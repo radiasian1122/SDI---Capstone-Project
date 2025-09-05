@@ -1,0 +1,68 @@
+Table users{
+  user_id uuid [PK, not null]
+  username string [not null, unique]
+  password string [not null]
+  first_name string [not null]
+  last_name string [not null]
+  uic string [not null]
+  role integer
+}
+
+Table units{
+  uic string [PK, unique, not null]
+  common_name string
+}
+
+Table vehicles{
+  vehicle_id integer [PK, not null]
+  uic string [not null]
+  platform string [not null]
+  variant string [not null]
+  bumper_no string [not null]
+}
+
+Table roles{
+  role_id integer [PK, not null]
+  role_name string [not null]
+}
+
+Table users_roles{
+  user_id integer [not null]
+  role_id integer [not null]
+} 
+
+Table dispatches_drivers{
+  dispatch_id integer [not null]
+  driver_id integer [not null]
+ }
+
+Table dispatches{
+  dispatch_id integer [PK, not null]
+  user_id integer [not null]
+  driver_id integer [not null]
+  active boolean [not null]
+}
+
+Table driver_quals{
+  user_id integer [not null]
+  vehicle_id integer [not null]
+}
+
+Ref: "users_roles"."user_id" < "users"."user_id"
+
+Ref: "users_roles"."role_id" < "roles"."role_id"
+
+Ref: "dispatches"."user_id" < "users"."user_id"
+
+
+Ref: "dispatches_drivers"."dispatch_id" < "dispatches"."dispatch_id"
+
+Ref: "dispatches_drivers"."driver_id" < "users"."user_id"
+
+Ref: "driver_quals"."user_id" < "users"."user_id"
+
+Ref: "driver_quals"."vehicle_id" < "vehicles"."vehicle_id"
+
+Ref: "users"."uic" < "units"."uic"
+
+Ref: "vehicles"."uic" < "units"."uic"
