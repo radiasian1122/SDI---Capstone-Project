@@ -16,7 +16,7 @@ services:
       - "./pg-data:/var/lib/postgresql/"
 
   express:
-    build: .
+    build: ../
     volumes:
       - "../api:/src/app"
     container_name: express-container

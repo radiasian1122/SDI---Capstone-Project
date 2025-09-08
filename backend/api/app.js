@@ -3,10 +3,9 @@ const app = express();
 const port = 8080;
 const rootRoutes = require('./routes/root.js')
 const vehicleRoutes = require('./routes/vehicle.js')
-const pmcsRoutes = require('./routes/pmcs.js')
 
 app.use("/", rootRoutes)
-app.use('/vehicle', somethingElseRoutes)
+app.use('/vehicle', vehicleRoutes)
 
 
 app.listen(port, (req, res) => {
