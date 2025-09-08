@@ -2,5 +2,3 @@
 
 ## ERD
 ![](docs/ERD/ERD.png)
-
-test push to main

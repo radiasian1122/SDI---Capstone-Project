@@ -11,17 +11,14 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: backend_db
+      POSTGRES_DB: convoy_connect
     volumes:
       - "./pg-data:/var/lib/postgresql/"
 
-
-
   express:
-    build: ../
-    image: "express-server"
+    build: .
     volumes:
-      - "../:/src/app"
+      - "../api:/src/app"
     container_name: express-container
     ports:
       - "8080:8080"
