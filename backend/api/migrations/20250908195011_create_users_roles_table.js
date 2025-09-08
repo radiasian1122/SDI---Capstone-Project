@@ -3,10 +3,7 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  return knex.schema.createTable('units', table => {
-      table.string('uic').unique().primary()
-      table.string('common-name')
-  })
+  return knex.schema.createTable('users_roles')
 };
 
 /**
@@ -14,5 +11,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  return knex.schema.dropTableIfExists('units');
+  
 };
