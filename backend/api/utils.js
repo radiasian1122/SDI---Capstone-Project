@@ -1,19 +1,19 @@
 import {faker} from '@faker-js/faker';
 
-export function generateUnits(){
+export function generateUnits() {
 
 }
 
 
-class User{
-  constructor() {
-      this.dodId = faker.number.int({min: 1000000000, max:9999999999});
-      this.firstName = faker.person.firstName('male');
-      this.lastName = faker.person.lastName('male');
-      this.username = `${this.firstName}-${this.lastName}`;
-      this.password = 'password';
-  }
-}
+// class User{
+//   constructor() {
+//       this.dodId = faker.number.int({min: 1000000000, max:9999999999});
+//       this.firstName = faker.person.firstName('male');
+//       this.lastName = faker.person.lastName('male');
+//       this.username = `${this.firstName}-${this.lastName}`;
+//       this.password = 'password';
+//   }
+// }
 
 // class Vic{
 //   constructor() {
@@ -37,23 +37,36 @@ class User{
 
 
 // export {Vic}
-export {User}
+// export {User}
 
 export function generateUsers() {
     const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
     const userArray = []
 
     //Users meant to be requestors
-    for (let i = 0; i < uicArray.length; i++){
-        for (let j = 0; j < 10; j++){
-            let currentUser = new User();
-            currentUser.uic = uicArray[i];
-            userArray.push(currentUser)
+    for (let i = 0; i < uicArray.length; i++) {
+        for (let j = 0; j < 10; j++) {
+
+            const fakeFirstName = faker.person.firstName('male');
+            const fakeLastName = faker.person.lastName('male');
+            userArray.push({
+                dodId: faker.number.int({min: 1000000000, max: 9999999999}),
+                username: `${fakeFirstName} - ${fakeLastName}`,
+                password: 'password',
+                uic: uicArray[i],
+                firstName: fakeFirstName,
+                lastName: fakeLastName,
+            })
         }
 
         //Users meant to be drivers
-        for (let k = 0; k < 20; k++){
-
+        for (let k = 0; k < 20; k++) {
+            userArray.push({
+                dodId: faker.number.int({min: 1000000000, max: 9999999999}),
+                uic: uicArray[i],
+                firstName: fakeFirstName,
+                lastName: fakeLastName,
+            })
         }
     }
     return userArray;
@@ -61,6 +74,24 @@ export function generateUsers() {
 
 export function generateUsersRoles() {
     const UsersRolesArray = [];
+
+
+}
+
+export function generateVehicles(){
+    const vehicleTypes = ['JLTV', '1.1', 'STRYKER', 'MRZR', 'ISV', 'LMTV', 'TLC', 'RFSS', 'QUAD']
+    let vehicles = []
+    for (let i = 0; i < vehicleTypes.length; i++){
+        for (let j = 0; j < 10; j++){
+            vehicles.push({
+                type: vehicleTypes[i],
+                callsign: `${vehicleTypes[i]}-0${j}`,
+                company: 'C',
+                status: 'available'
+            })
+        }
+    }
+    return vehicles;
 }
 
 console.log(generateUsers(), generateUsers().length);
