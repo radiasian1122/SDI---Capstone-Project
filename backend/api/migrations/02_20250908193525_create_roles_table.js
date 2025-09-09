@@ -3,7 +3,10 @@
  * @returns { Promise<void> }
  */
 exports.up = function(knex) {
-  
+  return knex.schema.createTable('roles', table => {
+      table.increments('role_id')
+      table.string('role_name')
+  })
 };
 
 /**
@@ -11,5 +14,5 @@ exports.up = function(knex) {
  * @returns { Promise<void> }
  */
 exports.down = function(knex) {
-  
+  return knex.schema.dropTableIfExists('roles')
 };
