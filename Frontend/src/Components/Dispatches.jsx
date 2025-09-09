@@ -1,5 +1,9 @@
 function Dispatches() {
-  return <div></div>;
+  return (
+    <div>
+      <h1>Dispatch Status Overview</h1>
+    </div>
+  );
 }
 
 export default Dispatches;
