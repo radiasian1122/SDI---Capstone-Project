@@ -1,4 +1,4 @@
-const {generateUsers} = require('../utils.js')
+const {generateUsers} = require('../utils.cjs')
 
 /**
  * @param { import("knex").Knex } knex
