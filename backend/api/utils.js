@@ -1,4 +1,5 @@
 import {faker} from '@faker-js/faker';
+import { db } from './db.js'
 
 export function generateUnits() {
 
