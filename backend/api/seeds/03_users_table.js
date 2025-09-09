@@ -1,13 +1,21 @@
 /**
  * @param { import("knex").Knex } knex
- * @returns { Promise<void> } 
+ * @returns { Promise<void> }
  */
+import User from '../utils.js'
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('users').del()
   await knex('users').insert([
-    {id: 1, colName: 'rowValue1'},
-    {id: 2, colName: 'rowValue2'},
-    {id: 3, colName: 'rowValue3'}
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HA0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HA0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HA0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HB0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HB0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HB0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HC0', first_name: User.firstname(), last_name: User.lastname() },
+    { dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HC0', first_name: User.firstname(), last_name: User.lastname() },
+    {dod_id: User.userID(), username: User.username(), password: User.password(), uic: 'NF5HC0', first_name: User.firstname(), last_name: User.lastname()},
+
   ]);
 };
