@@ -2,13 +2,20 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
-  return knex.schema.createTable('users_roles', function (table) {
-    table.increments('id').primary();
-    table.string('user_id').notNullable();
-    table.foreign('user_id').references('dod_id').inTable('users').onDelete('CASCADE');
-    table.integer('role_id').notNullable();
-    table.foreign('role_id').references('role_id').inTable('roles').onDelete('CASCADE');
+exports.up = function (knex) {
+  return knex.schema.createTable("users_roles", (table) => {
+    table.integer("user_id").notNullable();
+    table
+      .foreign("user_id")
+      .references("users.dod_id")
+      .deferrable("deferred")
+      .onDelete("CASCADE");
+    table.integer("role_id").notNullable();
+    table
+      .foreign("role_id")
+      .references("roles.role_id")
+      .deferrable("deferred")
+      .onDelete("CASCADE");
   });
 };
 
@@ -16,6 +23,12 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
-  return knex.schema.dropTable('users_roles');
+exports.down = function (knex) {
+  return knex.schema
+    .alterTable("users_roles", (table) => {
+      table.dropForeign("user_id").dropForeign("role_id");
+    })
+    .then(() => {
+      return knex.schema.dropTableIfExists("users_roles");
+    });
 };
