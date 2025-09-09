@@ -8,7 +8,7 @@ exports.up = function(knex) {
       table.string('uic')
       table.foreign('uic').references('units.uic').deferrable('deferred')
       table.string('platform').notNullable()
-      table.string('variant').notNullable()
+      table.string('variant')
       table.string('bumper_no').notNullable()
       table.boolean('deadlined').notNullable()
   })
