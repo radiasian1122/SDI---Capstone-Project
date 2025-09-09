@@ -1,0 +1,69 @@
+/* --- Tokens available to the browser as real CSS vars --- */
+:root {
+  /* Brand & functional */
+  --color-brand: #295f3d; /* SF green */
+  --color-brand-600: #214d32;
+  --color-accent: #1e40af; /* Airborne blue */
+  --color-success: #19944e; /* approvals */
+  --color-warning: #c8a300; /* Ranger gold */
+  --color-danger: #b31921; /* Airborne red */
+  --color-info: #1e40af; /* matches accent */
+  --color-out: #0ea5e9; /* sky */
+  --color-returned: #64748b; /* slate */
+  --color-maint: #d97706; /* maintenance orange */
+  --color-closed: #334155; /* closed slate */
+
+  /* Neutrals & surfaces */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f7fa;
+  --color-surface-contrast: #0b1220;
+  --color-border: #e5e7eb;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-inverted: #ffffff;
+
+  /* Typography */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Radii & shadows */
+  --radius-1: 0.5rem; /* 8px */
+  --radius-2: 9999px; /* pill */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08); /* subtle */
+}
+
+/* Dark theme overrides (toggle .dark on <html>) */
+:root.dark {
+  --color-surface: #0b1220;
+  --color-surface-muted: #0f172a;
+  --color-border: #1f2937;
+  --color-text: #e5e7eb;
+  --color-text-secondary: #94a3b8;
+}
+
+/* (Optional) Also keep Tailwind v4 tokens for future utilities */
+@theme {
+  --color-brand: #295f3d;
+  --color-brand-600: #214d32;
+  --color-accent: #1e40af;
+  --color-success: #19944e;
+  --color-warning: #c8a300;
+  --color-danger: #b31921;
+  --color-info: #1e40af;
+  --color-out: #0ea5e9;
+  --color-returned: #64748b;
+  --color-maint: #d97706;
+  --color-closed: #334155;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f5f7fa;
+  --color-surface-contrast: #0b1220;
+  --color-border: #e5e7eb;
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-inverted: #ffffff;
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}

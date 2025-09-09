@@ -1,15 +1,11 @@
-import { useState } from "react";
-import "../Styles/App.css";
-import Login from "./Login.jsx";
+import React from "react";
+import { AuthProvider } from "../Context/AuthContext";
+import AppRouter from "../App/router";
 
-function App() {
-  const [count, setCount] = useState(0);
-
+export default function App() {
   return (
-    <>
-      <Login />
-    </>
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
   );
 }
-
-export default App;
