@@ -1,4 +1,4 @@
-const {generateVehicles} = require('../utils')
+const {generateVehicles} = require('../utils.js')
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }

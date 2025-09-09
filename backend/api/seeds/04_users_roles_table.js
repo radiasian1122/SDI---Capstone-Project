@@ -1,4 +1,4 @@
-const {generateUsersRoles} = require('../utils')
+const {generateUsersRoles} = require('../utils.js')
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }

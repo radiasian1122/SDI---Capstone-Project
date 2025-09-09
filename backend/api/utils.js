@@ -1,5 +1,5 @@
 import {faker} from '@faker-js/faker';
-import { db } from './db.js'
+
 
 export function generateUnits() {
 
@@ -125,5 +125,3 @@ export function generateVehicles() {
     return vehicles;
 }
 
-// console.log(generateUsersRoles());
-console.log(generateVehicles());
