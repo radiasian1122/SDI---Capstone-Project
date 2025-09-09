@@ -6,11 +6,10 @@ import Homepage from "../Pages/Homepage";
 import DispatchForm from "../Pages/DispatchForm";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import NavBar from "../Components/Navbar";
-const ThemePreview = lazy(() => import("../Pages/ThemePreview"));
-import Homepage from "../Pages/Homepage";
 import ViewVehicles from "../Pages/ViewVehicles";
 import ViewDrivers from "../Pages/ViewDrivers";
 
+const ThemePreview = lazy(() => import("../Pages/ThemePreview"));
 export default function AppRouter() {
   return (
     <Routes>
