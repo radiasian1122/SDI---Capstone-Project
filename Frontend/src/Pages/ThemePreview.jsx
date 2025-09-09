@@ -1,5 +1,13 @@
 import React from "react";
+import ThemeToggle from "../Components/ThemeToggle";
 
+// (dev only)
+
+import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+
+{
+  import.meta.env.DEV && <DevRoleSwitcher />;
+}
 const SWATCHES = [
   { name: "brand", className: "bg-brand" },
   { name: "accent", className: "bg-accent" },
@@ -69,6 +77,9 @@ export default function ThemePreview() {
           <button className="btn-secondary btn-icon" aria-label="icon">
             ☆
           </button>
+        </div>
+        <div className="flex items-center gap-2">
+          <ThemeToggle />{" "}
         </div>
       </section>
 

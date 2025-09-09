@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
 
+// (dev only)
+import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+
+{
+  import.meta.env.DEV && <DevRoleSwitcher />;
+}
+
 export default function Login() {
   const { login } = useAuth();
   const [email, setEmail] = useState("");
@@ -38,7 +45,9 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && <div style={{ color: "red" }}>{error}</div>}
-        <button type="submit">Login</button>
+        <button className="btn-secondary" type="submit">
+          Login
+        </button>
       </form>
     </div>
   );
