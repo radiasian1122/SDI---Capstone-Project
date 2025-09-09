@@ -4,16 +4,16 @@ import Cart from "../Components/Cart";
 import { useState } from "react";
 
 function Homepage() {
-  const [dispatches, setDispatches] = useState([]);
+  const [dispatches, setDispatches] = useState();
 
   return (
     <div>
       <Navbar />
-      {dispatches.length > 0 ? (
-        <Dispatches />
-      ) : (
+      {!dispatches && (
         <p>No vehicles currently dispatched. Add one to get started!</p>
       )}
+      {dispatches && <Dispatches />}
+
       <Cart />
     </div>
   );

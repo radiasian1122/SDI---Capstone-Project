@@ -5,12 +5,17 @@ import Dashboard from "../Pages/Dashboard";
 import ProtectedRoute from "../Components/ProtectedRoute";
 import NavBar from "../Components/Navbar";
 const ThemePreview = lazy(() => import("../Pages/ThemePreview"));
+import Homepage from "../Pages/Homepage";
+import ViewVehicles from "../Pages/ViewVehicles";
+import ViewDrivers from "../Pages/ViewDrivers";
 
 export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/home" element={<Homepage />} />
+      <Route path="/vehicles" element={<ViewVehicles />} />
+      <Route path="/operators" element={<ViewDrivers />} />
 
       {/* Dev-only Theme Preview */}
       {import.meta.env.DEV && (
