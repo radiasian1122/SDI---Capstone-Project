@@ -6,8 +6,8 @@ exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('roles').del()
   await knex('roles').insert([
-    {id: 1, colName: 'rowValue1'},
-    {id: 2, colName: 'rowValue2'},
-    {id: 3, colName: 'rowValue3'}
+    {roles: 'rowValue1'},
+    {roles: 'rowValue2'},
+    {roles: 'rowValue3'}
   ]);
 };
