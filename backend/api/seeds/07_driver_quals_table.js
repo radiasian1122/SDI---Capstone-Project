@@ -6,8 +6,8 @@ exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('driver_quals').del()
   await knex('driver_quals').insert([
-    {id: 1, colName: 'rowValue1'},
-    {id: 2, colName: 'rowValue2'},
-    {id: 3, colName: 'rowValue3'}
+    {platform: 'JLTV', variant: 'some-variant'},
+    {colName: 'rowValue2'},
+    {colName: 'rowValue3'}
   ]);
 };

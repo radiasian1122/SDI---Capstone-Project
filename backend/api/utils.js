@@ -77,7 +77,7 @@ export function generateUsers() {
     return userArray;//User array length is 90
 }
 
-export function generateUsersRoles(usersArray) {
+export function generateUsersRoles() {
     const usersRolesArray = [];
     const users = generateUsers()
     for (let i = 0; i < users.length; i++) {
@@ -103,14 +103,26 @@ export function generateUsersRoles(usersArray) {
 
 export function generateVehicles() {
     //Bumper no. format "JLTV-1, JLTV-2. etc."
+    const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
     const vehicleTypes = ['JLTV', '1.1', 'STRYKER', 'MRZR', 'ISV', 'LMTV', 'TLC', 'RFSS', 'QUAD']
     let vehicles = []
-    for (let i = 0; i < vehicleTypes.length; i++) {
-        for (let j = 0; j < 10; j++) {
-            vehicles.push({})
+
+    for (let i = 0; i < uicArray.length; i++){
+        for (let j = 0; j < vehicleTypes.length; j++){
+            for (let k = 0; k < 3; k++){
+                vehicles.push({
+                    uic: uicArray[i],
+                    platform_variant: j + 1,
+                    bumper_no: `${vehicleTypes[j]}-${k + 1}`,
+                    deadlined: false
+                })
+            }
         }
     }
+
+
     return vehicles;
 }
 
-console.log(generateUsersRoles());
+// console.log(generateUsersRoles());
+console.log(generateVehicles());

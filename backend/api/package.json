@@ -12,12 +12,14 @@
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "@faker-js/faker": "^10.0.0"
+  },
   "scripts": {
     "start": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "module"
 }
