@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("users_roles", (table) => {
-    table.integer("user_id").notNullable();
+    table.bigint("user_id").notNullable();
     table
       .foreign("user_id")
       .references("users.dod_id")

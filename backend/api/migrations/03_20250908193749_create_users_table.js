@@ -4,7 +4,7 @@
  */
 exports.up = function (knex) {
   return knex.schema.createTable("users", (table) => {
-    table.integer("dod_id").unique().notNullable().primary();
+    table.bigint("dod_id").unique().notNullable().primary();
     table.string("username");
     table.string("password");
     table.string("uic").notNullable();

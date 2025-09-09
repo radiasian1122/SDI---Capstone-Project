@@ -4,6 +4,10 @@
  */
 exports.seed = async function(knex) {
   // Deletes ALL existing entries
-  await knex('driver_quals').del()
-  await knex('driver_quals').insert([]);
+  await knex('dispatches').del()
+  await knex('dispatches').insert({
+        user_id: 123456789,
+      vehicle_id: 1,
+      approved: true
+});
 };

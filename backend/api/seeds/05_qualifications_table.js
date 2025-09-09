@@ -4,8 +4,8 @@
  */
 exports.seed = async function (knex) {
   // Deletes ALL existing entries
-  await knex("table_name").del();
-  await knex("table_name").insert([
+  await knex("qualifications").del();
+  await knex("qualifications").insert([
     { platform: "JLTV", variant: "some-variant" },
     { platform: "1.1", variant: "some-variant" },
     { platform: "STRYKER", variant: "some-variant" },

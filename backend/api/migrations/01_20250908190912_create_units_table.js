@@ -5,7 +5,7 @@
 exports.up = function(knex) {
   return knex.schema.createTable('units', table => {
       table.string('uic').unique().primary()
-      table.string('common-name')
+      table.string('common_name')
   })
 };
 

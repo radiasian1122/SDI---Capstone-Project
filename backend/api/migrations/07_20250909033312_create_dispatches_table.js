@@ -5,11 +5,11 @@
 exports.up = function(knex) {
   return knex.schema.createTable('dispatches', table => {
       table.increments('dispatch_id')
-      table.integer("user_id")
+      table.bigint("user_id")
       table.foreign('user_id').references('users.dod_id').deferrable('deferred')
       table.integer("vehicle_id")
       table.foreign('vehicle_id').references('vehicles.vehicle_id').deferrable('deferred').onDelete('CASCADE')
-      table.boolean('active').notNullable()
+      table.boolean('approved').notNullable()
 
   })
 };

@@ -1,11 +1,6 @@
 import {faker} from '@faker-js/faker';
 
 
-export function generateUnits() {
-
-}
-
-
 // class User{
 //   constructor() {
 //       this.dodId = faker.number.int({min: 1000000000, max:9999999999});
@@ -40,6 +35,8 @@ export function generateUnits() {
 // export {Vic}
 // export {User}
 
+export const masterUsersList = generateUsers();
+
 export function generateUsers() {
     const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
     const userArray = []
@@ -52,12 +49,12 @@ export function generateUsers() {
             const fakeLastName = faker.person.lastName('male');
 
             userArray.push({
-                dodId: faker.number.int({min: 1000000000, max: 9999999999}),
+                dod_id: faker.number.int({min: 1000000000, max: 9999999999}),
                 username: `${fakeFirstName} - ${fakeLastName}`,
                 password: 'password',
                 uic: uicArray[i],
-                firstName: fakeFirstName,
-                lastName: fakeLastName,
+                first_name: fakeFirstName,
+                last_name: fakeLastName,
             })
         }
 
@@ -68,10 +65,10 @@ export function generateUsers() {
             const fakeLastName = faker.person.lastName('male');
 
             userArray.push({
-                dodId: faker.number.int({min: 1000000000, max: 9999999999}),
+                dod_id: faker.number.int({min: 1000000000, max: 9999999999}),
                 uic: uicArray[i],
-                firstName: fakeFirstName,
-                lastName: fakeLastName,
+                first_name: fakeFirstName,
+                last_name: fakeLastName,
             })
         }
     }
@@ -80,22 +77,22 @@ export function generateUsers() {
 
 export function generateUsersRoles() {
     const usersRolesArray = [];
-    const users = generateUsers()
+    const users = masterUsersList;
     for (let i = 0; i < users.length; i++) {
         if (i < 30) {
             usersRolesArray.push({
-                userID: users[i].dodId,
-                roleId: 1//requestor
+                user_id: users[i].dod_id,
+                role_id: 1//requestor
             })
-        } else if (i > 30 && i < 45) {
+        } else if (i >= 30 && i < 45) {
             usersRolesArray.push({
-                userID: users[i].dodId,
-                roleId: 3//approver
+                user_id: users[i].dod_id,
+                role_id: 3//approver
             })
-        } else if (i > 30 && i < 90) {
+        } else if (i >= 45 && i < users.length) {
             usersRolesArray.push({
-                userID: users[i].dodId,
-                roleId: 4//driver
+                user_id: users[i].dod_id,
+                role_id: 4//driver
             })
         }
     }
@@ -108,9 +105,9 @@ export function generateVehicles() {
     const vehicleTypes = ['JLTV', '1.1', 'STRYKER', 'MRZR', 'ISV', 'LMTV', 'TLC', 'RFSS', 'QUAD']
     let vehicles = []
 
-    for (let i = 0; i < uicArray.length; i++){
-        for (let j = 0; j < vehicleTypes.length; j++){
-            for (let k = 0; k < 3; k++){
+    for (let i = 0; i < uicArray.length; i++) {
+        for (let j = 0; j < vehicleTypes.length; j++) {
+            for (let k = 0; k < 3; k++) {
                 vehicles.push({
                     uic: uicArray[i],
                     platform_variant: j + 1,
@@ -125,3 +122,15 @@ export function generateVehicles() {
     return vehicles;
 }
 
+export function generateDriverQuals() {
+    const driverQuals = []
+
+    for (let i = 46; i < masterUsersList.length; i++) {
+        for (let j = 0; j < 9; j++)
+            driverQuals.push({
+                user_id: masterUsersList[i].dod_id,
+                qual_id: j + 1
+            })
+    }
+    return driverQuals;
+}

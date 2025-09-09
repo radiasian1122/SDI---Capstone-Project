@@ -5,10 +5,10 @@
 exports.up = function(knex) {
   return knex.schema.createTable('driver_quals', table => {
       table.increments()
-      table.integer('user_id')
+      table.bigint('user_id')
       table.foreign('user_id').references('users.dod_id').deferrable('deferred')
-      table.integer('vehicle_id')
-      table.foreign('vehicle_id').references('vehicles.vehicle_id').deferrable('deferred').onDelete('CASCADE')
+      table.integer('qual_id')
+      table.foreign('qual_id').references('qualifications.qual_id').deferrable('deferred').onDelete('CASCADE')
   })
 };
 
@@ -19,7 +19,7 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema.alterTable('driver_quals', table => {
       table.dropForeign('user_id')
-      table.dropForeign('vehicle_id')
+      table.dropForeign('qual_id')
   })
       .then(() => {
           return knex.schema.dropTableIfExists('driver_quals')
