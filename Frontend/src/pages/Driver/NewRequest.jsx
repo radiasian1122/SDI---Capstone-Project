@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAuth } from "../../Context/AuthContext";
-import Loading from "../../Components/Loading";
+import { useAuth } from "../../context/AuthContext";
+import Loading from "../../components/Loading";
 
 export default function NewRequest() {
   const { user, loading } = useAuth();

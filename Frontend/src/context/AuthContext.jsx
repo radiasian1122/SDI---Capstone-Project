@@ -1,6 +1,6 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getMe, login as apiLogin } from "../API/client";
+import { getMe, login as apiLogin } from "../api/client";
 
 // ---- DEV user (has all roles) ----
 const DEV_ROLES = ["DRIVER", "APPROVER", "DISPATCHER"];

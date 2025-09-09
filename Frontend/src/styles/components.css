@@ -1,7 +1,4 @@
-/* Convoy Connect — components.css (pure CSS, Tailwind-agnostic)
-   - Uses CSS variables from theme.css (no @apply, no @reference)
-   - Keeps your chosen layout, density, shadows, badges, tables, etc.
-*/
+/* Convoy Connect — components.css (pure CSS, Tailwind-agnostic)*/
 
 /* ---------- BASE ---------- */
 html {

@@ -1,9 +1,9 @@
 import React from "react";
-import ThemeToggle from "../Components/ThemeToggle";
+import ThemeToggle from "../components/ThemeToggle";
 
 // (dev only)
 
-import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+import DevRoleSwitcher from "../components/DevRoleSwitcher";
 
 {
   import.meta.env.DEV && <DevRoleSwitcher />;

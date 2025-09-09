@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../Context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 // (dev only)
-import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+import DevRoleSwitcher from "../components/DevRoleSwitcher";
 
 {
   import.meta.env.DEV && <DevRoleSwitcher />;
