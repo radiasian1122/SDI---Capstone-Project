@@ -1,13 +1,23 @@
+// src/components/ProtectedRoute.jsx
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../Context/AuthContext";
+
+function hasRequiredRole(user, required) {
+  if (!required || required.length === 0) return true; // no restriction
+  if (!user) return false;
+  if (Array.isArray(user.roles) && user.roles.some((r) => required.includes(r)))
+    return true;
+  if (user.role && required.includes(user.role)) return true;
+  return false;
+}
 
 export default function ProtectedRoute({ children, roles }) {
   let ctx;
   try {
     ctx = useAuth();
   } catch {
-    // Context hook threw because provider is missing
+    // Provider missing: fail soft with a helpful UI (kept from your version)
     return (
       <div className="cc-page">
         <div className="card">
@@ -28,7 +38,7 @@ export default function ProtectedRoute({ children, roles }) {
 
   if (loading) return <div className="cc-page">Loading…</div>;
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
-  if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
+  if (!hasRequiredRole(user, roles)) return <Navigate to="/" replace />;
 
   return children;
 }

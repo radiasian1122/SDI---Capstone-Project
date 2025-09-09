@@ -3,6 +3,14 @@ import { useAuth } from "../Context/AuthContext";
 import { listRequests } from "../API/client";
 import { useFetch } from "../Hooks/useFetch";
 
+// (dev only)
+
+import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+
+{
+  import.meta.env.DEV && <DevRoleSwitcher />;
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
 
