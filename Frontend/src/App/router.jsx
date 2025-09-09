@@ -10,6 +10,7 @@ export default function AppRouter() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/home" element={<Homepage />} />
 
       {/* Dev-only Theme Preview */}
       {import.meta.env.DEV && (
