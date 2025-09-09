@@ -8,7 +8,7 @@ export default function DevRoleSwitcher() {
 
   return (
     <div className="cc-actionbar">
-      <span className="badge">Dev Role</span>
+      <span className="badge">DEVELOPER TOOL: SELECT YOUR USER ROLE</span>
       <select
         className="input"
         value={current}
