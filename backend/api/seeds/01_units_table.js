@@ -6,8 +6,8 @@ exports.seed = async function(knex) {
   // Deletes ALL existing entries
   await knex('units').del()
   await knex('units').insert([
-    {id: 1, colName: 'rowValue1'},
-    {id: 2, colName: 'rowValue2'},
-    {id: 3, colName: 'rowValue3'}
+      {uic: "NF5HA0", common_name: 'A-2/75'},
+      {uic: "NF5HB0", common_name: 'B-2/75'},
+      {uic: "NF5HC0", common_name: 'C-2/75'}
   ]);
 };
