@@ -4,7 +4,7 @@
  */
 exports.up = function(knex) {
   return knex.schema.createTable('users', table => {
-      table.integer('dod_id.').unique().notNullable().primary()
+      table.integer('dod_id').unique().notNullable().primary()
       table.string('username')
       table.string('password')
       table.string('uic').notNullable()
@@ -21,7 +21,6 @@ exports.up = function(knex) {
 exports.down = function(knex) {
   return knex.schema.alterTable('users', table => {
       table.dropForeign('uic')
-          .dropForeign('role_id')
   })
           .then( () => {
               return knex.schema.dropTableIfExists('users')
