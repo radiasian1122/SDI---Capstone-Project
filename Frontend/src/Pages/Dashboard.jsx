@@ -1,61 +1,103 @@
+// src/pages/Dashboard.jsx
 import React, { useMemo } from "react";
 import { useAuth } from "../Context/AuthContext";
 import { listRequests } from "../API/client";
 import { useFetch } from "../Hooks/useFetch";
-
-// (dev only)
-
+import Loading from "../Components/Loading";
+import SkeletonList from "../Components/SkeletonList";
+import EmptyState from "../Components/EmptyState";
 import DevRoleSwitcher from "../Components/DevRoleSwitcher";
 
-{
-  import.meta.env.DEV && <DevRoleSwitcher />;
+// Minimal local badge (remove if you already have a shared one)
+function StatusBadge({ status }) {
+  const s = status || "PENDING";
+  return <span className={`badge state-${s}`}>{s}</span>;
 }
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
+  // 1) Wait for auth to resolve (both dev & prod)
+  if (authLoading) return <Loading label="Loading account…" />;
+
+  // 2) Resolve a safe role (dev default if needed)
+  const role =
+    user?.role ??
+    (import.meta.env.DEV
+      ? localStorage.getItem("dev-role") || "DISPATCHER"
+      : null);
+
+  // 3) If no role in prod, show friendly message
+  if (!role) {
+    return (
+      <div className="cc-page">
+        <div className="card">
+          <div className="card-body">
+            <h3 className="card-title">Signed out</h3>
+            <p className="card-subtitle">
+              Please log in to view the dashboard.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 4) Build params now that role is known
   const params = useMemo(() => {
-    if (user.role === "DRIVER") return { mine: true };
-    if (user.role === "APPROVER") return { status: "PENDING" };
-    return { status: "OUT" }; // dispatcher: show active
-  }, [user.role]);
+    if (role === "DRIVER") return { mine: true };
+    if (role === "APPROVER") return { status: "PENDING" };
+    return { status: "OUT" }; // DISPATCHER: show active
+  }, [role]);
 
-  const { data, loading } = useFetch(() => listRequests(params), [user.role]);
+  // 5) Fetch data; key off params only
+  const { data, loading: dataLoading } = useFetch(
+    () => listRequests(params),
+    [JSON.stringify(params)]
+  );
+
+  const firstName = user?.first_name || user?.name || "User";
 
   return (
-    <div style={{ padding: 16 }}>
-      <h2>Dashboard</h2>
-      <p>Welcome back, {user.first_name}.</p>
+    <div className="cc-page space-y-6">
+      {/* Dev-only role switcher */}
+      {import.meta.env.DEV && <DevRoleSwitcher />}
 
-      {loading && <div>Loading...</div>}
+      <h1 className="cc-page-title">Dashboard</h1>
 
-      {!loading && (
-        <div style={{ display: "grid", gap: 12 }}>
+      {/* Overview card */}
+      <div className="card">
+        <div className="card-body">
+          <p className="card-subtitle">User's role: {role}</p>
+          <p className="mt-2">Welcome back, {firstName}.</p>
+        </div>
+      </div>
+
+      {/* Content */}
+      {dataLoading ? (
+        <SkeletonList rows={4} />
+      ) : (
+        <div className="grid gap-3">
           {data?.items?.length ? (
             data.items.map((r) => (
-              <div
-                key={r.id}
-                style={{
-                  border: "1px solid #eee",
-                  padding: 12,
-                  borderRadius: 8,
-                }}
-              >
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <strong>{r.destination}</strong>
-                  <StatusBadge status={r.status} />
+              <div key={r.id} className="card">
+                <div className="card-body">
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <strong>{r.destination}</strong>
+                    <StatusBadge status={r.status} />
+                  </div>
+                  <div className="text-muted" style={{ fontSize: 13 }}>
+                    {new Date(r.start_time).toLocaleString()} →{" "}
+                    {new Date(r.end_time).toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: 13 }}>{r.purpose}</div>
                 </div>
-                <div style={{ fontSize: 13, color: "#555" }}>
-                  {new Date(r.start_time).toLocaleString()} →{" "}
-                  {new Date(r.end_time).toLocaleString()}
-                </div>
-                <div style={{ fontSize: 13 }}>{r.purpose}</div>
               </div>
             ))
           ) : (
-            <div>No items to show.</div>
+            <EmptyState title="No requests match your filters." />
           )}
         </div>
       )}

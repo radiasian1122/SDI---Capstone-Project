@@ -57,7 +57,7 @@ export function AuthProvider({ children }) {
     window.location.href = "/login";
   };
 
-  // DEV: allow toggling the *active* role for UI previews
+  // DEV ONLY: allow toggling the *active* role for testing
   const setDevRole = (nextRole) => {
     if (!import.meta.env.DEV) return;
     if (!DEV_ROLES.includes(nextRole)) return;
