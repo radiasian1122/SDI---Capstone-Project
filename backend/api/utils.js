@@ -45,10 +45,11 @@ export function generateUsers() {
 
     //Users meant to be requestors
     for (let i = 0; i < uicArray.length; i++) {
-        for (let j = 0; j < 10; j++) {
+        for (let j = 0; j < 15; j++) {
 
             const fakeFirstName = faker.person.firstName('male');
             const fakeLastName = faker.person.lastName('male');
+
             userArray.push({
                 dodId: faker.number.int({min: 1000000000, max: 9999999999}),
                 username: `${fakeFirstName} - ${fakeLastName}`,
@@ -61,6 +62,10 @@ export function generateUsers() {
 
         //Users meant to be drivers
         for (let k = 0; k < 20; k++) {
+
+            const fakeFirstName = faker.person.firstName('male');
+            const fakeLastName = faker.person.lastName('male');
+
             userArray.push({
                 dodId: faker.number.int({min: 1000000000, max: 9999999999}),
                 uic: uicArray[i],
@@ -69,26 +74,43 @@ export function generateUsers() {
             })
         }
     }
-    return userArray;
+    return userArray;//User array length is 90
 }
 
-export function generateUsersRoles() {
-    const UsersRolesArray = [];
-
-
+export function generateUsersRoles(usersArray) {
+    const usersRolesArray = [];
+    const users = generateUsers()
+    for (let i = 0; i < users.length; i++) {
+        if (i < 30) {
+            usersRolesArray.push({
+                userID: users[i].dodId,
+                roleId: 1//requestor
+            })
+        } else if (i > 30 && i < 45) {
+            usersRolesArray.push({
+                userID: users[i].dodId,
+                roleId: 3//approver
+            })
+        } else if (i > 30 && i < 90) {
+            usersRolesArray.push({
+                userID: users[i].dodId,
+                roleId: 4//driver
+            })
+        }
+    }
+    return usersRolesArray;
 }
 
-export function generateVehicles(){
+export function generateVehicles() {
+    //Bumper no. format "JLTV-1, JLTV-2. etc."
     const vehicleTypes = ['JLTV', '1.1', 'STRYKER', 'MRZR', 'ISV', 'LMTV', 'TLC', 'RFSS', 'QUAD']
     let vehicles = []
-    for (let i = 0; i < vehicleTypes.length; i++){
-        for (let j = 0; j < 10; j++){
-            vehicles.push({
-
-            })
+    for (let i = 0; i < vehicleTypes.length; i++) {
+        for (let j = 0; j < 10; j++) {
+            vehicles.push({})
         }
     }
     return vehicles;
 }
 
-console.log(generateUsers(), generateUsers().length);
+console.log(generateUsersRoles());
