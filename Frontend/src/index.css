@@ -1,4 +1,35 @@
 @import "tailwindcss";
+@import "tailwindcss/utilities";
+@import "tailwindcss/preflight";
+
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  padding: 8px 10px;
+}
+button {
+  cursor: pointer;
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
