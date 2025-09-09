@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
-import { useAuth } from "../../Context/AuthContext";
-import { useFetch } from "../../Hooks/useFetch";
-import { listRequests } from "../../API/client"; // must return { items: [...] }
-import Loading from "../../Components/Loading";
-import SkeletonList from "../../Components/SkeletonList";
-import EmptyState from "../../Components/EmptyState";
-import RequestCard from "../../Components/RequestCard";
+import { useAuth } from "../../context/AuthContext";
+import { useFetch } from "../../hooks/useFetch";
+import { listRequests } from "../../api/client"; // must return { items: [...] }
+import Loading from "../../components/Loading";
+import SkeletonList from "../../components/SkeletonList";
+import EmptyState from "../../components/EmptyState";
+import RequestCard from "../../components/RequestCard";
 
 export default function Approvals() {
   const { user, loading: authLoading } = useAuth();

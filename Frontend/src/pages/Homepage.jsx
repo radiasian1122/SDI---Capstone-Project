@@ -1,10 +1,10 @@
-import Navbar from "../Components/Navbar";
-import Dispatches from "../Components/Dispatches";
-import Cart from "../Components/Cart";
+import Navbar from "../components/Navbar";
+import Dispatches from "../components/Dispatches";
+import Cart from "../components/Cart";
 import { useState } from "react";
 
 // (dev only)
-import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+import DevRoleSwitcher from "../components/DevRoleSwitcher";
 
 {
   import.meta.env.DEV && <DevRoleSwitcher />;

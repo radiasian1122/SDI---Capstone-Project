@@ -1,10 +1,10 @@
 import React from "react";
-import { useAuth } from "../../Context/AuthContext";
-import { useFetch } from "../../Hooks/useFetch";
-import { listVehicles } from "../../API/client"; // implement to return { items: [...] }
-import Loading from "../../Components/Loading";
-import EmptyState from "../../Components/EmptyState";
-import StatusBadge from "../../Components/StatusBadge";
+import { useAuth } from "../../context/AuthContext";
+import { useFetch } from "../../hooks/useFetch";
+import { listVehicles } from "../../api/client"; // implement to return { items: [...] }
+import Loading from "../../components/Loading";
+import EmptyState from "../../components/EmptyState";
+import StatusBadge from "../../components/StatusBadge";
 
 export default function Vehicles() {
   const { user, loading: authLoading } = useAuth();

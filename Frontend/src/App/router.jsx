@@ -1,15 +1,15 @@
 import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "../Pages/Login";
-import Dashboard from "../Pages/Dashboard";
-import Homepage from "../Pages/Homepage";
-import DispatchForm from "../Pages/DispatchForm";
-import ProtectedRoute from "../Components/ProtectedRoute";
-import NavBar from "../Components/Navbar";
-import ViewVehicles from "../Pages/ViewVehicles";
-import ViewDrivers from "../Pages/ViewDrivers";
+import Login from "../pages/Login";
+import Dashboard from "../pages/Dashboard";
+import Homepage from "../pages/Homepage";
+import DispatchForm from "../pages/DispatchForm";
+import ProtectedRoute from "../components/ProtectedRoute";
+import NavBar from "../components/Navbar";
+import ViewVehicles from "../pages/ViewVehicles";
+import ViewDrivers from "../pages/ViewDrivers";
 
-const ThemePreview = lazy(() => import("../Pages/ThemePreview"));
+const ThemePreview = lazy(() => import("../pages/ThemePreview"));
 export default function AppRouter() {
   return (
     <Routes>

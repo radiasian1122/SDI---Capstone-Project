@@ -1,12 +1,12 @@
 // src/pages/Dashboard.jsx
 import React, { useMemo } from "react";
-import { useAuth } from "../Context/AuthContext";
-import { listRequests } from "../API/client";
-import { useFetch } from "../Hooks/useFetch";
-import Loading from "../Components/Loading";
-import SkeletonList from "../Components/SkeletonList";
-import EmptyState from "../Components/EmptyState";
-import DevRoleSwitcher from "../Components/DevRoleSwitcher";
+import { useAuth } from "../context/AuthContext";
+import { listRequests } from "../api/client";
+import { useFetch } from "../hooks/useFetch";
+import Loading from "../components/Loading";
+import SkeletonList from "../components/SkeletonList";
+import EmptyState from "../components/EmptyState";
+import DevRoleSwitcher from "../components/DevRoleSwitcher";
 
 // Minimal local badge (remove if you already have a shared one)
 function StatusBadge({ status }) {
