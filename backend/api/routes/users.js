@@ -95,7 +95,7 @@ router.get('/:id', usersCtl.getUserById)
  *                     example: 1234567891
  *                   qualifications:
  *                     type: array
- *                     example: []
+ *                     example: [{ qual_id: 1, platform: "JLTV", variant: "113"}, { qual_id: 1, platform: "LMTV", variant: "559"}]
  */
 router.get('/:id/qual', usersCtl.getUserQualifications)
 
