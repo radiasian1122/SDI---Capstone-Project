@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-  withCredentials: true, // for httpOnly cookie JWT
+  withCredentials: true,
 });
 
 // Interceptor for auth errors
@@ -10,7 +10,6 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err.response && err.response.status === 401) {
-      // optional: redirect to login
       window.location.href = "/login";
     }
     return Promise.reject(err);
