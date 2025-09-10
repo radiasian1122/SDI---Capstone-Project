@@ -6,6 +6,7 @@ exports.getAllUsers = async (req, res) => {
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });
+      console.error(err);
   }
 };
 
@@ -19,6 +20,7 @@ exports.getUserById = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({ error: err.message });
+      console.error(err)
   }
 };
 
