@@ -61,6 +61,7 @@ exports.getDispatchByRequestorId = async (req, res) => {
       .where("requestor_id", req.params.requestorId)
       .select("*");
 
+
     if (dispatches.length > 0) {
       res.status(200).json(dispatches);
     } else {
