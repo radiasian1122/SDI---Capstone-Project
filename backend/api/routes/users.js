@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const usersCtl = require('../controllers/users.js')
 
+///////// SWAGGER COMPONENTS ////////////
 
 /**
  * @swagger
@@ -29,6 +30,7 @@ const usersCtl = require('../controllers/users.js')
  *        example: Snuffy
  */
 
+//////////// ROUTES DEFINITIONS //////////////
 
 /**
  * @swagger

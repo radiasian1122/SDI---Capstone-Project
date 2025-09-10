@@ -8,7 +8,7 @@ exports.getAllVehicles = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}
 
 // Get vehicle by ID
 exports.getVehicleById = async (req, res) => {
@@ -24,4 +24,8 @@ exports.getVehicleById = async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
-};
+}
+
+exports.getVehiclesByUic = (req, res) => {
+  console.log('Write code to get a dispatch by UIC here')
+}

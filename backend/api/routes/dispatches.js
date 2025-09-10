@@ -2,18 +2,19 @@ const express = require('express')
 const router = express.Router()
 const dispatchesCtl = require('../controllers/dispatches.js')
 
+//////// SWAGGER COMPONENTS //////////
 
 /**
  * @swagger
  * components:
- *  dispatches:
+ *  dispatch:
  *    type: object
  *    properties:
  *      dispatch_id:
  *        type: integer
  *        example: 1
  *      driver_id:
- *        type: integer
+ *        type: bigint
  *        example: 1234567891
  *      vehicle_id:
  *        type: integer
@@ -21,7 +22,18 @@ const dispatchesCtl = require('../controllers/dispatches.js')
  *      approved:
  *        type: boolean
  *        example: false
+ *  new_dispatch:
+ *    type: object
+ *    properties:
+ *      driver_id:
+ *        type: bigint
+ *        example: 1234567891
+ *      vehicle_id:
+ *        type: integer
+ *        example: 1
  */
+
+///////// ROUTES DEFINITIONS ////////////
 
 /**
  * @swagger
@@ -36,22 +48,26 @@ const dispatchesCtl = require('../controllers/dispatches.js')
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   dispatch_id:
- *                     type: integer
- *                     example: 1
- *                   driver_id:
- *                     type: integer
- *                     example: 1234567891
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   active:
- *                     type: boolean
- *                     example: true
+ *                 $ref: '#/components/dispatch'
  */
 router.get('/', dispatchesCtl.getAllDispatches)
+
+/**
+ * @swagger
+ * /dispatches:
+ *   get:
+ *     summary: Retrieve a list of all dispatches
+ *     responses:
+ *       200:
+ *         description: Returns an array of all disptach objects whether they are active or inactive
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/dispatch'
+ */
+router.get('/:uic', dispatchesCtl.getDispatchesByUic)
 
 /**
  * @swagger
@@ -68,21 +84,30 @@ router.get('/', dispatchesCtl.getAllDispatches)
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   dispatch_id:
- *                     type: integer
- *                     example: 1
- *                   driver_id:
- *                     type: integer
- *                     example: 1234567891
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   active:
- *                     type: boolean
- *                     example: true
+ *                 $ref: '#/components/dispatch'
  */
 router.get('/:driver_id/all', dispatchesCtl.getDispatchesByDriver)
+
+/**
+ * @swagger
+ * /dispatches:
+ *  post:
+ *    summary: Create a new dispatch
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#components/new_dispatch'
+ *    responses:
+ *      200:
+ *        description: Returns an array containing the dispatch object that was created.
+ *        content:
+ *          application/json:
+ *            schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/dispatch'
+ */
+router.post('/disptaches', dispatchesCtl.createNewDispatch)
 
 module.exports = router

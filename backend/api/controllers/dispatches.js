@@ -20,3 +20,11 @@ exports.getDispatchesByDriver = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.createNewDispatch = (req, res) => {
+  console.log('Write code to create a dispatch here')
+}
+
+exports.getDispatchesByUic = (req, res) => {
+  console.log('Write code to get a dispatch by UIC here')
+}
