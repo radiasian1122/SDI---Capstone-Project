@@ -4,6 +4,26 @@ const vehiclesCtl = require('../controllers/vehicles.js')
 
 /**
  * @swagger
+ * components:
+ *   vehicle:
+ *     type: object
+ *     properties:
+ *       vehicle_id:
+ *         type: integer
+ *         example: 1
+ *       uic:
+ *         type: string
+ *         example: WAB4AA
+ *       platform_variant:
+ *         type: integer
+ *         example: 1
+ *       bumper_no:
+ *         type: string
+ *         example: A001
+ *       deadlined:
+ *         type: boolean
+ *         example: false
+ *
  * /vehicles:
  *   get:
  *     summary: Retrieve a list of vehicles
@@ -15,28 +35,8 @@ const vehiclesCtl = require('../controllers/vehicles.js')
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   platform_variant:
- *                     type: integer
- *                     example: 1
- *                   bumper_no:
- *                     type: string
- *                     example: A001
- *                   deadlined:
- *                     type: boolean
- *                     example: false
- */
-router.get('/', vehiclesCtl.getAllVehicles)
-
-/**
- * @swagger
+ *                 $ref: '#/components/vehicle'
+ *
  * /vehicles/:id:
  *   get:
  *     summary: Retrieve a single vehicle by vehicle ID
@@ -48,24 +48,9 @@ router.get('/', vehiclesCtl.getAllVehicles)
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   platform_variant:
- *                     type: integer
- *                     example: 1
- *                   bumper_no:
- *                     type: string
- *                     example: A001
- *                   deadlined:
- *                     type: boolean
- *                     example: false
+ *                 $ref: '#/components/vehicle'
  */
+router.get('/', vehiclesCtl.getAllVehicles)
 router.get('/:id', vehiclesCtl.getVehicleById)
 
 module.exports = router

@@ -5,6 +5,26 @@ const dispatchesCtl = require('../controllers/dispatches.js')
 
 /**
  * @swagger
+ * components:
+ *  dispatches:
+ *    type: object
+ *    properties:
+ *      dispatch_id:
+ *        type: integer
+ *        example: 1
+ *      driver_id:
+ *        type: integer
+ *        example: 1234567891
+ *      vehicle_id:
+ *        type: integer
+ *        example: 1
+ *      approved:
+ *        type: boolean
+ *        example: false
+ */
+
+/**
+ * @swagger
  * /dispatches:
  *   get:
  *     summary: Retrieve a list of all dispatches
