@@ -22,8 +22,6 @@ exports.seed = async function(knex) {
     //Default Driver
     await knex('users').insert({
         dod_id: 1010101010,
-        username: 'adam-driver',
-        password: 'password',
         uic: 'NF5HA0',
         first_name: 'Adam',
         last_name: 'Driver'

@@ -22,7 +22,7 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
   return knex.schema.alterTable('dispatches', table => {
-      table.dropForeign('user_id')
+      table.dropForeign('requestor_id')
       table.dropForeign('driver_id')
       table.dropForeign('vehicle_id')
   })
