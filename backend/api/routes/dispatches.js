@@ -1,4 +1,4 @@
-const express = require('express')
+ const express = require('express')
 const router = express.Router()
 const dispatchesCtl = require('../controllers/dispatches.js')
 
@@ -13,6 +13,9 @@ const dispatchesCtl = require('../controllers/dispatches.js')
  *      dispatch_id:
  *        type: integer
  *        example: 1
+ *      requestor_id:
+ *        type: bigint
+ *        example: 1234567891
  *      driver_id:
  *        type: bigint
  *        example: 1234567891
@@ -25,6 +28,9 @@ const dispatchesCtl = require('../controllers/dispatches.js')
  *  new_dispatch:
  *    type: object
  *    properties:
+ *      requestor_id:
+ *        type: bigint
+ *        example: 1234567891
  *      driver_id:
  *        type: bigint
  *        example: 1234567891
