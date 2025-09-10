@@ -13,5 +13,9 @@ module.exports = {
       host: 'localhost',
       port: 5432
     }
-  }
+  },
+    docker: {
+        client: "pg",
+        connection: "pg://postgres:docker@db:5432/convoy_connect",
+    },
 };

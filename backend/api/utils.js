@@ -50,7 +50,7 @@ export function generateUsers() {
 
             userArray.push({
                 dod_id: faker.number.int({min: 1000000000, max: 9999999999}),
-                username: `${fakeFirstName} - ${fakeLastName}`,
+                username: `${fakeFirstName.toLowerCase()} - ${fakeLastName.toLowerCase()}`,
                 password: 'password',
                 uic: uicArray[i],
                 first_name: fakeFirstName,

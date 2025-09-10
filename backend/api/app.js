@@ -3,6 +3,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 const app = express();
 const port = 8080;
+const cors = require('cors')
 const rootRoutes = require('./routes/root.js')
 const vehicleRoutes = require('./routes/vehicles.js')
 const userRoutes = require('./routes/users.js')
@@ -25,6 +26,9 @@ const swaggerOptions = {
   },
   apis: ['./routes/*.js'], // files containing annotations as above
 };
+
+app.use(cors())
+app.use(express.json());
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));

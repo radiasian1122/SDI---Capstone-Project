@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "knex": "^3.1.0",
@@ -16,7 +17,8 @@
     "@faker-js/faker": "^10.0.0"
   },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon app.js",
+    "migrate": "knex migrate:latest && knex seed:run"
   },
   "keywords": [],
   "author": "",

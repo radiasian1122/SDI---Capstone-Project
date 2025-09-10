@@ -2,6 +2,33 @@ const express = require('express')
 const router = express.Router()
 const vehiclesCtl = require('../controllers/vehicles.js')
 
+///////// SWAGGER COMPONENTS //////////
+
+/**
+ * @swagger
+ * components:
+ *   vehicle:
+ *     type: object
+ *     properties:
+ *       vehicle_id:
+ *         type: integer
+ *         example: 1
+ *       uic:
+ *         type: string
+ *         example: WAB4AA
+ *       platform_variant:
+ *         type: integer
+ *         example: 1
+ *       bumper_no:
+ *         type: string
+ *         example: A001
+ *       deadlined:
+ *         type: boolean
+ *         example: false
+ */
+
+/////////// ROUTE DEFINITIONS ///////////
+
 /**
  * @swagger
  * /vehicles:
@@ -15,29 +42,31 @@ const vehiclesCtl = require('../controllers/vehicles.js')
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   platform_variant:
- *                     type: integer
- *                     example: 1
- *                   bumper_no:
- *                     type: string
- *                     example: A001
- *                   deadlined:
- *                     type: boolean
- *                     example: false
+ *                 $ref: '#/components/vehicle'
  */
 router.get('/', vehiclesCtl.getAllVehicles)
 
+
 /**
  * @swagger
- * /vehicles/:id:
+ * /vehicles/uic/{uic}:
+ *   get:
+ *     summary: Retrieve a list of vehicles
+ *     responses:
+ *       200:
+ *         description: Returns an array of all vehicle objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/vehicle'
+ */
+router.get('/uic/:uic', vehiclesCtl.getVehiclesByUic)
+
+/**
+ * @swagger
+ * /vehicles/id/{id}:
  *   get:
  *     summary: Retrieve a single vehicle by vehicle ID
  *     responses:
@@ -48,24 +77,8 @@ router.get('/', vehiclesCtl.getAllVehicles)
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   vehicle_id:
- *                     type: integer
- *                     example: 1
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   platform_variant:
- *                     type: integer
- *                     example: 1
- *                   bumper_no:
- *                     type: string
- *                     example: A001
- *                   deadlined:
- *                     type: boolean
- *                     example: false
+ *                 $ref: '#/components/vehicle'
  */
-router.get('/:id', vehiclesCtl.getVehicleById)
+router.get('/id/:id', vehiclesCtl.getVehicleById)
 
 module.exports = router
