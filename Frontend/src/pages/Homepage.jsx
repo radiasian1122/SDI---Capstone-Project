@@ -22,6 +22,12 @@ function Homepage() {
       {dispatches && <Dispatches />}
 
       <Cart />
+      <BackgroundMedia
+            mp4Src="/media/slide1CCbg.mp4"
+            // gifSrc="/media/login-bg.gif"
+            // posterSrc="/media/login-poster.jpg"
+            overlay
+          ></BackgroundMedia>
     </div>
   );
 }

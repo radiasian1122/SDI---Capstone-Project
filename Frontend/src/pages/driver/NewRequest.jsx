@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Loading from "../../components/Loading";
+import BackgroundMedia from "../../components/BackgroundMedia";
 
 export default function NewRequest() {
   const { user, loading } = useAuth();
@@ -41,6 +42,11 @@ export default function NewRequest() {
   };
 
   return (
+    <BackgroundMedia
+    mp4Src= "/media/slide2CCbg.mp4">
+      <div className="card slide-in" style={{ maxWidth: 550, width: "100%" }}>
+        <div className="card-body"></div>
+
     <div className="cc-page space-y-6">
       <h1 className="cc-page-title">New Dispatch Request</h1>
 
@@ -113,5 +119,7 @@ export default function NewRequest() {
         <div className="cc-sticky-pad" />
       </form>
     </div>
+    </div>
+    </BackgroundMedia>
   );
 }
