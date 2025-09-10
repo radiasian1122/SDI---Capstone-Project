@@ -1,0 +1,403 @@
+/* Convoy Connect — components.css (pure CSS, Tailwind-agnostic)*/
+
+/* ---------- BASE ---------- */
+html {
+  scroll-behavior: smooth;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--color-surface);
+  color: var(--color-text);
+  margin: 0;
+}
+
+/* ---------- LAYOUT ---------- */
+.cc-container {
+  width: 100%;
+  max-width: min(1120px, 95vw);
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .cc-container {
+    padding-inline: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .cc-container {
+    padding-inline: 2rem;
+  }
+}
+.cc-page {
+  padding-block: 1.5rem;
+}
+.cc-page-title {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem 0;
+}
+.cc-spacer {
+  margin-inline-start: auto;
+}
+
+/* Top Nav (top bar only) */
+.cc-nav {
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in oklab, var(--color-surface) 90%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.cc-nav-inner {
+  height: 56px; /* h-14 */
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.cc-brand {
+  color: var(--color-brand);
+  font-weight: 600;
+}
+
+/* Sticky page action bar */
+.cc-actionbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  margin-top: 0.75rem;
+  padding-block: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  background: color-mix(in oklab, var(--color-surface) 85%, transparent);
+}
+.cc-sticky-pad {
+  height: 48px;
+} /* spacer to avoid overlap below sticky bar */
+
+/* ----- Loading spinner ----- */
+.cc-spinner {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid color-mix(in oklab, var(--color-text) 25%, transparent);
+  border-top-color: var(--color-text);
+  animation: cc-spin 0.8s linear infinite;
+}
+@keyframes cc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ----- Skeletons ----- */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: color-mix(in oklab, var(--color-surface-muted) 70%, transparent);
+  border-radius: 6px;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in oklab, var(--color-surface) 65%, transparent),
+    transparent
+  );
+  animation: cc-shimmer 1.2s infinite;
+}
+@keyframes cc-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton-line {
+  height: 12px;
+}
+.skeleton-card {
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface);
+}
+/* ---------- BUTTONS ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-1);
+  transition:
+    filter 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  border: none;
+  cursor: pointer;
+}
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #fff;
+  background: var(--color-accent);
+}
+.btn-primary:hover {
+  filter: brightness(0.95);
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.btn-secondary {
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+.btn-secondary:hover {
+  background: var(--color-surface-muted);
+}
+
+.btn-ghost {
+  background: transparent;
+}
+.btn-ghost:hover {
+  background: var(--color-surface-muted);
+}
+
+.btn-danger {
+  color: #fff;
+  background: var(--color-danger);
+}
+.btn-danger:hover {
+  filter: brightness(0.95);
+}
+
+.btn-pill {
+  border-radius: var(--radius-2);
+}
+.btn-icon {
+  padding: 0.5rem;
+  aspect-ratio: 1 / 1;
+}
+
+/* ---------- CARDS ---------- */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  box-shadow: var(--shadow-md);
+}
+.card-body {
+  padding: 1rem;
+}
+@media (min-width: 768px) {
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+.card-title {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 600;
+}
+.card-subtitle {
+  margin: 0;
+  font-size: 0.875rem;
+  color: color-mix(in oklab, var(--color-text) 70%, transparent);
+}
+
+/* ---------- FORMS ---------- */
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 0.25rem;
+}
+.label.required::after {
+  content: " *";
+  color: var(--color-danger);
+}
+
+.input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.input:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-accent);
+}
+
+.help {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: color-mix(in oklab, var(--color-text) 70%, transparent);
+}
+.error {
+  margin-top: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-danger);
+}
+
+/* ----- Text helpers ----- */
+.text-muted {
+  color: color-mix(in oklab, var(--color-text) 70%, transparent);
+}
+
+/* ---------- BADGES / STATUS ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 11px;
+  font-weight: 500;
+  border-radius: var(--radius-2);
+}
+.state-PENDING {
+  background: color-mix(in oklab, var(--color-warning) 20%, transparent);
+  color: var(--color-warning);
+}
+.state-APPROVED {
+  background: color-mix(in oklab, var(--color-success) 20%, transparent);
+  color: var(--color-success);
+}
+.state-DENIED {
+  background: color-mix(in oklab, var(--color-danger) 20%, transparent);
+  color: var(--color-danger);
+}
+.state-DISPATCHED {
+  background: color-mix(in oklab, var(--color-info) 15%, transparent);
+  color: var(--color-info);
+}
+.state-OUT {
+  background: color-mix(in oklab, var(--color-out) 20%, transparent);
+  color: var(--color-out);
+}
+.state-RETURNED {
+  background: color-mix(in oklab, var(--color-returned) 30%, transparent);
+  color: var(--color-returned);
+}
+.state-MAINTENANCE {
+  background: color-mix(in oklab, var(--color-maint) 20%, transparent);
+  color: var(--color-maint);
+}
+.state-CLOSED {
+  background: color-mix(in oklab, var(--color-closed) 20%, transparent);
+  color: var(--color-closed);
+}
+
+/* ---------- TABLES ---------- */
+.table {
+  width: 100%;
+  font-size: 0.875rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+}
+.thead {
+  position: sticky;
+  top: 0;
+  text-align: left;
+  background: var(--color-surface-muted);
+}
+.th {
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+.tbody {
+  background: var(--color-surface);
+}
+.tr {
+  border-top: 1px solid var(--color-border);
+}
+.tr-striped:nth-child(even) {
+  background: var(--color-surface-muted);
+}
+.row-hover:hover {
+  background: color-mix(in oklab, var(--color-surface-muted) 80%, transparent);
+}
+.td {
+  padding: 0.5rem 1rem;
+}
+
+.th-sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.th-sortable::after {
+  content: " ↕";
+  color: color-mix(in oklab, var(--color-text) 60%, transparent);
+}
+
+/* ---------- TOASTS ---------- */
+.toast-wrap {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0.75rem;
+  display: flex;
+  justify-content: center;
+  z-index: 50;
+}
+.toast {
+  border-radius: var(--radius-1);
+  padding: 0.5rem 1rem;
+  box-shadow: var(--shadow-md);
+  background: var(--color-text);
+  color: var(--color-text-inverted);
+}
+
+/* ---------- REDUCED MOTION / PRINT ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .cc-nav,
+  .toast-wrap,
+  .cc-actionbar {
+    display: none !important;
+  }
+  .card {
+    box-shadow: none !important;
+    border-color: #000 !important;
+  }
+  .cc-container {
+    max-width: 100% !important;
+    padding: 0 12mm !important;
+  }
+}

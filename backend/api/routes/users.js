@@ -2,6 +2,35 @@ const express = require('express')
 const router = express.Router()
 const usersCtl = require('../controllers/users.js')
 
+///////// SWAGGER COMPONENTS ////////////
+
+/**
+ * @swagger
+ * components:
+ *  user:
+ *    type: object
+ *    properties:
+ *      dod_id:
+ *        type: integer
+ *        example: 1234567891
+ *      username:
+ *        type: string
+ *        example: joe.snuffy
+ *      password:
+ *        type: string
+ *        example: $5$MnfsQ4iN$ZMTppKN16y/tIsUYs/obHlhdP.Os80yXhTurpBMUbA5
+ *      uic:
+ *        type: string
+ *        example: NF5HA0
+ *      first_name:
+ *        type: string
+ *        example: Joseph
+ *      last_name:
+ *        type: string
+ *        example: Snuffy
+ */
+
+//////////// ROUTES DEFINITIONS //////////////
 
 /**
  * @swagger
@@ -16,26 +45,7 @@ const usersCtl = require('../controllers/users.js')
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   dod_id:
- *                     type: integer
- *                     example: 1234567891
- *                   username:
- *                     type: string
- *                     example: joe.snuffy
- *                   password:
- *                     type: string
- *                     example: $5$MnfsQ4iN$ZMTppKN16y/tIsUYs/obHlhdP.Os80yXhTurpBMUbA5
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   first_name:
- *                     type: string
- *                     example: Joseph
- *                   last_name:
- *                     type: string
- *                     example: Snuffy
+ *                 $ref: '#/components/user'
  */
 router.get('/', usersCtl.getAllUsers)
 
@@ -52,26 +62,7 @@ router.get('/', usersCtl.getAllUsers)
  *             schema:
  *               type: array
  *               items:
- *                 type: object
- *                 properties:
- *                   dod_id:
- *                     type: integer
- *                     example: 1234567891
- *                   username:
- *                     type: string
- *                     example: joe.snuffy
- *                   password:
- *                     type: string
- *                     example: $5$MnfsQ4iN$ZMTppKN16y/tIsUYs/obHlhdP.Os80yXhTurpBMUbA5
- *                   uic:
- *                     type: string
- *                     example: WAB4AA
- *                   first_name:
- *                     type: string
- *                     example: Joseph
- *                   last_name:
- *                     type: string
- *                     example: Snuffy
+ *                 $ref: '#/components/user'
  */
 router.get('/:id', usersCtl.getUserById)
 
@@ -95,7 +86,7 @@ router.get('/:id', usersCtl.getUserById)
  *                     example: 1234567891
  *                   qualifications:
  *                     type: array
- *                     example: []
+ *                     example: [{ qual_id: 1, platform: "JLTV", variant: "113"}, { qual_id: 1, platform: "LMTV", variant: "559"}]
  */
 router.get('/:id/qual', usersCtl.getUserQualifications)
 
