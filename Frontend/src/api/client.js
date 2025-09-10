@@ -65,6 +65,8 @@ export async function checkinDispatch(id, payload) {
 
 // Vehicles
 export async function listVehicles() {
-  const { data } = await api.get("/vehicles");
+  const { data } = await api.get(
+    "http://localhost:8080/docs/#/default/get_vehicles"
+  );
   return data;
 }

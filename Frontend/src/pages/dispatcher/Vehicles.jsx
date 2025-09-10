@@ -5,6 +5,7 @@ import { listVehicles } from "../../api/client"; // implement to return { items:
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
 import StatusBadge from "../../components/StatusBadge";
+import { useEffect, useState } from "react";
 
 export default function Vehicles() {
   const { user, loading: authLoading } = useAuth();
@@ -22,13 +23,71 @@ export default function Vehicles() {
     );
   }
 
-  const { data, loading } = useFetch(() => listVehicles(), []);
+  // const { loading } = useFetch(() => listVehicles(), []);
+
+  const [vehicles, setVehicles] = useState([]);
+  const [addVic, setAddVic] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/vehicles")
+      .then((data) => data.json())
+      .then((json) => {
+        setVehicles(json);
+      });
+  }, []);
+
+  function handleBumperNumbers(num) {
+    if (addVic.includes(num)) {
+      let newArray = addVic.filter((vic) => vic != num);
+      setAddVic(newArray);
+      return;
+    }
+    setAddVic((prev) => [...prev, num]);
+  }
 
   return (
     <div className="cc-page space-y-6">
       <h1 className="cc-page-title">Vehicles</h1>
-
-      {loading ? (
+      <div className="vehicles-container">
+        <table>
+          <thead>
+            <tr>
+              <th className="th th-sortable" scope="col">
+                Type
+              </th>
+              <th className="th th-sortable" scope="col">
+                Callsign
+              </th>
+              <th className="th th-sortable" scope="col">
+                Company
+              </th>
+              <th scope="col">Status</th>
+              <th scope="col">Check Box to Add</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vehicles.map((vehicle) => (
+              <tr>
+                <td className="td px-4 py-2">
+                  {vehicle.bumper_no.replace(/[^a-zA-Z]/g, "")}
+                </td>
+                <td className="td px-4 py-2">{vehicle.bumper_no}</td>
+                <td className="td px-4 py-2">{vehicle.uic.slice(4, 5)}</td>
+                <td className="td px-4 py-2">
+                  {vehicle.deadlined ? "FMC" : "Deadlined"}
+                </td>
+                <td className="td px-4 py-2">
+                  <input
+                    type="checkbox"
+                    onChange={() => handleBumperNumbers(vehicle.bumper_no)}
+                  />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {/* {loading ? (
         <div className="card">
           <div className="card-body">Loading…</div>
         </div>
@@ -61,7 +120,7 @@ export default function Vehicles() {
             </tbody>
           </table>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
