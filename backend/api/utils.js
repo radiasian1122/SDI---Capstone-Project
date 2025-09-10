@@ -1,4 +1,5 @@
 import {faker} from '@faker-js/faker';
+import knex from "./db.js";
 
 
 // class User{
@@ -11,29 +12,10 @@ import {faker} from '@faker-js/faker';
 //   }
 // }
 
-// class Vic{
-//   constructor() {
-//   }
-//   deadlined() {
-//     let num = Math.floor(Math.random() * 2)+1;
-//    return num == 1 ? true : false;
-//   }
-//   bumper() {
-//     const company = ["A", "B", "C", "D"];
-//     let num1 = Math.floor(Math.random() * 4) + 1;
-//     let num2 = Math.floor(Math.random() * 4) + 1;
-//     return `${company[num1]} ${num2}/${num1}`
-//   }
-//   variant() {
-//     const letters = ["M", "L", "C", "D"];
-//
-//   }
-//
-// }
 
 
-// export {Vic}
-// export {User}
+
+
 
 export const masterUsersList = generateUsers();
 
@@ -133,4 +115,26 @@ export function generateDriverQuals() {
             })
     }
     return driverQuals;
+}
+
+export async function formatDrivers(req, res){
+
+    try {
+        const drivers = await knex("qualifications as Q")
+            .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
+            .innerJoin("users as U", "U.dod_id", "D.user_id")
+            .select("U.first_name", "U.last_name", "U.uic")
+            .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
+            .groupBy("U.first_name", "U.last_name", "U.uic")
+            .orderBy(["U.last_name", "U.first_name"]);
+
+        drivers.forEach(driver => {
+            driver.qualifications = driver.qualifications.split(", ");
+        })
+        res.status(200).json(drivers);
+
+    }catch (err) {
+        res.status(500).json({ error: err.message });
+        console.error(err);
+    }
 }
