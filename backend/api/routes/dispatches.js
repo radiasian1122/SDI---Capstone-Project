@@ -60,7 +60,7 @@ router.get('/', dispatchesCtl.getAllDispatches)
 
 /**
  * @swagger
- * /dispatches:
+ * /dispatches/uic/{uic}:
  *   get:
  *     summary: Retrieve a list of all dispatches
  *     responses:
@@ -73,26 +73,7 @@ router.get('/', dispatchesCtl.getAllDispatches)
  *               items:
  *                 $ref: '#/components/dispatch'
  */
-router.get('/:uic', dispatchesCtl.getDispatchesByUic)
-
-/**
- * @swagger
- * /dispatches/:driver_id:
- *   get:
- *     summary: Retrieve a list of all dispatches associated with a specific driver
- *     responses:
- *        404:
- *          description: No dispatches found for the given user
- *        200:
- *         description: Returns an array of all disptach objects associated with a specific driver whether they are active or not
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 $ref: '#/components/dispatch'
- */
-router.get('/:driver_id/all', dispatchesCtl.getDispatchesByDriver)
+router.get('/uic/:uic', dispatchesCtl.getDispatchesByUic)
 
 /**
  * @swagger
@@ -114,6 +95,6 @@ router.get('/:driver_id/all', dispatchesCtl.getDispatchesByDriver)
  *               items:
  *                $ref: '#/components/dispatch'
  */
-router.post('/disptaches', dispatchesCtl.createNewDispatch)
+router.post('/dispatches', dispatchesCtl.createNewDispatch)
 
 module.exports = router

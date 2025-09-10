@@ -51,7 +51,7 @@ router.get('/', usersCtl.getAllUsers)
 
 /**
  * @swagger
- * /users/:id:
+ * /users/id/{id}:
  *   get:
  *     summary: Get a single user by user ID (DOD ID)
  *     responses:
@@ -64,11 +64,11 @@ router.get('/', usersCtl.getAllUsers)
  *               items:
  *                 $ref: '#/components/user'
  */
-router.get('/:id', usersCtl.getUserById)
+router.get('/id/:id', usersCtl.getUserById)
 
 /**
  * @swagger
- * /users/:id/qual:
+ * /users/id/{id}/qual:
  *   get:
  *     summary: Get a single user by user ID (DOD ID)
  *     responses:
@@ -88,6 +88,6 @@ router.get('/:id', usersCtl.getUserById)
  *                     type: array
  *                     example: [{ qual_id: 1, platform: "JLTV", variant: "113"}, { qual_id: 1, platform: "LMTV", variant: "559"}]
  */
-router.get('/:id/qual', usersCtl.getUserQualifications)
+router.get('/id/:id/qual', usersCtl.getUserQualifications)
 
 module.exports = router

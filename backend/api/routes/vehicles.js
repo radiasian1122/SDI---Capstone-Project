@@ -49,7 +49,7 @@ router.get('/', vehiclesCtl.getAllVehicles)
 
 /**
  * @swagger
- * /vehicles:
+ * /vehicles/uic/{uic}:
  *   get:
  *     summary: Retrieve a list of vehicles
  *     responses:
@@ -62,11 +62,11 @@ router.get('/', vehiclesCtl.getAllVehicles)
  *               items:
  *                 $ref: '#/components/vehicle'
  */
-router.get('/:uic', vehiclesCtl.getVehiclesByUic)
+router.get('/uic/:uic', vehiclesCtl.getVehiclesByUic)
 
 /**
  * @swagger
- * /vehicles/:id:
+ * /vehicles/id/{id}:
  *   get:
  *     summary: Retrieve a single vehicle by vehicle ID
  *     responses:
@@ -79,6 +79,6 @@ router.get('/:uic', vehiclesCtl.getVehiclesByUic)
  *               items:
  *                 $ref: '#/components/vehicle'
  */
-router.get('/:id', vehiclesCtl.getVehicleById)
+router.get('/id/:id', vehiclesCtl.getVehicleById)
 
 module.exports = router
