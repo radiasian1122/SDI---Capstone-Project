@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { StrictMode } from "react";
 import "./index.css";
 import "./styles/theme.css";
+import "./styles/login.css";
 import "./styles/components.css";
 import App from "./components/App.jsx";
 

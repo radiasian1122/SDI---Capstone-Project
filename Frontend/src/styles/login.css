@@ -1,0 +1,150 @@
+/* Full-bleed background container */
+.login-wrap {
+  position: relative;
+  min-height: 100dvh; /* mobile safe unit */
+  overflow: hidden;
+  background: var(--color-surface); /* fallback color */
+}
+
+/* Background video / gif / image fills the page */
+.login-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Dark gradient overlay for contrast */
+.login-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom right,
+    color-mix(in oklab, var(--color-surface-contrast) 60%, transparent),
+    transparent 40%,
+    color-mix(in oklab, var(--color-surface-contrast) 30%, transparent)
+  );
+  pointer-events: none;
+}
+
+/* Foreground layout: centers the auth card */
+.login-foreground {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 2rem;
+}
+
+/* ===== Reusable background media ===== */
+.bgmedia {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--color-surface); /* fallback color */
+}
+.bgmedia-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bgmedia-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* soft contrast gradient for readability */
+  background: linear-gradient(
+    to bottom right,
+    color-mix(in oklab, var(--color-surface-contrast) 60%, transparent) 0%,
+    transparent 40%,
+    color-mix(in oklab, var(--color-surface-contrast) 30%, transparent) 100%
+  );
+}
+.bgmedia-foreground {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+/* Slide-in animation for the logo/panel */
+@keyframes ccSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.slide-in {
+  animation: ccSlideIn 420ms cubic-bezier(0.22, 0.7, 0.25, 1) both;
+}
+
+/* Respect reduced motion: pause the video and disable the animation */
+@media (prefers-reduced-motion: reduce) {
+  .slide-in {
+    animation: none !important;
+  }
+  video.bgmedia-media {
+    display: none !important;
+  }
+}
+.login-bg--video {
+  display: none !important;
+}
+
+/* Small helpers for the brand row */
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+.login-brand img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+/* ===== Reusable background media ===== */
+.bgmedia {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--color-surface); /* fallback color */
+}
+.bgmedia-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.bgmedia-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* soft contrast gradient for readability */
+  background: linear-gradient(
+    to bottom right,
+    color-mix(in oklab, var(--color-surface-contrast) 60%, transparent) 0%,
+    transparent 40%,
+    color-mix(in oklab, var(--color-surface-contrast) 30%, transparent) 100%
+  );
+}
+.bgmedia-foreground {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
