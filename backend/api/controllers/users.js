@@ -32,3 +32,30 @@ exports.getUserQualifications = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+exports.createNewUser = (req, res) => {
+  if (!req.body){
+    res.status(400).json({
+      message: "You must supply a body with this request"
+    })
+  }
+  else if(
+    !Object.hasOwn(req.body, "dod_id") || !Object.hasOwn(req.body, "uic")
+  ){
+    res.status(400).json({
+      message: "Missing required parameters in request body"
+    })
+  }
+  else{
+    knex('users').insert(req.body, ['dod_id','uic'])
+    .then(createdUser => {
+      res.status(200).send(createdUser)
+    })
+    .catch(err => {
+      if (err){
+        console.log(err.message)
+        res.status(500).send(err.message)
+      }
+    })
+  }
+}

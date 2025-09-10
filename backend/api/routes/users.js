@@ -7,6 +7,15 @@ const usersCtl = require('../controllers/users.js')
 /**
  * @swagger
  * components:
+ *  new_user:
+ *    type: object
+ *    properties:
+ *      dod_id:
+ *        type: bigint
+ *        example: 1234567891
+ *      uic:
+ *        type: string
+ *        example: NF5HA0
  *  user:
  *    type: object
  *    properties:
@@ -48,6 +57,29 @@ const usersCtl = require('../controllers/users.js')
  *                 $ref: '#/components/user'
  */
 router.get('/', usersCtl.getAllUsers)
+
+/**
+ * @swagger
+ * /users:
+ *   post:
+ *     summary: Create a new user
+ *     requestBody:
+ *      description: The following properties are optional when creating a new user. **username**, **password**, **first_name**, **last_name**
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/user'
+ *     responses:
+ *       200:
+ *         description: Returns an array containing the user object that was created. The object will only contain the required properties.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/new_user'
+ */
+router.post('/', usersCtl.createNewUser)
 
 /**
  * @swagger
