@@ -2,6 +2,8 @@ const express = require('express')
 const router = express.Router()
 const vehiclesCtl = require('../controllers/vehicles.js')
 
+///////// SWAGGER COMPONENTS //////////
+
 /**
  * @swagger
  * components:
@@ -23,7 +25,12 @@ const vehiclesCtl = require('../controllers/vehicles.js')
  *       deadlined:
  *         type: boolean
  *         example: false
- *
+ */
+
+/////////// ROUTE DEFINITIONS ///////////
+
+/**
+ * @swagger
  * /vehicles:
  *   get:
  *     summary: Retrieve a list of vehicles
@@ -36,7 +43,29 @@ const vehiclesCtl = require('../controllers/vehicles.js')
  *               type: array
  *               items:
  *                 $ref: '#/components/vehicle'
- *
+ */
+router.get('/', vehiclesCtl.getAllVehicles)
+
+
+/**
+ * @swagger
+ * /vehicles:
+ *   get:
+ *     summary: Retrieve a list of vehicles
+ *     responses:
+ *       200:
+ *         description: Returns an array of all vehicle objects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/vehicle'
+ */
+router.get('/:uic', vehiclesCtl.getVehiclesByUic)
+
+/**
+ * @swagger
  * /vehicles/:id:
  *   get:
  *     summary: Retrieve a single vehicle by vehicle ID
@@ -50,7 +79,6 @@ const vehiclesCtl = require('../controllers/vehicles.js')
  *               items:
  *                 $ref: '#/components/vehicle'
  */
-router.get('/', vehiclesCtl.getAllVehicles)
 router.get('/:id', vehiclesCtl.getVehicleById)
 
 module.exports = router
