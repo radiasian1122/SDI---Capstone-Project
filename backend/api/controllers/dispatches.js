@@ -60,22 +60,19 @@ exports.createNewDispatch = (req, res) => {
 
 exports.getDispatchesByUic = async (req, res) => {
   try {
-    const dispatches = await knex("dispatches as d")
-      .join("vehicles as v", "d.vehicle_id", "=", "v.vehicle_id")
-      .join("users as u", "d.requestor_id", "=", "u.dod_id")
-      .join("units as un", "v.uic", "=", "un.uic")
-      .where("v.uic", req.params.uic)
-      .select(
-        "d.*",
-        "v.platform",
-        "v.variant",
-        "v.bumper_no",
-        "u.first_name as requestor_first_name",
-        "u.last_name as requestor_last_name",
-        "un.common_name as unit_name"
-      );
+    const dispatches = await knex("dispatches as D")
+        .select(
+            "D.dispatch_id",
+            "D.requestor_id",
+            "D.driver_id",
+            "D.vehicle_id",
+            "D.approved"
+        )
+        .join("users as U", "D.requestor_id", "U.dod_id")
+        .where("U.uic", req.params.uic);
 
-    if (dispatches.length > 0) {
+
+      if (dispatches.length > 0) {
       res.status(200).json(dispatches);
     } else {
       res.status(404).json({
