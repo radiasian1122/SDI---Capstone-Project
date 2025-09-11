@@ -165,15 +165,17 @@ export async function formatDriverById(req, res){
 
 export async function formatDriversByQualId(req, res) {
     try {
-        const drivers = await knex("qualifications as Q")
-            .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
-            .innerJoin("users as U", "U.dod_id", "D.user_id")
-            .select("U.first_name", "U.last_name", "U.uic", "U.dod_id")
-            .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
-            .groupBy("U.first_name", "U.last_name", "U.uic", "U.dod_id")
-            .orderBy(["U.last_name", "U.first_name"])
-            .where("Q.qual_id", req.params.id)
-    }catch (err) {
+        const drivers = await knex('driver_quals as D')
+            .innerJoin('users as U', 'U.dod_id', 'D.user_id')
+            .innerJoin('qualifications as Q', 'Q.qual_id', 'D.qual_id')
+            .select('U.first_name', 'U.last_name', 'U.uic', 'U.dod_id')
+            .where('D.qual_id', req.params.qualId)
+            .orderBy(['U.last_name', 'U.first_name']);
+
+        
+        res.status(200).json(drivers);
+
+    } catch (err) {
         res.status(500).json({ error: err.message });
         console.error(err);
     }
