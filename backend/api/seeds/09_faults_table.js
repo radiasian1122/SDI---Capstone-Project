@@ -8,8 +8,10 @@ exports.seed = async function (knex) {
     await knex('faults').insert(
         {
             vehicle_id: 1,
-            fault: 'some-fault',
-            corrective_action: 'some-corrective-action'
+            fault_code: 123,
+            fault_description: 'It broke dawg',
+            tech_status: 'Ordered the part 6 months ago',
+            corrective_action: 'I tried to fix it but nah'
         }
     );
 };

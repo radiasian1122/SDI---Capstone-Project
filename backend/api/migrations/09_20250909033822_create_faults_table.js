@@ -7,7 +7,10 @@ exports.up = function(knex) {
       table.increments('fault_id')
       table.integer('vehicle_id')
       table.foreign('vehicle_id').references('vehicles.vehicle_id').deferrable('deferred').onDelete('CASCADE')
-      table.string('fault').notNullable()
+      table.integer('fault_code').notNullable()
+      table.timestamp('fault_date').notNullable().defaultTo(knex.fn.now())
+      table.string('fault_description').notNullable()
+      table.string('tech_status')
       table.string('corrective_action')
   })
 };
