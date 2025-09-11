@@ -3,8 +3,68 @@ const router = express.Router();
 const driversCtl = require('../controllers/drivers.js')
 
 
-router.get('/', driversCtl.getAllDrivers)
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     driver:
+ *       type: object
+ *       properties:
+ *         first_name:
+ *           type: string
+ *           example: "John"
+ *         last_name:
+ *           type: string
+ *           example: "Smith"
+ *         uic:
+ *           type: string
+ *           example: "NF5HA0"
+ *         qualifications:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["JLTV", "LMTV", "STRYKER"]
+ *
+ *     new_driver:
+ *       type: object
+ *       properties:
+ *         first_name:
+ *           type: string
+ *           example: "John"
+ *         last_name:
+ *           type: string
+ *           example: "Smith"
+ *         uic:
+ *           type: string
+ *           example: "NF5HA0"
+ *         qualifications:
+ *           type: array
+ *           items:
+ *             type: string
+ *           example: ["JLTV", "LMTV", "STRYKER"]
+ */
 
-router.get('/:quals', driversCtl.getAllQuals)
+/**
+ * @swagger
+ * /drivers:
+ *   get:
+ *     summary: Get all drivers with their qualifications
+ *     tags: [Drivers]
+ *     description: Retrieves all drivers along with their vehicle platform qualifications, grouped by driver and sorted by last name, first name
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all drivers
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/driver'
+ */
+
+
+router.get('/', driversCtl.getAllDrivers)
+router.get('/:id', driversCtl.getDriverById)
+
 
 module.exports = router;
