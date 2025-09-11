@@ -5,10 +5,12 @@ import { listVehicles } from "../../api/client"; // implement to return { items:
 import Loading from "../../components/Loading";
 import EmptyState from "../../components/EmptyState";
 import StatusBadge from "../../components/StatusBadge";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { VehiclesContext } from "../../context/VehiclesContext";
 
 export default function Vehicles() {
   const { user, loading: authLoading } = useAuth();
+  const { dispatchId, setDispatchId } = useContext(VehiclesContext);
   if (authLoading) return <Loading label="Loading account…" />;
   if (user && user.role !== "DISPATCHER" && !import.meta.env.DEV) {
     return (
@@ -26,7 +28,6 @@ export default function Vehicles() {
   // const { loading } = useFetch(() => listVehicles(), []);
 
   const [vehicles, setVehicles] = useState([]);
-  const [addVic, setAddVic] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:8080/vehicles")
@@ -37,12 +38,12 @@ export default function Vehicles() {
   }, []);
 
   function handleBumperNumbers(num) {
-    if (addVic.includes(num)) {
-      let newArray = addVic.filter((vic) => vic != num);
-      setAddVic(newArray);
+    if (dispatchId.includes(num)) {
+      let newArray = dispatchId.filter((vic) => vic != num);
+      setDispatchId(newArray);
       return;
     }
-    setAddVic((prev) => [...prev, num]);
+    setDispatchId((prev) => [...prev, num]);
   }
 
   return (
@@ -79,7 +80,7 @@ export default function Vehicles() {
                 <td className="td px-4 py-2">
                   <input
                     type="checkbox"
-                    onChange={() => handleBumperNumbers(vehicle.bumper_no)}
+                    onChange={() => handleBumperNumbers(vehicle)}
                   />
                 </td>
               </tr>
