@@ -106,3 +106,29 @@ exports.getDispatchByRequestorId = async (req, res) => {
     console.error(err);
   }
 };
+
+exports.updateDispatch = (req, res) => {
+  if (!req.body){
+    res.status(400).json({
+      message: "Missing request body"
+    })
+  }
+  else if(
+    !Object.hasOwn(req.body, "driver_id") &&
+    !Object.hasOwn(req.body, "approved")
+  ){
+    res.status(400).json({
+      message: "Request body is missing required properties. See /docs endpoint."
+    })
+  }
+  else{
+    knex('dispatches').where({ dispatch_id: req.params.dispatch_id }).update(req.body, ['dispatch_id', 'approved', 'driver_id'])
+    .then(updatedDispatch => {
+      res.status(200).send(updatedDispatch)
+    })
+    .catch(err => {
+      console.log(err.message)
+      res.status(500).send(err.message)
+    })
+  }
+}
