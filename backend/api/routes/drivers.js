@@ -65,6 +65,7 @@ const driversCtl = require('../controllers/drivers.js')
 
 router.get('/', driversCtl.getAllDrivers)
 router.get('/:id', driversCtl.getDriverById)
+router.get('/qual/:qualId', driversCtl.getDriversByQualId)
 
 
 module.exports = router;
