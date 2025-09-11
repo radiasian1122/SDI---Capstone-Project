@@ -60,6 +60,30 @@ router.get('/', dispatchesCtl.getAllDispatches)
 
 /**
  * @swagger
+ * /dispatches:
+ *  post:
+ *    summary: Create a new dispatch
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#components/new_dispatch'
+ *    responses:
+ *      400:
+ *        description: Request did not contain a request body or failed to send required properties with request body.
+ *      200:
+ *        description: Returns an array containing the dispatch object that was created.
+ *        content:
+ *          application/json:
+ *            schema:
+ *               type: array
+ *               items:
+ *                $ref: '#/components/dispatch'
+ */
+router.post('/', dispatchesCtl.createNewDispatch)
+
+/**
+ * @swagger
  * /dispatches/uic/{uic}:
  *   get:
  *     summary: Retrieve a list of all dispatches
@@ -75,26 +99,5 @@ router.get('/', dispatchesCtl.getAllDispatches)
  */
 router.get('/uic/:uic', dispatchesCtl.getDispatchesByUic)
 
-/**
- * @swagger
- * /dispatches:
- *  post:
- *    summary: Create a new dispatch
- *    requestBody:
- *      content:
- *        application/json:
- *          schema:
- *            $ref: '#components/new_dispatch'
- *    responses:
- *      200:
- *        description: Returns an array containing the dispatch object that was created.
- *        content:
- *          application/json:
- *            schema:
- *               type: array
- *               items:
- *                $ref: '#/components/dispatch'
- */
-router.post('/dispatches', dispatchesCtl.createNewDispatch)
 
 module.exports = router

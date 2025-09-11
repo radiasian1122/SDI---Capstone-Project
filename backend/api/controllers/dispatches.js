@@ -22,9 +22,87 @@ exports.getDispatchesByDriver = async (req, res) => {
 };
 
 exports.createNewDispatch = (req, res) => {
-  console.log('Write code to create a dispatch here')
-}
+  console.log("Write code to create a dispatch here");
+  if (!req.body) {
+    res.status(400).json({
+      message: "You must supply a body with this request.",
+    });
+  } else if (
+    !Object.hasOwn(req.body, "requestor_id") ||
+    !Object.hasOwn(req.body, "driver_id") ||
+    !Object.hasOwn(req.body, "vehicle_id")
+  ) {
+    res.status(400).json({
+      message: "Missing required parameters. See /docs endpoint.",
+    });
+  } else {
+    knex("dispatches")
+      .insert(req.body, [
+        "dispatch_id",
+        "requestor_id",
+        "driver_id",
+        "vehicle_id",
+        "approved",
+      ])
+      .then((newDispatch) => res.status(200).send(newDispatch))
+      .catch((err) => {
+        if (err) {
+          res.status(500).send(err.message);
+          console.error(err.message);
+        } else {
+          res.status(500).json({
+            message: "something went wrong",
+          });
+        }
+      });
+  }
+};
 
-exports.getDispatchesByUic = (req, res) => {
-  console.log('Write code to get a dispatch by UIC here')
-}
+exports.getDispatchesByUic = async (req, res) => {
+  try {
+    const dispatches = await knex("dispatches as d")
+      .join("vehicles as v", "d.vehicle_id", "=", "v.vehicle_id")
+      .join("users as u", "d.requestor_id", "=", "u.dod_id")
+      .join("units as un", "v.uic", "=", "un.uic")
+      .where("v.uic", req.params.uic)
+      .select(
+        "d.*",
+        "v.platform",
+        "v.variant",
+        "v.bumper_no",
+        "u.first_name as requestor_first_name",
+        "u.last_name as requestor_last_name",
+        "un.common_name as unit_name"
+      );
+
+    if (dispatches.length > 0) {
+      res.status(200).json(dispatches);
+    } else {
+      res.status(404).json({
+        error: `No dispatches found for UIC: ${req.params.uic}`,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.error(err);
+  }
+};
+
+exports.getDispatchByRequestorId = async (req, res) => {
+  try {
+    const dispatches = await knex("dispatches")
+      .where("requestor_id", req.params.requestorId)
+      .select("*");
+
+    if (dispatches.length > 0) {
+      res.status(200).json(dispatches);
+    } else {
+      res.status(404).json({
+        error: `No dispatches found for requestor ID: ${req.params.requestorId}`,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+    console.error(err);
+  }
+};
