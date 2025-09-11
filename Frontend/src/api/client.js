@@ -121,12 +121,13 @@ export async function getVehicleById(id) {
   return data;
 }
 
-// Vehicles
-export async function listVehicles() {
-  const { data } = await api.get(
-    "http://localhost:8080/docs/#/default/get_vehicles"
-      return data;
-  );
+// // Vehicles
+// export async function listVehicles() {
+//   const { data } = await api.get(
+//     "http://localhost:8080/docs/#/default/get_vehicles"
+//   );
+//   return data;
+// }
 // GET /vehicles/uic/{uic}
 export async function listVehiclesByUIC(uic, params) {
   const { data } = await api.get(`/vehicles/uic/${encodeURIComponent(uic)}`, {
