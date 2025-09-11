@@ -7,6 +7,8 @@ import Loading from "../components/Loading";
 import SkeletonList from "../components/SkeletonList";
 import EmptyState from "../components/EmptyState";
 import DevRoleSwitcher from "../components/DevRoleSwitcher";
+import { VehiclesContext } from "../context/VehiclesContext";
+import { useContext } from "react";
 
 // Minimal local badge (remove if you already have a shared one)
 function StatusBadge({ status }) {
@@ -16,7 +18,7 @@ function StatusBadge({ status }) {
 
 export default function Dashboard() {
   const { user, loading: authLoading } = useAuth();
-
+  const { dispatchId } = useContext(VehiclesContext);
   // 1) Wait for auth to resolve (both dev & prod)
   if (authLoading) return <Loading label="Loading account…" />;
 
