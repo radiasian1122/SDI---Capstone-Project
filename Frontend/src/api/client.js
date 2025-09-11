@@ -106,10 +106,10 @@ export async function listVehicles(params) {
   const items = Array.isArray(data)
     ? data.map((v) => ({
         id: v.vehicle_id,
-        name: `${v.uic}-${v.bumper_no}`,
+        name: `${v.uic.slice(4, 5)}-${v.bumper_no.replace(/[^a-zA-Z]/g, "")}-${v.bumper_no}`,
         type: String(v.platform_variant),
-        status: v.deadlined ? "CLOSED" : "OPEN",
-        notes: v.notes || "",
+        status: v.deadlined ? "DEADLINED" : "FMC",
+        // notes: v.notes || "",
       }))
     : [];
   return { items };
