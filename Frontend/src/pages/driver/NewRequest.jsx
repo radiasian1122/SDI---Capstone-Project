@@ -5,7 +5,6 @@ import BackgroundMedia from "../../components/BackgroundMedia";
 import { useFetch } from "../../hooks/useFetch";
 import { listVehicles } from "../../api/client";
 
-
 export default function NewRequest() {
   const { user, loading } = useAuth();
   const [form, setForm] = useState({
@@ -28,7 +27,7 @@ export default function NewRequest() {
   const availableVehicles = useMemo(
     () =>
       allVehicles.filter(
-        (v) => v.status === "OPEN" && !selectedVehicleIds.includes(v.id)
+        (v) => v.status === "FMC" && !selectedVehicleIds.includes(v.id)
       ),
     [allVehicles, selectedVehicleIds]
   );
@@ -76,142 +75,145 @@ export default function NewRequest() {
     setSelectedVehicleIds((prev) => prev.filter((x) => x !== id));
 
   return (
-    <BackgroundMedia
-    mp4Src= "/media/slide2CCbg.mp4">
+    <BackgroundMedia>
       <div className="card slide-in" style={{ maxWidth: 550, width: "100%" }}>
         <div className="card-body"></div>
 
-    <div className="cc-page space-y-6">
-      <h1 className="cc-page-title">New Dispatch Request</h1>
+        <div className="cc-page space-y-6">
+          <h1 className="cc-page-title">New Dispatch Request</h1>
 
-      <form className="space-y-4 max-w-xl" onSubmit={onSubmit} noValidate>
-        <div>
-          <label className="label required" htmlFor="destination">
-            Destination
-          </label>
-          <input
-            id="destination"
-            className="input"
-            value={form.destination}
-            onChange={onChange("destination")}
-          />
-          {errors.destination && <p className="error">{errors.destination}</p>}
-        </div>
-
-        {/* Vehicles picker */}
-        <div>
-          <label className="label" htmlFor="vehicle-picker">
-            Vehicles (select one or more)
-          </label>
-          {vehiclesLoading ? (
-            <div className="text-muted">Loading vehicles…</div>
-          ) : (
-            <div className="flex gap-2 items-center">
-              <select
-                id="vehicle-picker"
+          <form className="space-y-4 max-w-xl" onSubmit={onSubmit} noValidate>
+            <div>
+              <label className="label required" htmlFor="destination">
+                Destination
+              </label>
+              <input
+                id="destination"
                 className="input"
-                value={pickerValue}
-                onChange={(e) => setPickerValue(e.target.value)}
-              >
-                <option value="">Select available vehicle…</option>
-                {availableVehicles.map((v) => (
-                  <option key={v.id} value={v.id}>
-                    {v.name} • {v.type}
-                  </option>
-                ))}
-              </select>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                onClick={addVehicle}
-                disabled={!pickerValue}
-              >
-                Add
-              </button>
+                value={form.destination}
+                onChange={onChange("destination")}
+              />
+              {errors.destination && (
+                <p className="error">{errors.destination}</p>
+              )}
             </div>
-          )}
 
-          {selectedVehicleIds.length > 0 && (
-            <div className="mt-3">
-              <div className="text-muted mb-2">Selected vehicles</div>
-              <div className="flex flex-wrap gap-2">
-                {selectedVehicleIds.map((id) => {
-                  const v = allVehicles.find((x) => x.id === id);
-                  return (
-                    <div key={id} className="badge">
-                      {v ? `${v.name} • ${v.type}` : `Vehicle ${id}`}
-                      <button
-                        type="button"
-                        className="ml-2 text-danger"
-                        onClick={() => removeVehicle(id)}
-                        aria-label={`Remove vehicle ${id}`}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  );
-                })}
+            {/* Vehicles picker */}
+            <div>
+              <label className="label" htmlFor="vehicle-picker">
+                Vehicles (select one or more)
+              </label>
+              {vehiclesLoading ? (
+                <div className="text-muted">Loading vehicles…</div>
+              ) : (
+                <div className="flex gap-2 items-center">
+                  <select
+                    id="vehicle-picker"
+                    className="input"
+                    value={pickerValue}
+                    onChange={(e) => setPickerValue(e.target.value)}
+                  >
+                    <option value="">Select available vehicle…</option>
+                    {availableVehicles.map((v) => (
+                      <option key={v.id} value={v.id}>
+                        {v.name}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={addVehicle}
+                    disabled={!pickerValue}
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
+
+              {selectedVehicleIds.length > 0 && (
+                <div className="mt-3">
+                  <div className="text-muted mb-2">Selected vehicles</div>
+                  <div className="flex flex-wrap gap-2">
+                    {selectedVehicleIds.map((id) => {
+                      const v = allVehicles.find((x) => x.id === id);
+                      return (
+                        <div key={id} className="badge">
+                          {v ? `${v.name} • ${v.type}` : `Vehicle ${id}`}
+                          <button
+                            type="button"
+                            className="ml-2 text-danger"
+                            onClick={() => removeVehicle(id)}
+                            aria-label={`Remove vehicle ${id}`}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="label" htmlFor="purpose">
+                Purpose
+              </label>
+              <textarea
+                id="purpose"
+                className="input"
+                rows={3}
+                value={form.purpose}
+                onChange={onChange("purpose")}
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="label required" htmlFor="start">
+                  Start time
+                </label>
+                <input
+                  id="start"
+                  type="datetime-local"
+                  className="input"
+                  value={form.start_time}
+                  onChange={onChange("start_time")}
+                />
+                {errors.start_time && (
+                  <p className="error">{errors.start_time}</p>
+                )}
+              </div>
+              <div>
+                <label className="label required" htmlFor="end">
+                  End time
+                </label>
+                <input
+                  id="end"
+                  type="datetime-local"
+                  className="input"
+                  value={form.end_time}
+                  onChange={onChange("end_time")}
+                />
+                {errors.end_time && <p className="error">{errors.end_time}</p>}
               </div>
             </div>
-          )}
-        </div>
 
-        <div>
-          <label className="label" htmlFor="purpose">
-            Purpose
-          </label>
-          <textarea
-            id="purpose"
-            className="input"
-            rows={3}
-            value={form.purpose}
-            onChange={onChange("purpose")}
-          />
+            {/* Sticky actions */}
+            <div className="cc-actionbar">
+              <button type="button" className="btn btn-secondary">
+                Cancel
+              </button>
+              <div className="cc-spacer" />
+              <button type="submit" className="btn btn-primary">
+                Submit Request
+              </button>
+            </div>
+            <div className="cc-sticky-pad" />
+          </form>
         </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="label required" htmlFor="start">
-              Start time
-            </label>
-            <input
-              id="start"
-              type="datetime-local"
-              className="input"
-              value={form.start_time}
-              onChange={onChange("start_time")}
-            />
-            {errors.start_time && <p className="error">{errors.start_time}</p>}
-          </div>
-          <div>
-            <label className="label required" htmlFor="end">
-              End time
-            </label>
-            <input
-              id="end"
-              type="datetime-local"
-              className="input"
-              value={form.end_time}
-              onChange={onChange("end_time")}
-            />
-            {errors.end_time && <p className="error">{errors.end_time}</p>}
-          </div>
-        </div>
-
-        {/* Sticky actions */}
-        <div className="cc-actionbar">
-          <button type="button" className="btn btn-secondary">
-            Cancel
-          </button>
-          <div className="cc-spacer" />
-          <button type="submit" className="btn btn-primary">
-            Submit Request
-          </button>
-        </div>
-        <div className="cc-sticky-pad" />
-      </form>
-    </div>
-    </div>
+      </div>
     </BackgroundMedia>
   );
 }
