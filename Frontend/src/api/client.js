@@ -43,6 +43,7 @@ export async function login(emailOrObj, password) {
   return data;
 }
 
+// NEEDS REFACTOR - NO /me ENDPOINT
 export async function getMe() {
   // If your backend exposes /auth/me instead of /me, change this path
   const { data } = await api.get("/me");

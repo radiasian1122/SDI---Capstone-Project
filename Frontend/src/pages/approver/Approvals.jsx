@@ -5,7 +5,7 @@ import { listRequests } from "../../api/client"; // must return { items: [...] }
 import Loading from "../../components/Loading";
 import SkeletonList from "../../components/SkeletonList";
 import EmptyState from "../../components/EmptyState";
-import RequestCard from "../../components/RequestCard";
+import DispatchCard from "../../components/DispatchCard";
 
 export default function Approvals() {
   const { user, loading: authLoading } = useAuth();
@@ -39,7 +39,7 @@ export default function Approvals() {
           {data.items.map((r) => (
             <div key={r.id} className="card">
               <div className="card-body">
-                <RequestCard item={r} />
+                <DispatchCard item={r} />
                 <div className="mt-3 flex gap-2">
                   <button className="btn btn-primary">Approve</button>
                   <button className="btn btn-danger">Deny</button>
