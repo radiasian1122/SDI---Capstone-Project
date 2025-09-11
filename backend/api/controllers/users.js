@@ -2,7 +2,7 @@ const knex = require("../db.js");
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await knex("users").select("*");
+    const users = await knex("users").select("*").orderBy("last_name");
     res.json(users);
   } catch (err) {
     res.status(500).json({ error: err.message });

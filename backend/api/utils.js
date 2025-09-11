@@ -32,7 +32,7 @@ export function generateUsers() {
 
             userArray.push({
                 dod_id: faker.number.int({min: 1000000000, max: 9999999999}),
-                username: `${fakeFirstName.toLowerCase()} - ${fakeLastName.toLowerCase()}`,
+                username: `${fakeFirstName.toLowerCase()}-${fakeLastName.toLowerCase()}`,
                 password: 'password',
                 uic: uicArray[i],
                 first_name: fakeFirstName,
@@ -117,6 +117,7 @@ export function generateDriverQuals() {
     return driverQuals;
 }
 
+//Formats the drivers table to be used in the frontend
 export async function formatDrivers(req, res){
 
     try {
@@ -134,6 +135,28 @@ export async function formatDrivers(req, res){
         res.status(200).json(drivers);
 
     }catch (err) {
+        res.status(500).json({ error: err.message });
+        console.error(err);
+    }
+}
+
+//Gets a single driver by dod_id and properly formats the data to be used in the frontend
+export async function formatDriverById(req, res){
+    try {
+        const driver = await knex("qualifications as Q")
+            .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
+            .innerJoin("users as U", "U.dod_id", "D.user_id")
+            .select("U.first_name", "U.last_name", "U.uic")
+            .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
+            .groupBy("U.first_name", "U.last_name", "U.uic")
+            .orderBy(["U.last_name", "U.first_name"])
+            .where("U.dod_id", req.params.id)
+
+        driver[0].qualifications = driver[0].qualifications.split(", ");
+
+        res.status(200).json(driver);
+
+    }catch (err){
         res.status(500).json({ error: err.message });
         console.error(err);
     }
