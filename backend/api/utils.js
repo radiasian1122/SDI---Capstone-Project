@@ -124,9 +124,9 @@ export async function formatDrivers(req, res){
         const drivers = await knex("qualifications as Q")
             .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
             .innerJoin("users as U", "U.dod_id", "D.user_id")
-            .select("U.first_name", "U.last_name", "U.uic")
+            .select("U.first_name", "U.last_name", "U.uic", "U.dod_id")
             .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
-            .groupBy("U.first_name", "U.last_name", "U.uic")
+            .groupBy("U.first_name", "U.last_name", "U.uic", "U.dod_id")
             .orderBy(["U.last_name", "U.first_name"]);
 
         drivers.forEach(driver => {
@@ -146,17 +146,27 @@ export async function formatDriverById(req, res){
         const driver = await knex("qualifications as Q")
             .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
             .innerJoin("users as U", "U.dod_id", "D.user_id")
-            .select("U.first_name", "U.last_name", "U.uic")
+            .select("U.first_name", "U.last_name", "U.uic","U.dod_id")
             .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
-            .groupBy("U.first_name", "U.last_name", "U.uic")
+            .groupBy("U.first_name", "U.last_name", "U.uic", "U.dod_id")
             .orderBy(["U.last_name", "U.first_name"])
             .where("U.dod_id", req.params.id)
+
 
         driver[0].qualifications = driver[0].qualifications.split(", ");
 
         res.status(200).json(driver);
 
     }catch (err){
+        res.status(500).json({ error: err.message });
+        console.error(err);
+    }
+}
+
+export async function getDriversByQualId(req, res) {
+    try{
+
+    }catch (err) {
         res.status(500).json({ error: err.message });
         console.error(err);
     }
