@@ -21,15 +21,18 @@ exports.seed = async function (knex) {
             requestor_id: 1234567890,
             driver_id: 3333333333,
             vehicle_id: 13,
+            approved: false
         },
         {
             requestor_id: 1234567890,
             driver_id: 4444444444,
             vehicle_id: 19,
+            approved: false
         },
         {
-        requestor_id: 1234567890,
-        driver_id: 5555555555,
-        vehicle_id: 25,
+            requestor_id: 1234567890,
+            driver_id: 5555555555,
+            vehicle_id: 25,
+            approved: false
         }]);
 };
