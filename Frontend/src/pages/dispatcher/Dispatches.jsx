@@ -1,11 +1,13 @@
-import React, { useMemo, useState } from "react";
+// src/pages/dispatcher/Dispatches.jsx
+import React, { useMemo, useState, useCallback } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useFetch } from "../../hooks/useFetch";
-import { listRequests } from "../../api/client"; // or a dedicated listDispatches()
+import { listRequests } from "../../api/client";
 import Loading from "../../components/Loading";
 import SkeletonList from "../../components/SkeletonList";
 import EmptyState from "../../components/EmptyState";
 import RequestCard from "../../components/RequestCard";
+import AccessRestrictedCard from "../../components/AccessRestrictedCard";
 
 const FILTERS = ["OUT", "DISPATCHED", "RETURNED"];
 
@@ -13,22 +15,40 @@ export default function Dispatches() {
   const { user, loading: authLoading } = useAuth();
   const [filter, setFilter] = useState("OUT");
 
-  if (authLoading) return <Loading label="Loading account…" />;
-  if (user && user.role !== "DISPATCHER" && !import.meta.env.DEV) {
-    return (
-      <div className="cc-page">
-        <div className="card">
-          <div className="card-body">
-            <h3 className="card-title">Access restricted</h3>
-            <p className="card-subtitle">Dispatcher role required.</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // Decide if this user can view the page
+  const canView = import.meta.env.DEV || (user && user.role === "DISPATCHER");
+  // Enabled flag prevents fetching until we’re allowed
+  const enabled = !authLoading && canView;
 
+  // Build params & fetcher unconditionally
   const params = useMemo(() => ({ status: filter }), [filter]);
-  const { data, loading } = useFetch(() => listRequests(params), [filter]);
+  const fetcher = useCallback(
+    () => listRequests(params),
+    [JSON.stringify(params)]
+  );
+
+  // Call the hook UNCONDITIONALLY
+  const { data, loading, error, refetch } = useFetch(
+    fetcher,
+    // include both your params AND 'enabled' so the effect re-evaluates when enabled toggles true
+    [JSON.stringify(params), enabled],
+    { auto: enabled }
+  );
+
+  // If your useFetch supports an "enabled" arg, use it.
+  // If not, we pass a no-op fetcher when disabled to keep hooks order stable.
+  // const fetcher = enabled
+  //   ? () => listRequests(params)
+  //   : () => Promise.resolve({ items: [] });
+
+  // const { data, loading } = useFetch(fetcher, [
+  //   JSON.stringify(params),
+  //   enabled,
+  // ]);
+
+  // Early returns AFTER all hooks are declared:
+  if (authLoading) return <Loading label="Loading account…" />;
+  if (!canView) return <AccessRestrictedCard />;
 
   return (
     <div className="cc-page space-y-6">

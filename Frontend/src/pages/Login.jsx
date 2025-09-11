@@ -28,8 +28,8 @@ export default function Login() {
 
   return (
     <BackgroundMedia
-      mp4Src="/media/login-bg.mp4"
-      gifSrc="/media/login-bg.gif"
+      mp4Src="/media/slide1CCbg.mp4"
+      // gifSrc="/media/login-bg.gif"
       posterSrc="/media/login-poster.jpg"
       overlay
     >
