@@ -8,6 +8,7 @@
 html,
 body,
 #root {
+  margin: 1rem;
   height: 100%;
 }
 body {
@@ -30,7 +31,7 @@ textarea {
 button {
   cursor: pointer;
 }
-/* 
+/*
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
