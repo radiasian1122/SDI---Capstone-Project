@@ -31,5 +31,25 @@ npm start
 
 6. Open docs at ```http://localhost:3001/docs```
 
+## Get a clean slate after updates
+If you've pulled new code changes from the backend, you can ensure your postgres instance is updated by doing the following:
+
+1. From the ```backend/docker-compose-dev``` directory, bring down docker compose
+```
+docker compose down
+```
+
+2. Remove the postgres volume (you *may* need to run with sudo)
+```
+rm -rf pg-data
+```
+
+3. Bring docker compose back up
+```
+docker compose up -d
+```
+
+4. Run the the above steps to migrate an seed the database again
+
 ## ERD
 ![](../docs/ERD/ERD.svg)

@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Loading from "../../components/Loading";
 import BackgroundMedia from "../../components/BackgroundMedia";
+import { useFetch } from "../../hooks/useFetch";
+import { listVehicles } from "../../api/client";
+
 
 export default function NewRequest() {
   const { user, loading } = useAuth();
@@ -12,6 +15,23 @@ export default function NewRequest() {
     end_time: "",
   });
   const [errors, setErrors] = useState({});
+  const [selectedVehicleIds, setSelectedVehicleIds] = useState([]);
+  const [pickerValue, setPickerValue] = useState("");
+
+  // Load vehicles inventory
+  const { data: vehiclesData, loading: vehiclesLoading } = useFetch(
+    () => listVehicles(),
+    []
+  );
+
+  const allVehicles = vehiclesData?.items || [];
+  const availableVehicles = useMemo(
+    () =>
+      allVehicles.filter(
+        (v) => v.status === "OPEN" && !selectedVehicleIds.includes(v.id)
+      ),
+    [allVehicles, selectedVehicleIds]
+  );
 
   if (loading) return <Loading label="Loading account…" />;
 
@@ -38,8 +58,22 @@ export default function NewRequest() {
     ev.preventDefault();
     if (!validate()) return;
     // TODO: POST to API; show toast on success
-    console.log("submit", { ...form, user_id: user?.id });
+    console.log("submit", {
+      ...form,
+      user_id: user?.id,
+      vehicle_ids: selectedVehicleIds,
+    });
   };
+
+  const addVehicle = () => {
+    const id = Number(pickerValue);
+    if (!id) return;
+    setSelectedVehicleIds((prev) => (prev.includes(id) ? prev : [...prev, id]));
+    setPickerValue("");
+  };
+
+  const removeVehicle = (id) =>
+    setSelectedVehicleIds((prev) => prev.filter((x) => x !== id));
 
   return (
     <BackgroundMedia
@@ -62,6 +96,64 @@ export default function NewRequest() {
             onChange={onChange("destination")}
           />
           {errors.destination && <p className="error">{errors.destination}</p>}
+        </div>
+
+        {/* Vehicles picker */}
+        <div>
+          <label className="label" htmlFor="vehicle-picker">
+            Vehicles (select one or more)
+          </label>
+          {vehiclesLoading ? (
+            <div className="text-muted">Loading vehicles…</div>
+          ) : (
+            <div className="flex gap-2 items-center">
+              <select
+                id="vehicle-picker"
+                className="input"
+                value={pickerValue}
+                onChange={(e) => setPickerValue(e.target.value)}
+              >
+                <option value="">Select available vehicle…</option>
+                {availableVehicles.map((v) => (
+                  <option key={v.id} value={v.id}>
+                    {v.name} • {v.type}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={addVehicle}
+                disabled={!pickerValue}
+              >
+                Add
+              </button>
+            </div>
+          )}
+
+          {selectedVehicleIds.length > 0 && (
+            <div className="mt-3">
+              <div className="text-muted mb-2">Selected vehicles</div>
+              <div className="flex flex-wrap gap-2">
+                {selectedVehicleIds.map((id) => {
+                  const v = allVehicles.find((x) => x.id === id);
+                  return (
+                    <div key={id} className="badge">
+                      {v ? `${v.name} • ${v.type}` : `Vehicle ${id}`}
+                      <button
+                        type="button"
+                        className="ml-2 text-danger"
+                        onClick={() => removeVehicle(id)}
+                        aria-label={`Remove vehicle ${id}`}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
 
         <div>

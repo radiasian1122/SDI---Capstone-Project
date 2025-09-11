@@ -8,6 +8,8 @@ const rootRoutes = require('./routes/root.js')
 const vehicleRoutes = require('./routes/vehicles.js')
 const userRoutes = require('./routes/users.js')
 const dispatchRoutes = require('./routes/dispatches.js')
+const driverRoutes = require('./routes/drivers.js')
+const qualsRoutes = require('./routes/quals.js')
 
 // Swagger documentation setup
 const swaggerOptions = {
@@ -36,6 +38,8 @@ app.use('/', rootRoutes)
 app.use('/vehicles', vehicleRoutes)
 app.use('/users', userRoutes)
 app.use('/dispatches', dispatchRoutes)
+app.use('/drivers', driverRoutes);
+app.use('/quals', qualsRoutes);
 
 app.listen(port, (req, res) => {
     console.log('express server up and running on port ', port);
