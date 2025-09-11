@@ -19,12 +19,36 @@ exports.seed = async function(knex) {
         last_name: 'Somers'
     })
 
-    //Default Driver
-    await knex('users').insert({
-        dod_id: 1010101010,
+    //Default Drivers
+    await knex('users').insert([{
+        dod_id: 1111111111,
         uic: 'NF5HA0',
         first_name: 'Adam',
         last_name: 'Driver'
-    })
+    },
+        {
+            dod_id: 2222222222,
+            uic: 'NF5HB0',
+            first_name: 'Bob',
+            last_name: 'Driver'
+        },
+        {
+            dod_id: 3333333333,
+            uic: 'NF5HC0',
+            first_name: 'Charlie',
+            last_name: 'Driver'
+        },
+        {
+            dod_id: 4444444444,
+            uic: 'NF5HC0',
+            first_name: 'David',
+            last_name: 'Driver'
+        },
+        {
+            dod_id: 5555555555,
+            uic: 'NF5HC0',
+            first_name: 'Eve',
+            last_name: 'Driver'
+        }])
   await knex('users').insert(masterUsersList);
 };
