@@ -33,6 +33,24 @@ Backend should be running on `VITE_API_URL`. In dev, the app seeds a local user 
 - Background slideshow cycles images (`/public/media/1.png`–`5.png`) with a soft cross-fade and dim overlay.
 - In dev, a small card shows a welcome message and the active role for quick UI checks. A Dev Role Switcher is available where indicated.
 
+### Screenshots
+
+Below are example visuals to align UI expectations (assets are in `Frontend/public/media`).
+
+![Dashboard](public/media/Dashboard.png)
+![Dispatch Request](public/media/DispatchRequest.png)
+![Pending Dispatch](public/media/PendingDispatches.png)
+![Vehicle Status](public/media/VehicleStatus.png)
+
+### Theme Preview (Styling Guidance)
+
+- Style Guide: Frontend/src/styles/StyleSheet.md
+- ![Style Sheet](public/media/StyleSheet.png)
+- Route: `/theme-preview` (dev only)
+- Shows color tokens, buttons, badges, cards, forms, tables, toasts, and a popover demo.
+- Color swatches are bound to CSS variables (e.g., `--color-brand`, `--color-surface-muted`) for accurate light/dark validation.
+- Use this page to verify component styles as you iterate on CSS tokens in `styles/theme.css` and primitives in `styles/components.css`.
+
 ### Driver Flow
 
 - New Request (`/driver/new-request`)
@@ -110,12 +128,13 @@ Frontend/src
 ## Common Tasks
 
 - Add a new page:
-  1) Create `pages/MyPage.jsx`.
-  2) Add a route in `App/router.jsx` (wrap with `ProtectedRoute` as needed).
-  3) Link it in `Navbar` if it’s top-level.
+  1. Create `pages/MyPage.jsx`.
+  2. Add a route in `App/router.jsx` (wrap with `ProtectedRoute` as needed).
+  3. Link it in `Navbar` if it’s top-level.
 
 - Add a dropdown:
   Use `SelectPopover`:
+
   ```jsx
   <SelectPopover
     value={value}
@@ -146,4 +165,3 @@ Frontend/src
 
 - Navbar not clickable: ensure background layers use `pointer-events: none` or have lower `z-index`.
 - 401s in dev: Auth is mocked in dev; verify you didn’t set `VITE_AUTH_MODE=cookie` without a cookie-based backend.
-
