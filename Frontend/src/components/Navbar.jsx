@@ -66,17 +66,9 @@ export default function NavBar() {
             }
             style={linkHoverStyle}
           >
-            Approvals
-          </NavLink>
-          <NavLink
-            to="/dispatcher/dispatches"
-            className={({ isActive }) =>
-              `${linkBase} ${isActive ? linkActive : ""}`
-            }
-            style={linkHoverStyle}
-          >
             Dispatches
           </NavLink>
+
           <NavLink
             to="/dispatcher/vehicles"
             className={({ isActive }) =>

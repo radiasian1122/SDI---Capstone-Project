@@ -35,14 +35,15 @@ export default function Approvals() {
 
   return (
     <div className="cc-page space-y-6">
-      <h1 className="cc-page-title">Approvals</h1>
+      <h1 className="cc-page-title">Dispatches</h1>
 
       {loading || usersLoading || vehiclesLoading ? (
         <SkeletonList rows={4} />
       ) : data?.items?.length ? (
         <div className="grid gap-3">
           {data.items.map((r) => (
-            <ApprovalItem key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
+            <ApprovalItem
+              key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
               row={r}
               users={users}
               vehicles={vehicles}
