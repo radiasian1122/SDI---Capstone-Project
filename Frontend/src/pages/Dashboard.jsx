@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import SkeletonList from "../components/SkeletonList";
 import EmptyState from "../components/EmptyState";
 import DevRoleSwitcher from "../components/DevRoleSwitcher";
+import BackgroundSlideshow from "../components/BackgroundSlideshow";
 import { VehiclesContext } from "../context/VehiclesContext";
 import { useContext } from "react";
 
@@ -59,50 +60,53 @@ export default function Dashboard() {
   );
 
   const firstName = user?.first_name || user?.name || "User";
+  const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
 
   return (
-    <div className="cc-page space-y-6">
-      {/* Dev-only role switcher */}
-      {import.meta.env.DEV && <DevRoleSwitcher />}
+    <div>
+      <BackgroundSlideshow images={IMAGES} intervalMs={6000} fadeMs={800} dim={0.25} />
+      <div className="cc-page space-y-6" style={{ position: "relative", zIndex: 1 }}>
+        {/* Dev-only role switcher */}
+        {import.meta.env.DEV && <DevRoleSwitcher />}
 
-      <h1 className="cc-page-title">Dashboard</h1>
+        {/* Dev-only welcome/role copy (for UI testing) */}
+        {import.meta.env.DEV && (
+          <div className="card">
+            <div className="card-body flex items-center gap-2">
+              <span className="card-subtitle">Welcome back, {firstName}.</span>
+              {user?.role && <span className="badge">{user.role}</span>}
+            </div>
+          </div>
+        )}
 
-      {/* Overview card */}
-      <div className="card">
-        <div className="card-body">
-          <p className="card-subtitle">User's role: {role}</p>
-          <p className="mt-2">Welcome back, {firstName}.</p>
-        </div>
-      </div>
+        <h1 className="cc-page-title">Dashboard</h1>
 
       {/* Content */}
-      {dataLoading ? (
+        {dataLoading ? (
         <SkeletonList rows={4} />
-      ) : (
-        <div className="grid gap-3">
-          {data?.items?.length ? (
-            data.items.map((r) => (
-              <div key={r.id} className="card">
-                <div className="card-body">
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <strong>{r.destination}</strong>
-                    <StatusBadge status={r.status} />
+        ) : (
+          <div className="grid gap-3">
+            {data?.items?.length ? (
+              data.items.map((r) => (
+                <div key={r.id} className="card">
+                  <div className="card-body">
+                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                      <strong>{r.destination}</strong>
+                      <StatusBadge status={r.status} />
+                    </div>
+                    <div className="text-muted" style={{ fontSize: 13 }}>
+                      {new Date(r.start_time).toLocaleString()} → {new Date(r.end_time).toLocaleString()}
+                    </div>
+                    <div style={{ fontSize: 13 }}>{r.purpose}</div>
                   </div>
-                  <div className="text-muted" style={{ fontSize: 13 }}>
-                    {new Date(r.start_time).toLocaleString()} →{" "}
-                    {new Date(r.end_time).toLocaleString()}
-                  </div>
-                  <div style={{ fontSize: 13 }}>{r.purpose}</div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <EmptyState title="No requests match your filters." />
-          )}
-        </div>
-      )}
+              ))
+            ) : (
+              <EmptyState title="No requests match your filters." />
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

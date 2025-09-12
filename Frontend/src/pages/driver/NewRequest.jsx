@@ -1,95 +1,18 @@
-import React, { useMemo, useState, useEffect, useContext, useRef } from "react";
+import React, { useMemo, useState, useContext } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Loading from "../../components/Loading";
 import BackgroundMedia from "../../components/BackgroundMedia";
 import { useFetch } from "../../hooks/useFetch";
+import { createDispatch } from "../../api/client";
 import {
-  listVehicles,
-  listUsers,
-  getUserQuals,
-  createDispatch,
-  listDispatches,
-} from "../../api/client";
+  useVehicles,
+  useUsersWithQuals,
+  useDispatches,
+} from "../../hooks/useDomainData";
+import { getEligibleDrivers } from "../../data/selectors";
 import { ToastCtx } from "../../components/ToastProvider";
-import Popover from "../../components/Popover";
-
-function DriverSelect({ value, onChange, options }) {
-  const btnRef = useRef(null);
-  const [open, setOpen] = useState(false);
-  return (
-    <div className="flex items-center gap-2">
-      <select
-        className="input"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        <option value="">Select driver…</option>
-        {options.map((u) => (
-          <option key={u.dod_id} value={u.dod_id}>
-            {u.first_name} {u.last_name} ({u.dod_id})
-          </option>
-        ))}
-      </select>
-      <button
-        ref={btnRef}
-        type="button"
-        className="btn btn-ghost btn-icon"
-        aria-label="Driver details"
-        onClick={() => setOpen((v) => !v)}
-        disabled={!value}
-      >
-        i
-      </button>
-      <Popover anchorRef={btnRef} open={open} onClose={() => setOpen(false)}>
-        <div className="popover-body text-sm">
-          {(() => {
-            const u = options.find((o) => String(o.dod_id) === String(value));
-            if (!u) return <em>No driver selected</em>;
-            return (
-              <div>
-                <div className="font-semibold mb-1">
-                  {u.first_name} {u.last_name}
-                </div>
-                <div className="text-text/70">DOD: {u.dod_id}</div>
-                <div className="text-text/70">UIC: {u.uic || '—'}</div>
-              </div>
-            );
-          })()}
-        </div>
-      </Popover>
-    </div>
-  );
-}
-
-function VehicleInfoButton({ vehicle }) {
-  const btnRef = useRef(null);
-  const [open, setOpen] = useState(false);
-  if (!vehicle) return (
-    <button className="btn btn-ghost btn-icon" disabled aria-label="Vehicle details">i</button>
-  );
-  return (
-    <>
-      <button
-        ref={btnRef}
-        type="button"
-        className="btn btn-ghost btn-icon"
-        aria-label="Vehicle details"
-        onClick={() => setOpen((v) => !v)}
-      >
-        i
-      </button>
-      <Popover anchorRef={btnRef} open={open} onClose={() => setOpen(false)}>
-        <div className="popover-body text-sm">
-          <div className="grid gap-1">
-            <div><strong>Company:</strong> {vehicle.company || (vehicle.uic?.slice(4,5)) || '—'}</div>
-            <div><strong>Vehicle:</strong> {vehicle.bumper_no || '—'}</div>
-            <div className="flex items-center gap-1"><strong>Status:</strong> <span className={`badge state-${vehicle.status}`}>{vehicle.status}</span></div>
-          </div>
-        </div>
-      </Popover>
-    </>
-  );
-}
+import VehiclePicker from "./components/VehiclePicker";
+import SelectedVehiclesList from "./components/SelectedVehiclesList";
 
 export default function NewRequest() {
   const { user, loading } = useAuth();
@@ -106,12 +29,7 @@ export default function NewRequest() {
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
 
   // Load vehicles inventory
-  const { data: vehiclesData, loading: vehiclesLoading } = useFetch(
-    () => listVehicles(),
-    []
-  );
-
-  const allVehicles = vehiclesData?.items || [];
+  const { items: allVehicles, loading: vehiclesLoading } = useVehicles();
   const availableVehicles = useMemo(
     () =>
       allVehicles.filter(
@@ -121,64 +39,23 @@ export default function NewRequest() {
   );
 
   // Load current dispatches to treat their drivers as busy (unavailable)
-  const dispatchesQuery = useFetch(() => listDispatches(), []);
-  const busyDriverIds = useMemo(() => {
-    const items = dispatchesQuery.data?.items || [];
-    return new Set(items.map((d) => Number(d.driver_id)).filter(Boolean));
-  }, [dispatchesQuery.data]);
+  const { busySet: busyDriverIds } = useDispatches();
 
   // Load users and their quals (to determine driver eligibility)
-  const { data: usersData, loading: usersLoading } = useFetch(
-    () => listUsers(),
-    []
-  );
-  const users = usersData?.items || [];
-  const [userQuals, setUserQuals] = useState({}); // { [userId]: number[] }
-  const [qualsLoading, setQualsLoading] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    async function loadQuals() {
-      if (!users.length) return;
-      setQualsLoading(true);
-      try {
-        const entries = await Promise.all(
-          users.map(async (u) => {
-            try {
-              const quals = await getUserQuals(u.dod_id);
-              const ids = Array.isArray(quals)
-                ? quals.map((q) => q.qual_id).filter((x) => x != null)
-                : [];
-              return [u.dod_id, ids];
-            } catch {
-              return [u.dod_id, []];
-            }
-          })
-        );
-        if (!cancelled) setUserQuals(Object.fromEntries(entries));
-      } finally {
-        if (!cancelled) setQualsLoading(false);
-      }
-    }
-    loadQuals();
-    return () => {
-      cancelled = true;
-    };
-  }, [users]);
+  const { users, userQuals, loading: usersLoading } = useUsersWithQuals();
 
   const eligibleDrivers = (vehicleId) => {
     const vehicle = allVehicles.find((v) => v.id === vehicleId);
-    if (!vehicle) return [];
-    const required = vehicle.qual_id;
-    const selectedDriverIds = new Set(
-      Object.entries(driverByVehicle)
-        .filter(([vid]) => Number(vid) !== vehicleId)
-        .map(([, uid]) => Number(uid))
-    );
-    return users
-      .filter((u) => (userQuals[u.dod_id] || []).includes(required))
-      .filter((u) => !selectedDriverIds.has(Number(u.dod_id)))
-      .filter((u) => !busyDriverIds.has(Number(u.dod_id)));
+    const selectedIds = Object.entries(driverByVehicle)
+      .filter(([vid]) => Number(vid) !== vehicleId)
+      .map(([, uid]) => Number(uid));
+    return getEligibleDrivers({
+      vehicle,
+      users,
+      userQuals,
+      busySet: busyDriverIds,
+      selectedDriverIds: selectedIds,
+    });
   };
 
   if (loading) return <Loading label="Loading account…" />;
@@ -255,7 +132,7 @@ export default function NewRequest() {
     setSelectedVehicleIds((prev) => prev.filter((x) => x !== id));
 
   return (
-    <BackgroundMedia>
+    <BackgroundMedia posterSrc="/media/pmcs.png">
       <div className="card slide-in" style={{ maxWidth: 550, width: "100%" }}>
         <div className="card-body"></div>
 
@@ -286,32 +163,12 @@ export default function NewRequest() {
               {vehiclesLoading ? (
                 <div className="text-muted">Loading vehicles…</div>
               ) : (
-                <div className="flex gap-2 items-center">
-                  <select
-                    id="vehicle-picker"
-                    className="input"
-                    value={pickerValue}
-                    onChange={(e) => setPickerValue(e.target.value)}
-                  >
-                    <option value="">Select available vehicle…</option>
-                    {availableVehicles.map((v) => (
-                      <option key={v.id} value={v.id}>
-                        {v.name}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn btn-secondary"
-                    onClick={addVehicle}
-                    disabled={!pickerValue}
-                  >
-                    Add
-                  </button>
-                  <VehicleInfoButton
-                    vehicle={availableVehicles.find((v) => String(v.id) === String(pickerValue))}
-                  />
-                </div>
+                <VehiclePicker
+                  availableVehicles={availableVehicles}
+                  value={pickerValue}
+                  onChange={(val) => setPickerValue(val)}
+                  onAdd={addVehicle}
+                />
               )}
 
               {selectedVehicleIds.length > 0 && (
@@ -319,54 +176,15 @@ export default function NewRequest() {
                   <div className="text-muted mb-2">
                     Selected vehicles and drivers
                   </div>
-                  <div className="space-y-2">
-                    {selectedVehicleIds.map((id) => {
-                      const v = allVehicles.find((x) => x.id === id);
-                      const eligible = eligibleDrivers(id);
-                      return (
-                    <div key={id} className="card">
-                      <div className="card-body flex items-center gap-3">
-                        <div className="badge">
-                          {v ? `${v.name} • ${v.type}` : `Vehicle ${id}`}
-                        </div>
-                        <div className="flex-1">
-                          {usersLoading || qualsLoading ? (
-                            <div className="text-muted">
-                              Loading drivers…
-                            </div>
-                          ) : eligible.length ? (
-                            <DriverSelect
-                              value={driverByVehicle[id] || ""}
-                              onChange={(val) =>
-                                setDriverByVehicle((prev) => ({ ...prev, [id]: Number(val) }))
-                              }
-                              options={eligible}
-                            />
-                          ) : (
-                            <div className="text-danger text-sm">
-                              No qualified drivers available for this
-                              vehicle.
-                            </div>
-                          )}
-                          {errors[`driver_${id}`] && (
-                            <p className="error">
-                              {errors[`driver_${id}`]}
-                            </p>
-                          )}
-                        </div>
-                        <button
-                          type="button"
-                          className="btn btn-danger"
-                          onClick={() => removeVehicle(id)}
-                          aria-label={`Remove vehicle ${id}`}
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+                  <SelectedVehiclesList
+                    selectedVehicleIds={selectedVehicleIds}
+                    vehicles={allVehicles}
+                    getEligibleDrivers={eligibleDrivers}
+                    driverByVehicle={driverByVehicle}
+                    setDriverByVehicle={setDriverByVehicle}
+                    onRemoveVehicle={removeVehicle}
+                    errors={errors}
+                  />
                   {errors.vehicles && (
                     <p className="error mt-2">{errors.vehicles}</p>
                   )}

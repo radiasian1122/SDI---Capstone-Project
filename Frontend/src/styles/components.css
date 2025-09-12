@@ -47,16 +47,27 @@ body {
   background: color-mix(in oklab, var(--color-surface) 90%, transparent);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
+  position: sticky; /* keep at the top */
+  top: 0;
+  z-index: 100; /* ensure nav stacks above background slideshow */
+  width: 100%;
 }
 .cc-nav-inner {
   height: 56px; /* h-14 */
   display: flex;
   align-items: center;
   gap: 1rem;
+  width: 100%;
 }
 .cc-brand {
   color: var(--color-brand);
   font-weight: 600;
+}
+/* Center and evenly space the nav links */
+.cc-nav-links {
+  flex: 1;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 /* Sticky page action bar */
