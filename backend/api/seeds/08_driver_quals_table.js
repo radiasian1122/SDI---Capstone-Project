@@ -17,5 +17,24 @@ exports.seed = async function (knex) {
         }
 
     }
+
+    //Give alec-somers limited qualifications
+    for (let i = 0; i < 5; i++) {
+        await knex("driver_quals").insert({
+            user_id: 1234567890,
+            qual_id: i + 1
+            }
+        )
+    }
+
+    //Give frank-castle limited qualifications
+    for (let i = 0; i < 3; i++){
+        await knex("driver_quals").insert({
+            user_id: 6666666666,
+            qual_id: i + 1
+        })
+    }
+
+
     await knex("driver_quals").insert(generateDriverQuals());
 };

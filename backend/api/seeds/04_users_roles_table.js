@@ -8,10 +8,30 @@ exports.seed = async function (knex) {
     await knex('users_roles').del()
 
     //Default Requestor
-    await knex('users_roles').insert({
+    await knex('users_roles').insert([{
         user_id: 1234567890,
         role_id: 3
-    })
+    },
+        {
+            user_id: 1234567890,
+            role_id: 1
+        },
+        {
+            user_id: 1234567890,
+            role_id: 2
+        },
+        {
+            user_id: 1234567890,
+            role_id: 4
+        },
+        {
+            user_id: 6666666666,
+            role_id: 4
+        },
+        {
+            user_id: 6666666666,
+            role_id: 1
+        }])
 
     //Default Driver
     await knex('users_roles').insert([{
