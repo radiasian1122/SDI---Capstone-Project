@@ -6,9 +6,10 @@ import { login as apiLogin, getMe } from "../api/client";
 const DEV_ROLES = ["DRIVER", "APPROVER", "DISPATCHER"];
 const readDevRole = () => localStorage.getItem("dev-role") || "DISPATCHER";
 const makeDevUser = () => ({
-  id: 1234567890,
-  name: "Dev User",
-  email: "dev@convoy.local",
+  dod_id: 1234567890,
+  first_name: "Alec",
+  last_name: "Somers",
+  uic: "NF5HA0",
   role: readDevRole(), // current active role (for UI)
   roles: DEV_ROLES, // full permissions (for gates)
 });

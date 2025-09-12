@@ -26,9 +26,21 @@ export default function Dashboard() {
   useEffect(() => {
     fetch(`${api_url}/dispatches`)
     .then(res => res.json())
-    .then(data => setDispatches(data))
+    .then(data => {
+      if (user.role === 'APPROVER'){
+        setDispatches(data)
+      }
+      else if(user.role === 'DRIVER'){
+        setDispatches(
+          data.filter(dispatch => dispatch.requestor_id === user.dod_id)
+        )
+      }
+      else{
+        setDispatches([])
+      }
+    })
     .catch(err => console.log(err.message))
-  }, [])
+  }, [user.dod_id, user.role])
 
   useEffect(() => {
     if(dispatches.length === 0){
@@ -41,15 +53,10 @@ export default function Dashboard() {
   // 1) Wait for auth to resolve (both dev & prod)
   if (authLoading) return <Loading label="Loading account…" />;
 
-  // 2) Resolve a safe role (dev default if needed)
-  const role =
-    user?.role ??
-    (import.meta.env.DEV
-      ? localStorage.getItem("dev-role") || "DISPATCHER"
-      : null);
+  console.log(`USER: ${user.first_name}`)
 
   // 3) If no role in prod, show friendly message
-  if (!role) {
+  if (!user.role) {
     return (
       <div className="cc-page">
         <div className="card">
@@ -66,7 +73,7 @@ export default function Dashboard() {
 
   const firstName = user?.first_name || user?.name || "User";
   const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
-  
+
   return (
     <div>
       <BackgroundSlideshow
