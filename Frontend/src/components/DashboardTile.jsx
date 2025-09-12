@@ -18,6 +18,7 @@ export default function DashboardTile({ dispatch }){
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
   const [requestor, setRequestor] = useState([])
+  const [viewDetails, setViewDetails] = useState(false)
 
   useEffect(() => {
     fetch(`${api_url}/users/id/${dispatch.requestor_id}`)
@@ -46,6 +47,10 @@ export default function DashboardTile({ dispatch }){
                 <span>{vehicle.bumper_no}</span>
               </span>
               <span>
+                <strong>Requestor: </strong>
+                <span>{requestor.last_name}, {requestor.first_name}</span>
+              </span>
+              <span>
                 <strong>Driver: </strong>
                 <span>{driver.last_name}, {driver.first_name}</span>
               </span>
@@ -62,7 +67,15 @@ export default function DashboardTile({ dispatch }){
                 Pending date
               </div>
             }
-            <div style={{ fontSize: 13 }}>{dispatch.purpose}</div>
+            {viewDetails &&
+              <div className="text-muted italic" style={{ fontSize: 13 }}>
+                {/* filter thru and render stuff  */}
+              </div>
+            }
+            <button
+              className="btn btn-secondary"
+              onClick={() => setViewDetails(!viewDetails)}
+            >Details</button>
           </div>
         </div>
     </div>
