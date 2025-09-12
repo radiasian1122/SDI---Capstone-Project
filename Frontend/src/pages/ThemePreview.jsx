@@ -1,5 +1,6 @@
-import React from "react";
 import ThemeToggle from "../components/ThemeToggle";
+import React, { useRef, useState } from "react";
+import Popover from "../components/Popover";
 
 // (dev only)
 
@@ -184,6 +185,37 @@ export default function ThemePreview() {
           <div className="toast">This is a toast notification</div>
         </div>
       </section>
+
+      {/* Popover */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">Popover</h2>
+        <PopoverDemo />
+      </section>
+    </div>
+  );
+}
+
+function PopoverDemo() {
+  const btnRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        ref={btnRef}
+        className="btn-secondary"
+        onClick={() => setOpen((v) => !v)}
+      >
+        Toggle popover
+      </button>
+      <Popover anchorRef={btnRef} open={open} onClose={() => setOpen(false)}>
+        <div className="popover-body">
+          <div className="font-semibold">Example Popover</div>
+          <div className="text-sm">
+            This positions relative to the trigger and closes on outside click
+            or navigation.
+          </div>
+        </div>
+      </Popover>
     </div>
   );
 }
