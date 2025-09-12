@@ -32,7 +32,7 @@ export default function Dashboard() {
       }
       else if(user.role === 'DRIVER'){
         setDispatches(
-          data.filter(dispatch => dispatch.requestor_id === user.dod_id)
+          data.filter(dispatch => dispatch.requestor_id == user.dod_id)
         )
       }
       else{
