@@ -67,10 +67,18 @@ export default function Dashboard() {
   const firstName = user?.first_name || user?.name || "User";
   const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
   
-  return(
+  return (
     <div>
-      <BackgroundSlideshow images={IMAGES} intervalMs={6000} fadeMs={800} dim={0.25} />
-      <div className="cc-page space-y-6" style={{ position: "relative", zIndex: 1 }}>
+      <BackgroundSlideshow
+        images={IMAGES}
+        intervalMs={6000}
+        fadeMs={800}
+        dim={0.25}
+      />
+      <div
+        className="cc-page space-y-6"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {/* Dev-only role switcher */}
         {import.meta.env.DEV && <DevRoleSwitcher />}
 
