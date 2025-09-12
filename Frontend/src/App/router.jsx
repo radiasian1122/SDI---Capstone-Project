@@ -2,13 +2,11 @@ import React, { lazy, Suspense } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
-import Homepage from "../pages/Homepage";
-import ViewDrivers from "../pages/ViewDrivers";
+// Homepage and generic list pages removed (unused)
 import NewRequest from "../pages/driver/NewRequest";
 import Approvals from "../pages/approver/Approvals";
 import DispatchForm from "../pages/DispatchForm";
 import Dispatches from "../pages/dispatcher/Dispatches";
-import ViewVehicles from "../pages/ViewVehicles";
 import Vehicles from "../pages/dispatcher/Vehicles";
 import ProtectedRoute from "../components/ProtectedRoute";
 import NavBar from "../components/Navbar";
@@ -32,7 +30,6 @@ export default function AppRouter() {
       {import.meta.env.DEV && (
         <>
           <Route path="/dev/Dashboard" element={<Dashboard />} />
-          <Route path="/dev/Homepage" element={<Homepage />} />
           <Route path="/dev/DispatchForm" element={<DispatchForm />} />
         </>
       )}
@@ -91,9 +88,7 @@ export default function AppRouter() {
 
       <Route path="*" element={<Navigate to="/" replace />} />
       <Route path="/login" element={<Login />} />
-      <Route path="/home" element={<Homepage />} />
-      <Route path="/vehicles" element={<ViewVehicles />} />
-      <Route path="/operators" element={<ViewDrivers />} />
+      {/* Removed unused routes: /home, /vehicles, /operators */}
     </Routes>
   );
 }

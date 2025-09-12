@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
+import { getDriverQualTypes } from "../../data/selectors";
 
 export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   const id = row.dispatch_id ?? row.id ?? `${row.driver_id}:${row.vehicle_id}`;
@@ -21,19 +22,10 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
       driver &&
       (driverQuals[driver.dod_id] || []).includes(vehicle.qual_id)
   );
-  // Derive type strings for driver's quals by matching any vehicle with same qual_id
-  const driverQualTypes = useMemo(() => {
-    const ids = driver ? driverQuals[driver.dod_id] || [] : [];
-    const types = ids
-      .map((qid) => {
-        const v = vehicles.find((vv) => Number(vv.qual_id) === Number(qid));
-        if (!v || !v.bumper_no) return null;
-        return String(v.bumper_no).replace(/[^a-zA-Z]/g, "");
-      })
-      .filter(Boolean);
-    // de-dupe
-    return Array.from(new Set(types));
-  }, [driver, driverQuals, vehicles]);
+  const driverQualTypes = useMemo(
+    () => getDriverQualTypes({ driverId: driver?.dod_id, driverQuals, vehicles }),
+    [driver?.dod_id, driverQuals, vehicles]
+  );
   const qualsBtnRef = useRef(null);
   const [openQuals, setOpenQuals] = useState(false);
 

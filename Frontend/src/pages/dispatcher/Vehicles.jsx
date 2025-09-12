@@ -37,13 +37,13 @@ export default function Vehicles() {
       });
   }, []);
 
-  function handleBumperNumbers(num) {
-    if (dispatchId.includes(num)) {
-      let newArray = dispatchId.filter((vic) => vic != num);
+  function handleBumperNumbers(id) {
+    if (dispatchId.includes(id)) {
+      let newArray = dispatchId.filter((vic) => vic != id);
       setDispatchId(newArray);
       return;
     }
-    setDispatchId((prev) => [...prev, num]);
+    setDispatchId((prev) => [...prev, id]);
   }
 
   return (
@@ -68,7 +68,7 @@ export default function Vehicles() {
           </thead>
           <tbody className="tbody">
             {vehicles.map((vehicle) => (
-              <tr className="tr tr-striped row-hover">
+              <tr key={vehicle.vehicle_id ?? vehicle.bumper_no} className="tr tr-striped row-hover">
                 <td className="td px-4 py-2">
                   {vehicle.bumper_no.replace(/[^a-zA-Z]/g, "")}
                 </td>
@@ -80,7 +80,7 @@ export default function Vehicles() {
                 <td className="td px-4 py-2">
                   <input
                     type="checkbox"
-                    onChange={() => handleBumperNumbers(vehicle)}
+                    onChange={() => handleBumperNumbers(vehicle.vehicle_id)}
                   />
                 </td>
               </tr>
