@@ -80,12 +80,7 @@ export async function createDispatch(payload) {
 }
 
 // GET /dispatches/uic/{uic}
-export async function listDispatchesByUIC(uic, params) {
-  const { data } = await api.get(`/dispatches/uic/${encodeURIComponent(uic)}`, {
-    params,
-  });
-  return { items: data };
-}
+// (removed) listDispatchesByUIC — not used by frontend
 
 /* ======================
    USERS
@@ -99,10 +94,7 @@ export async function listUsers(params) {
 }
 
 // GET /users/id/{id}  (DOD ID)
-export async function getUserById(id) {
-  const { data } = await api.get(`/users/id/${encodeURIComponent(id)}`);
-  return data;
-}
+// (removed) getUserById — not used by frontend
 
 // GET /users/id/{id}/qual
 export async function getUserQuals(id) {
@@ -121,19 +113,10 @@ export async function listVehicles(params) {
   return { items };
 }
 
-// GET /vehicles/id/{id}
-export async function getVehicleById(id) {
-  const { data } = await api.get(`/vehicles/id/${encodeURIComponent(id)}`);
-  return data;
-}
+// (removed) getVehicleById — not used by frontend
 
 // Vehicles
-export async function listVehiclesByUIC(uic, params) {
-  const { data } = await api.get(`/vehicles/uic/${encodeURIComponent(uic)}`, {
-    params,
-  });
-  return data;
-}
+// (removed) listVehiclesByUIC — not used by frontend
 
 /* ======================
    COMPAT SHIMS (optional)
@@ -177,15 +160,11 @@ const client = {
   // dispatches
   listDispatches,
   createDispatch,
-  listDispatchesByUIC,
   // users
   listUsers,
-  getUserById,
   getUserQuals,
   // vehicles
   listVehicles,
-  getVehicleById,
-  listVehiclesByUIC,
   // shims
   createRequest,
   listRequests,

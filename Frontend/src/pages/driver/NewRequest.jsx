@@ -132,7 +132,7 @@ export default function NewRequest() {
     setSelectedVehicleIds((prev) => prev.filter((x) => x !== id));
 
   return (
-    <BackgroundMedia>
+    <BackgroundMedia posterSrc="/media/pmcs.png">
       <div className="card slide-in" style={{ maxWidth: 550, width: "100%" }}>
         <div className="card-body"></div>
 
