@@ -394,11 +394,28 @@ body {
   box-shadow: var(--shadow-lg);
   max-width: min(92vw, 360px);
 }
-.popover .popover-body { padding: 0.75rem 0.875rem; }
+.popover .popover-body {
+  padding: 0.75rem 0.875rem;
+}
+
+/* Anchor-based positioning */
+select::picker {
+  position: absolute;
+  inset: auto auto auto anchor(bottom); /* position relative to select */
+  left: anchor(left);
+  min-width: anchor-size(width);
+  z-index: 1000;
+}
 
 /* ---------- VEHICLE STATUS BADGES ---------- */
-.badge.state-FMC { background: var(--color-success); color: #fff; }
-.badge.state-DEADLINED { background: var(--color-danger); color: #fff; }
+.badge.state-FMC {
+  background: var(--color-success);
+  color: #fff;
+}
+.badge.state-DEADLINED {
+  background: var(--color-danger);
+  color: #fff;
+}
 
 /* ---------- REDUCED MOTION / PRINT ---------- */
 @media (prefers-reduced-motion: reduce) {

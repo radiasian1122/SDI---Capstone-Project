@@ -40,3 +40,13 @@
 .read-the-docs {
   color: #888;
 }
+
+@layer components {
+  select::picker {
+    position: absolute;
+    inset: auto auto auto anchor(bottom);
+    left: anchor(left);
+    min-width: anchor-size(width);
+    z-index: 50;
+  }
+}
