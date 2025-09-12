@@ -12,6 +12,8 @@ exports.up = function(knex) {
       table.integer("vehicle_id")
       table.foreign('vehicle_id').references('vehicles.vehicle_id').deferrable('deferred').onDelete('CASCADE')
       table.boolean('approved').notNullable().defaultTo(false)
+      table.datetime('start_time', { useTz: false})
+      table.datetime('end_time', { useTz: false})
   })
 };
 
