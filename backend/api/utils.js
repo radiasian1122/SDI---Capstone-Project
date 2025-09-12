@@ -11,7 +11,7 @@ import knex from "./db.js";
 //       this.password = 'password';
 //   }
 // }
-
+const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
 
 
 
@@ -20,7 +20,7 @@ import knex from "./db.js";
 export const masterUsersList = generateUsers();
 
 export function generateUsers() {
-    const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
+
     const userArray = []
 
     //Users meant to be requestors
@@ -83,7 +83,6 @@ export function generateUsersRoles() {
 
 export function generateVehicles() {
     //Bumper no. format "JLTV-1, JLTV-2. etc."
-    const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
     const vehicleTypes = ['JLTV', '1.1', 'STRYKER', 'MRZR', 'ISV', 'LMTV', 'TLC', 'RFSS', 'QUAD']
     let vehicles = []
 
@@ -180,3 +179,4 @@ export async function formatDriversByQualId(req, res) {
         console.error(err);
     }
 }
+

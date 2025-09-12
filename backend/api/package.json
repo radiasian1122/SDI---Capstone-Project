@@ -18,7 +18,8 @@
   },
   "scripts": {
     "start": "nodemon app.js",
-    "migrate": "knex migrate:latest && knex seed:run"
+    "migrate": "knex migrate:latest && knex seed:run",
+    "rollback": "knex migrate:rollback"
   },
   "keywords": [],
   "author": "",
