@@ -50,8 +50,8 @@ export default function Vehicles() {
     <div className="cc-page space-y-6">
       <h1 className="cc-page-title">Vehicles</h1>
       <div className="vehicles-container">
-        <table>
-          <thead>
+        <table className="table">
+          <thead className="thead">
             <tr>
               <th className="th th-sortable" scope="col">
                 Type
@@ -66,9 +66,9 @@ export default function Vehicles() {
               <th scope="col">Check Box to Add</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="tbody">
             {vehicles.map((vehicle) => (
-              <tr>
+              <tr className="tr tr-striped row-hover">
                 <td className="td px-4 py-2">
                   {vehicle.bumper_no.replace(/[^a-zA-Z]/g, "")}
                 </td>

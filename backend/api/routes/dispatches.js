@@ -1,6 +1,6 @@
- const express = require('express')
-const router = express.Router()
-const dispatchesCtl = require('../controllers/dispatches.js')
+const express = require("express");
+const router = express.Router();
+const dispatchesCtl = require("../controllers/dispatches.js");
 
 //////// SWAGGER COMPONENTS //////////
 
@@ -77,7 +77,7 @@ const dispatchesCtl = require('../controllers/dispatches.js')
  *               items:
  *                 $ref: '#/components/dispatch'
  */
-router.get('/', dispatchesCtl.getAllDispatches)
+router.get("/", dispatchesCtl.getAllDispatches);
 
 /**
  * @swagger
@@ -101,7 +101,7 @@ router.get('/', dispatchesCtl.getAllDispatches)
  *               items:
  *                $ref: '#/components/dispatch'
  */
-router.post('/', dispatchesCtl.createNewDispatch)
+router.post("/", dispatchesCtl.createNewDispatch);
 
 /**
  * @swagger
@@ -118,8 +118,7 @@ router.post('/', dispatchesCtl.createNewDispatch)
  *               items:
  *                 $ref: '#/components/dispatch'
  */
-router.get('/uic/:uic', dispatchesCtl.getDispatchesByUic)
-
+router.get("/uic/:uic", dispatchesCtl.getDispatchesByUic);
 
 /**
  * @swagger
@@ -142,6 +141,6 @@ router.get('/uic/:uic', dispatchesCtl.getDispatchesByUic)
  *               items:
  *                $ref: '#/components/updated_dispatch_return'
  */
-router.patch('/:dispatch_id', dispatchesCtl.updateDispatch)
+router.patch("/:dispatch_id", dispatchesCtl.updateDispatch);
 
-module.exports = router
+module.exports = router;

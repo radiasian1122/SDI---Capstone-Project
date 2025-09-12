@@ -272,8 +272,8 @@ body {
   display: inline-flex;
   align-items: center;
   padding: 0.25rem 0.75rem;
-  font-size: 11px;
-  font-weight: 500;
+  font-size: 12.5px;
+  font-weight: 600;
   border-radius: var(--radius-2);
 }
 .state-PENDING {
@@ -369,9 +369,25 @@ body {
   border-radius: var(--radius-1);
   padding: 0.5rem 1rem;
   box-shadow: var(--shadow-md);
-  background: var(--color-text);
-  color: var(--color-text-inverted);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
 }
+
+/* ---------- POPOVER ---------- */
+.popover {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-lg);
+  max-width: min(92vw, 360px);
+}
+.popover .popover-body { padding: 0.75rem 0.875rem; }
+
+/* ---------- VEHICLE STATUS BADGES ---------- */
+.badge.state-FMC { background: var(--color-success); color: #fff; }
+.badge.state-DEADLINED { background: var(--color-danger); color: #fff; }
 
 /* ---------- REDUCED MOTION / PRINT ---------- */
 @media (prefers-reduced-motion: reduce) {
