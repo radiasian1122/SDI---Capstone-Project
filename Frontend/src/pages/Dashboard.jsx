@@ -66,8 +66,7 @@ export default function Dashboard() {
 
   const firstName = user?.first_name || user?.name || "User";
   const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
-
-  console.log(dispatches)
+  
   return(
     <div>
       <BackgroundSlideshow images={IMAGES} intervalMs={6000} fadeMs={800} dim={0.25} />

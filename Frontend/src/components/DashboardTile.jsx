@@ -52,9 +52,16 @@ export default function DashboardTile({ dispatch }){
               {dispatch.approved && <StatusBadge status={'APPROVED'} />}
               {!dispatch.approved && <StatusBadge status={'PENDING'} />}
             </div>
-            <div className="text-muted" style={{ fontSize: 13 }}>
-              {new Date(dispatch.start_time).toLocaleString()} → {new Date(dispatch.end_time).toLocaleString()}
-            </div>
+            {dispatch.start_time !== null && dispatch.end_time !== null &&
+              <div className="text-muted" style={{ fontSize: 13 }}>
+                  {new Date(dispatch.start_time).toLocaleString()} → {new Date(dispatch.end_time).toLocaleString()}
+              </div>
+            }
+            {(dispatch.start_time === null || dispatch.end_time === null) &&
+              <div className="text-muted italic" style={{ fontSize: 13 }}>
+                Pending date
+              </div>
+            }
             <div style={{ fontSize: 13 }}>{dispatch.purpose}</div>
           </div>
         </div>
