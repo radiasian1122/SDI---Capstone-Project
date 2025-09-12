@@ -33,6 +33,8 @@ exports.seed = async function (knex) {
             requestor_id: 1234567890,
             driver_id: 5555555555,
             vehicle_id: 25,
-            approved: false
+            approved: false,
+            start_time: new Date(),
+            end_time: '2025-09-09 13:00:00'
         }]);
 };
