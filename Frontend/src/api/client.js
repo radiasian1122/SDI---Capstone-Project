@@ -61,9 +61,19 @@ export async function listDispatches(params) {
 
 // POST /dispatches (create)
 export async function createDispatch(payload) {
-  // NOTE: Backend currently mounts this route at /dispatches/dispatches
-  const { data } = await api.post("/dispatches/dispatches", payload);
-  return data;
+  // Try nested path first, then fall back. This tolerates either
+  // router style: app.use('/dispatches', router.post('/', ...))
+  // or: app.use('/dispatches', router.post('/dispatches', ...))
+  try {
+    const { data } = await api.post("/dispatches/dispatches", payload);
+    return data;
+  } catch (e) {
+    if (e?.response?.status === 404) {
+      const { data } = await api.post("/dispatches", payload);
+      return data;
+    }
+    throw e;
+  }
 }
 
 // GET /dispatches/uic/{uic}
@@ -106,8 +116,12 @@ export async function listVehicles(params) {
   const items = Array.isArray(data)
     ? data.map((v) => ({
         id: v.vehicle_id,
-        name: `${v.uic.slice(4, 5)}-${v.bumper_no.replace(/[^a-zA-Z]/g, "")}-${v.bumper_no}`,
+        name: `${v.uic}-${v.bumper_no}`,
         type: String(v.platform_variant),
+        qual_id: v.platform_variant,
+        uic: v.uic,
+        company: typeof v.uic === 'string' ? v.uic.slice(4, 5) : '',
+        bumper_no: v.bumper_no,
         status: v.deadlined ? "DEADLINED" : "FMC",
         // notes: v.notes || "",
       }))

@@ -6,7 +6,7 @@ import { login as apiLogin, getMe } from "../api/client";
 const DEV_ROLES = ["DRIVER", "APPROVER", "DISPATCHER"];
 const readDevRole = () => localStorage.getItem("dev-role") || "DISPATCHER";
 const makeDevUser = () => ({
-  id: 0,
+  id: 1234567890,
   name: "Dev User",
   email: "dev@convoy.local",
   role: readDevRole(), // current active role (for UI)

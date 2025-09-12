@@ -1,11 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useFetch } from "../../hooks/useFetch";
-import { listRequests } from "../../api/client"; // must return { items: [...] }
+import { listRequests, listUsers, listVehicles, getUserQuals } from "../../api/client"; // must return { items: [...] }
 import Loading from "../../components/Loading";
 import SkeletonList from "../../components/SkeletonList";
 import EmptyState from "../../components/EmptyState";
-import RequestCard from "../../components/RequestCard";
+import ApprovalItem from "./ApprovalItem";
 
 export default function Approvals() {
   const { user, loading: authLoading } = useAuth();
@@ -27,25 +27,51 @@ export default function Approvals() {
 
   const params = useMemo(() => ({ status: "PENDING" }), []);
   const { data, loading } = useFetch(() => listRequests(params), []);
+  const usersQuery = useFetch(() => listUsers(), []);
+  const vehiclesQuery = useFetch(() => listVehicles(), []);
+  const users = usersQuery.data?.items || [];
+  const vehicles = vehiclesQuery.data?.items || [];
+
+  // Load qualifications for drivers in the current list
+  const [driverQuals, setDriverQuals] = useState({}); // { [dod_id]: number[] }
+  useEffect(() => {
+    const items = data?.items || [];
+    const ids = Array.from(new Set(items.map((r) => r.driver_id).filter(Boolean)));
+    if (!ids.length) return;
+    let cancelled = false;
+    (async () => {
+      const entries = await Promise.all(
+        ids.map(async (id) => {
+          try {
+            const quals = await getUserQuals(id);
+            return [id, (quals || []).map((q) => q.qual_id).filter((x) => x != null)];
+          } catch {
+            return [id, []];
+          }
+        })
+      );
+      if (!cancelled) setDriverQuals(Object.fromEntries(entries));
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [data]);
 
   return (
     <div className="cc-page space-y-6">
       <h1 className="cc-page-title">Approvals</h1>
 
-      {loading ? (
+      {loading || usersQuery.loading || vehiclesQuery.loading ? (
         <SkeletonList rows={4} />
       ) : data?.items?.length ? (
         <div className="grid gap-3">
           {data.items.map((r) => (
-            <div key={r.id} className="card">
-              <div className="card-body">
-                <RequestCard item={r} />
-                <div className="mt-3 flex gap-2">
-                  <button className="btn btn-primary">Approve</button>
-                  <button className="btn btn-danger">Deny</button>
-                </div>
-              </div>
-            </div>
+            <ApprovalItem key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
+              row={r}
+              users={users}
+              vehicles={vehicles}
+              driverQuals={driverQuals}
+            />
           ))}
         </div>
       ) : (
