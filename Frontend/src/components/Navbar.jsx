@@ -1,16 +1,10 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
-
-// this is to all access without authentication use useAuth wrapper later.
-let useAuthSafe = () => ({ user: null, loading: false, logout: () => {} });
-try {
-  const { useAuth } = require("../context/AuthContext");
-  useAuthSafe = useAuth;
-} catch {}
+import { useAuth } from "../context/AuthContext";
 
 export default function NavBar() {
-  const { user, loading, logout } = useAuthSafe() || {};
+  const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
 
   const linkBase = "px-2 py-1 rounded transition-colors";
@@ -19,17 +13,33 @@ export default function NavBar() {
 
   return (
     <nav className="cc-nav">
-      <div className="cc-nav-inner">
+      <div
+        className="cc-nav-inner"
+        style={{ padding: "0 16px", width: "100%" }}
+      >
         <div
           className="cc-brand"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", padding: "6px  0px" }}
           onClick={() => navigate("/")}
         >
-          Convoy Connect
+          Convoy
+        </div>
+        <img
+          alt="Logo"
+          className="w-16 h-16"
+          src="/public/media/logo-NoBackground.png"
+        />
+        <div
+          className="cc-brand"
+          style={{ cursor: "pointer", padding: "6px 0px" }}
+          onClick={() => navigate("/")}
+        >
+          {" "}
+          Connect
         </div>
 
         {/* Main nav links */}
-        <div className="hidden md:flex items-center gap-2">
+        <div className="cc-nav-links hidden md:flex items-center">
           <NavLink
             to="/"
             end
@@ -82,13 +92,31 @@ export default function NavBar() {
 
         {/* Right side controls */}
         <div className="flex items-center gap-2">
-          <ThemeToggle />
-
           {!loading && user ? (
             <>
+              {/* Left-to-right within group: role, welcome, avatar, theme, logout */}
+              {user.role && <span className="badge">{user.role}</span>}
               <span className="text-sm" style={{ color: "var(--color-text)" }}>
-                {user.name || user.email || "Signed in"}
+                {`Welcome, ${(user.first_name || user.name || "User").toString()}`}
               </span>
+              <div
+                aria-hidden
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: "50%",
+                  background: "var(--color-surface-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontWeight: 600,
+                  color: "var(--color-text)",
+                }}
+                title={user.name || user.email}
+              >
+                {(user.first_name || user.name || "U").toString().slice(0, 1)}
+              </div>
+              <ThemeToggle />
               <button
                 type="button"
                 className="btn btn-ghost"
@@ -99,18 +127,23 @@ export default function NavBar() {
                     navigate("/login");
                   }
                 }}
+                style={{ padding: "6px 10px" }}
               >
                 Logout
               </button>
             </>
           ) : (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+            <>
+              <ThemeToggle />
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => navigate("/login")}
+                style={{ padding: "6px 10px" }}
+              >
+                Login
+              </button>
+            </>
           )}
         </div>
       </div>

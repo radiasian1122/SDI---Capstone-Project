@@ -1,4 +1,5 @@
 import axios from "axios";
+import { mapVehicle, mapUser, mapDispatch } from "./mappers";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const AUTH_MODE = import.meta.env.VITE_AUTH_MODE;
@@ -29,8 +30,7 @@ api.interceptors.response.use(
 );
 
 /* ======================
-   AUTH (kept as-is so your app compiles)
-   If your backend uses different paths, tell me and I’ll adjust.
+   AUTH (kept as-is so app compiles)
    ====================== */
 
 export async function login(emailOrObj, password) {
@@ -42,7 +42,7 @@ export async function login(emailOrObj, password) {
   const { data } = await api.post("/auth/login", body);
   return data;
 }
-
+//TODO tie in the auth endpoint to validate users
 export async function getMe() {
   // If your backend exposes /auth/me instead of /me, change this path
   const { data } = await api.get("/me");
@@ -56,7 +56,10 @@ export async function getMe() {
 // GET /dispatches (all)
 export async function listDispatches(params) {
   const { data } = await api.get("/dispatches", { params });
-  return { items: data };
+  const items = Array.isArray(data)
+    ? data.map(mapDispatch).filter(Boolean)
+    : [];
+  return { items };
 }
 
 // POST /dispatches (create)
@@ -77,12 +80,7 @@ export async function createDispatch(payload) {
 }
 
 // GET /dispatches/uic/{uic}
-export async function listDispatchesByUIC(uic, params) {
-  const { data } = await api.get(`/dispatches/uic/${encodeURIComponent(uic)}`, {
-    params,
-  });
-  return { items: data };
-}
+// (removed) listDispatchesByUIC — not used by frontend
 
 /* ======================
    USERS
@@ -91,14 +89,12 @@ export async function listDispatchesByUIC(uic, params) {
 // GET /users
 export async function listUsers(params) {
   const { data } = await api.get("/users", { params });
-  return { items: data };
+  const items = Array.isArray(data) ? data.map(mapUser).filter(Boolean) : [];
+  return { items };
 }
 
 // GET /users/id/{id}  (DOD ID)
-export async function getUserById(id) {
-  const { data } = await api.get(`/users/id/${encodeURIComponent(id)}`);
-  return data;
-}
+// (removed) getUserById — not used by frontend
 
 // GET /users/id/{id}/qual
 export async function getUserQuals(id) {
@@ -113,42 +109,14 @@ export async function getUserQuals(id) {
 // GET /vehicles
 export async function listVehicles(params) {
   const { data } = await api.get("/vehicles", { params });
-  const items = Array.isArray(data)
-    ? data.map((v) => ({
-        id: v.vehicle_id,
-        name: `${v.uic}-${v.bumper_no}`,
-        type: String(v.platform_variant),
-        qual_id: v.platform_variant,
-        uic: v.uic,
-        company: typeof v.uic === 'string' ? v.uic.slice(4, 5) : '',
-        bumper_no: v.bumper_no,
-        status: v.deadlined ? "DEADLINED" : "FMC",
-        // notes: v.notes || "",
-      }))
-    : [];
+  const items = Array.isArray(data) ? data.map(mapVehicle).filter(Boolean) : [];
   return { items };
 }
 
-// GET /vehicles/id/{id}
-export async function getVehicleById(id) {
-  const { data } = await api.get(`/vehicles/id/${encodeURIComponent(id)}`);
-  return data;
-}
+// (removed) getVehicleById — not used by frontend
 
-// // Vehicles
-// export async function listVehicles() {
-//   const { data } = await api.get(
-//     "http://localhost:8080/docs/#/default/get_vehicles"
-//   );
-//   return data;
-// }
-// GET /vehicles/uic/{uic}
-export async function listVehiclesByUIC(uic, params) {
-  const { data } = await api.get(`/vehicles/uic/${encodeURIComponent(uic)}`, {
-    params,
-  });
-  return data;
-}
+// Vehicles
+// (removed) listVehiclesByUIC — not used by frontend
 
 /* ======================
    COMPAT SHIMS (optional)
@@ -167,17 +135,16 @@ export async function listRequests(params) {
   return listDispatches(params);
 }
 
-// Approvals flow isn’t defined in the new endpoints you shared.
-// If you have approve/deny endpoints elsewhere, paste them and I’ll wire them.
+// Approvals flow isn’t defined in endpoints.
 // For now, leave these no-ops or point them to future routes:
 export async function approveRequest(/* id */) {
   throw new Error(
-    "approveRequest endpoint not available on backend. Provide path and I’ll wire it."
+    "approveRequest endpoint not available on backend. Build endpoint path"
   );
 }
 export async function denyRequest(/* id */) {
   throw new Error(
-    "denyRequest endpoint not available on backend. Provide path and I’ll wire it."
+    "denyRequest endpoint not available on backend. Build endpoint path"
   );
 }
 
@@ -193,15 +160,11 @@ const client = {
   // dispatches
   listDispatches,
   createDispatch,
-  listDispatchesByUIC,
   // users
   listUsers,
-  getUserById,
   getUserQuals,
   // vehicles
   listVehicles,
-  getVehicleById,
-  listVehiclesByUIC,
   // shims
   createRequest,
   listRequests,
@@ -210,74 +173,3 @@ const client = {
 };
 
 export default client;
-
-// import axios from "axios";
-
-// export const api = axios.create({
-//   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-//   withCredentials: true,
-// });
-
-// // Interceptor for auth errors
-// api.interceptors.response.use(
-//   (res) => res,
-//   (err) => {
-//     if (err.response && err.response.status === 401) {
-//       window.location.href = "/login";
-//     }
-//     return Promise.reject(err);
-//   }
-// );
-
-// export async function login(email, password) {
-//   const { data } = await api.post("/auth/login", { email, password });
-//   return data;
-// }
-
-// export async function getMe() {
-//   const { data } = await api.get("/me");
-//   return data;
-// }
-
-// // Requests
-// export async function createRequest(payload) {
-//   const { data } = await api.post("/requests", payload);
-//   return data;
-// }
-
-// export async function listRequests(params) {
-//   const { data } = await api.get("/requests", { params });
-//   return data;
-// }
-
-// export async function approveRequest(id) {
-//   const { data } = await api.patch(`/requests/${id}/approve`);
-//   return data;
-// }
-
-// export async function denyRequest(id) {
-//   const { data } = await api.patch(`/requests/${id}/deny`);
-//   return data;
-// }
-
-// // Dispatches
-// export async function createDispatch(requestId, payload) {
-//   const { data } = await api.post(`/requests/${requestId}/dispatch`, payload);
-//   return data;
-// }
-
-// export async function checkoutDispatch(id) {
-//   const { data } = await api.patch(`/dispatches/${id}/checkout`);
-//   return data;
-// }
-
-// export async function checkinDispatch(id, payload) {
-//   const { data } = await api.patch(`/dispatches/${id}/checkin`, payload);
-//   return data;
-// }
-
-// // Vehicles
-// export async function listVehicles() {
-//   const { data } = await api.get("/vehicles");
-//   return data;
-// }
