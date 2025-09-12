@@ -13,6 +13,8 @@ export default function DevRoleSwitcher() {
         className="input"
         value={current}
         onChange={(e) => setDevRole?.(e.target.value)}
+        popover="auto"
+        anchor-name="role-select"
       >
         {["DRIVER", "APPROVER", "DISPATCHER"].map((r) => (
           <option key={r} value={r}>

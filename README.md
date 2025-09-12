@@ -19,3 +19,7 @@ VITE_AUTH_MODE=none
 Notes:
 - No auth routes are wired yet; development uses a local dev user.
 - CORS: credentials are only sent when `VITE_AUTH_MODE=cookie`.
+
+## Frontend docs
+
+See `Frontend/README.md` for detailed frontend documentation: UX and role flows, architecture, setup, and conventions for contributing.

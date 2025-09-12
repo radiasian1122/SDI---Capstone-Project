@@ -60,16 +60,30 @@ export default function Dashboard() {
   );
 
   const firstName = user?.first_name || user?.name || "User";
-  const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
+  const IMAGES = [
+    "/media/1.png",
+    "/media/2.png",
+    "/media/3.png",
+    "/media/4.png",
+    "/media/5.png",
+  ];
 
   return (
     <div>
-      <BackgroundSlideshow images={IMAGES} intervalMs={6000} fadeMs={800} dim={0.25} />
-      <div className="cc-page space-y-6" style={{ position: "relative", zIndex: 1 }}>
+      <BackgroundSlideshow
+        images={IMAGES}
+        intervalMs={6000}
+        fadeMs={800}
+        dim={0.25}
+      />
+      <div
+        className="cc-page space-y-6"
+        style={{ position: "relative", zIndex: 1 }}
+      >
         {/* Dev-only role switcher */}
         {import.meta.env.DEV && <DevRoleSwitcher />}
 
-        {/* Dev-only welcome/role copy (for UI testing) */}
+        {/* Dev-only welcome/role copy (for UI testing)
         {import.meta.env.DEV && (
           <div className="card">
             <div className="card-body flex items-center gap-2">
@@ -77,25 +91,31 @@ export default function Dashboard() {
               {user?.role && <span className="badge">{user.role}</span>}
             </div>
           </div>
-        )}
+        )} */}
 
         <h1 className="cc-page-title">Dashboard</h1>
 
-      {/* Content */}
+        {/* Content */}
         {dataLoading ? (
-        <SkeletonList rows={4} />
+          <SkeletonList rows={4} />
         ) : (
           <div className="grid gap-3">
             {data?.items?.length ? (
               data.items.map((r) => (
                 <div key={r.id} className="card">
                   <div className="card-body">
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
                       <strong>{r.destination}</strong>
                       <StatusBadge status={r.status} />
                     </div>
                     <div className="text-muted" style={{ fontSize: 13 }}>
-                      {new Date(r.start_time).toLocaleString()} → {new Date(r.end_time).toLocaleString()}
+                      {new Date(r.start_time).toLocaleString()} →{" "}
+                      {new Date(r.end_time).toLocaleString()}
                     </div>
                     <div style={{ fontSize: 13 }}>{r.purpose}</div>
                   </div>
