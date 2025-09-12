@@ -11,28 +11,30 @@ import BackgroundSlideshow from "../components/BackgroundSlideshow";
 import { VehiclesContext } from "../context/VehiclesContext";
 import { useContext } from "react";
 import StatusBadge from '../components/StatusBadge'
+import DashboardTile from '../components/DashboardTile'
 
 const api_url = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 export default function Dashboard() {
   const [dataLoading, setDataLoading] = useState(true)
-  const [data, setData] = useState([])
+  const [dispatches, setDispatches] = useState([])
   const { user, loading: authLoading } = useAuth();
   const { dispatchId } = useContext(VehiclesContext);
 
+
+  // TODO - Filter by role once auth is implemented
   useEffect(() => {
     fetch(`${api_url}/dispatches`)
     .then(res => res.json())
-    .then(data => setData(data))
-    .catch(err => console.error(err))
+    .then(data => setDispatches(data))
+    .catch(err => console.log(err.message))
   }, [])
 
   useEffect(() => {
-    if(data.length){
+    if(dispatches.length === 0){
       setDataLoading(false)
     }
-  }, [data])
-
+  }, [dispatches])
 
   ////// TODO - refactor when auth is implemented //////
 
@@ -62,19 +64,11 @@ export default function Dashboard() {
     );
   }
 
-  // 4) Build params now that role is known
-  // const params = useMemo(() => {
-  //   if (role === "DRIVER") return { mine: true };
-  //   if (role === "APPROVER") return { status: "PENDING" };
-  //   return { status: "OUT" }; // DISPATCHER: show active
-  // }, [role]);
-
-
   const firstName = user?.first_name || user?.name || "User";
   const IMAGES = ["/media/1.png", "/media/2.png", "/media/3.png", "/media/4.png", "/media/5.png"];
 
-  console.log(data)
-  return (
+  console.log(dispatches)
+  return(
     <div>
       <BackgroundSlideshow images={IMAGES} intervalMs={6000} fadeMs={800} dim={0.25} />
       <div className="cc-page space-y-6" style={{ position: "relative", zIndex: 1 }}>
@@ -92,34 +86,10 @@ export default function Dashboard() {
         )}
 
         <h1 className="cc-page-title">Dashboard</h1>
-
-      {/* Content */}
-        {dataLoading ? (
-        <SkeletonList rows={4} />
-        ) : (
-          <div className="grid gap-3">
-            {data.length !== 0 ? (
-              data.map((dispatch) => (
-                <div key={dispatch.dispatch_id} className="card">
-                  <div className="card-body">
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <strong>{dispatch.dispatch_id}</strong>
-                      {dispatch.approved && <StatusBadge status={'APPROVED'} />}
-                      {!dispatch.approved && <StatusBadge status={'PENDING'} />}
-                    </div>
-                    <div className="text-muted" style={{ fontSize: 13 }}>
-                      {new Date(dispatch.start_time).toLocaleString()} → {new Date(dispatch.end_time).toLocaleString()}
-                    </div>
-                    <div style={{ fontSize: 13 }}>{dispatch.purpose}</div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <EmptyState title="No requests match your filters." />
-            )}
-          </div>
-        )}
+        {dispatches.length > 0 && dispatches.map((dispatch) => {
+          return <DashboardTile dispatch={dispatch}/>
+        })}
       </div>
     </div>
-  );
+  )
 }
