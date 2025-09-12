@@ -35,17 +35,6 @@ export default function Dispatches() {
     { auto: enabled }
   );
 
-  // If your useFetch supports an "enabled" arg, use it.
-  // If not, we pass a no-op fetcher when disabled to keep hooks order stable.
-  // const fetcher = enabled
-  //   ? () => listRequests(params)
-  //   : () => Promise.resolve({ items: [] });
-
-  // const { data, loading } = useFetch(fetcher, [
-  //   JSON.stringify(params),
-  //   enabled,
-  // ]);
-
   // Early returns AFTER all hooks are declared:
   if (authLoading) return <Loading label="Loading account…" />;
   if (!canView) return <AccessRestrictedCard />;
