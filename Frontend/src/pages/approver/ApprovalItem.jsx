@@ -29,6 +29,19 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   );
   const qualsBtnRef = useRef(null);
   const [openQuals, setOpenQuals] = useState(false);
+  const [comment, setComment] = useState("");
+
+  // Replace these with your actual approve/deny logic
+  const handleApprove = () => {
+    // Use comment value here
+    // e.g., send approval with comment
+    console.log("Approved with comment:", comment);
+  };
+  const handleDeny = () => {
+    // Use comment value here
+    // e.g., send denial with comment
+    console.log("Denied with comment:", comment);
+  };
 
   return (
     <div key={id} className="card">
@@ -111,8 +124,24 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
             : row.requestor_id || "—"}
         </div>
         <div className="mt-2 flex gap-2">
-          <button className="btn btn-primary">Approve</button>
-          <button className="btn btn-danger">Deny</button>
+          <button className="btn btn-primary" onClick={handleApprove}>
+            Approve
+          </button>
+          <button className="btn btn-danger" onClick={handleDeny}>
+            Deny
+          </button>
+        </div>
+        <div className="comments mt-2">
+          <label htmlFor="username">Add comments with approve/deny:</label>
+          <input
+            className="border rounded p-4 bg-white shadow mb-4 w-full"
+            type="text"
+            id="username"
+            name="user_name"
+            placeholder="Enter comments here"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
       </div>
     </div>
