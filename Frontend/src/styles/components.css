@@ -12,6 +12,10 @@ body {
 }
 
 /* ---------- LAYOUT ---------- */
+.add-margin {
+  margin: 1.5rem;
+}
+
 .cc-container {
   width: 100%;
   max-width: min(1120px, 95vw);

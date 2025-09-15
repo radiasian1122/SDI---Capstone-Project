@@ -11,6 +11,7 @@ exports.up = function(knex) {
       table.foreign('platform_variant').references('qualifications.qual_id').deferrable('deferred').onDelete('CASCADE')
       table.string('bumper_no').notNullable()
       table.boolean('deadlined').notNullable()
+      table.integer('mileage_hours').notNullable()
   })
 };
 
