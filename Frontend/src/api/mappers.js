@@ -18,6 +18,18 @@ export function mapVehicle(v) {
   };
 }
 
+export function mapFaults(f) {
+  if (!f) return null;
+  return {
+    vehicle_id: f.vehicle_id,
+    fault_code: f.fault_code,
+    fault_description: f.fault_description,
+    fault_date: f.fault_date,
+    tech_status: f.tech_status,
+    corrective_action: f.corrective_action,
+  };
+}
+
 export function mapUser(u) {
   if (!u) return null;
   return {
@@ -43,4 +55,3 @@ export function mapDispatch(d) {
     purpose: d.purpose,
   };
 }
-

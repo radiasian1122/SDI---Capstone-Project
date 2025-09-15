@@ -113,6 +113,22 @@ export async function listVehicles(params) {
   return { items };
 }
 
+export async function listFaults(params) {
+  const { data } = await api.get("/faults", { params });
+  const items = Array.isArray(data) ? data.map(mapFaults).filter(Boolean) : [];
+  return { items };
+}
+// fetch(`${api_url}/vehicles/id/${dispatch.vehicle_id}`)
+//   .then(res => res.json())
+//   .then(data => {
+//     setVehicle(data)
+//     fetch(`${api_url}/faults/${data.vehicle_id}`)
+//     .then(res => res.json())
+//     .then(data => setFaults(data))
+//     .catch(err => console.error(err))
+//   })
+//   .catch(err => console.error(err.message))
+
 // (removed) getVehicleById — not used by frontend
 
 // Vehicles
@@ -165,6 +181,7 @@ const client = {
   getUserQuals,
   // vehicles
   listVehicles,
+  listFaults,
   // shims
   createRequest,
   listRequests,

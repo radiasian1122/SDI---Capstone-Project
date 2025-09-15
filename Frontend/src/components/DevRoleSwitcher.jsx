@@ -16,7 +16,7 @@ export default function DevRoleSwitcher() {
         popover="auto"
         anchor-name="role-select"
       >
-        {["DRIVER", "APPROVER", "DISPATCHER"].map((r) => (
+        {["DRIVER", "DISPATCHER"].map((r) => (
           <option key={r} value={r}>
             {r}
           </option>
