@@ -81,4 +81,52 @@ router.get('/uic/:uic', vehiclesCtl.getVehiclesByUic)
  */
 router.get('/id/:id', vehiclesCtl.getVehicleById)
 
+/**
+ * @swagger
+ * /vehicles/id/{vehicle_id}:
+ *   patch:
+ *     summary: Update a vehicle
+ *     tags: [vehicles]
+ *     description: Update a vehicle's mileage hours
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID of the vehicle to update
+ *         schema:
+ *           type: integer
+ *           example: 1
+ *     requestBody:
+ *       description: The vehicle fields to be updated.
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               mileage_hours:
+ *                 type: integer
+ *                 example: 1500
+ *             required:
+ *               - mileage_hours
+ *     responses:
+ *       200:
+ *         description: Successfully updated the vehicle
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   mileage_hours:
+ *                     type: integer
+ *       400:
+ *         description: Bad request - missing request body or required properties
+ *       500:
+ *         description: Internal server error
+*/
+
+router.patch('/id/:vehicle_id', vehiclesCtl.updateVehicle)
+
 module.exports = router

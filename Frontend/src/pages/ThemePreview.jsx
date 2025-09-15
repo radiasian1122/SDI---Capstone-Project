@@ -68,22 +68,29 @@ export default function ThemePreview() {
                   border: `2px solid var(${s.varName})`,
                 }
               : s.isText
+
                 ? {
                     background: "var(--color-surface)",
-                    color: `var(${s.varName})`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
+                    border: `2px solid var(${s.varName})`,
                   }
-                : { background: `var(${s.varName})` };
-            return (
-              <div key={s.name} className="card">
-                <div className="card-body">
-                  <div className="w-full h-12 rounded" style={baseStyle}>
-                    {s.isText ? "Aa" : null}
+                : s.isText
+                  ? {
+                      background: "var(--color-surface)",
+                      color: `var(${s.varName})`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 600,
+                    }
+                  : { background: `var(${s.varName})` };
+              return (
+                <div key={s.name} className="card">
+                  <div className="card-body">
+                    <div className="w-full h-12 rounded" style={baseStyle}>
+                      {s.isText ? "Aa" : null}
+                    </div>
+                    <p className="mt-2 text-sm">{s.name}</p>
                   </div>
-                  <p className="mt-2 text-sm">{s.name}</p>
                 </div>
               </div>
             );

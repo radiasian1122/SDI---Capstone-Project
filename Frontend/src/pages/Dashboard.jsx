@@ -24,20 +24,23 @@ export default function Dashboard() {
   // TODO - Filter by role once auth is implemented
   useEffect(() => {
     fetch(`${api_url}/dispatches`)
-      .then((res) => res.json())
-      .then((data) => {
-        if (user.role === "APPROVER") {
-          setDispatches(data);
-        } else if (user.role === "DRIVER") {
-          setDispatches(
-            data.filter((dispatch) => dispatch.requestor_id == user.dod_id)
-          );
-        } else {
-          setDispatches([]);
-        }
-      })
-      .catch((err) => console.log(err.message));
-  }, [user.dod_id, user.role]);
+
+    .then(res => res.json())
+    .then(data => {
+      if (user.role === 'DISPATCHER'){
+        setDispatches(data)
+      }
+      else if(user.role === 'DRIVER'){
+        setDispatches(
+          data.filter(dispatch => dispatch.requestor_id == user.dod_id)
+        )
+      }
+      else{
+        setDispatches([])
+      }
+    })
+    .catch(err => console.log(err.message))
+  }, [user.dod_id, user.role])
 
   useEffect(() => {
     if (dispatches.length === 0) {

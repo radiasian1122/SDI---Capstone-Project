@@ -2,7 +2,7 @@ const knex = require("../db.js");
 
 exports.getAllDispatches = async (req, res) => {
   try {
-    const dispatches = await knex("dispatches").select("*");
+    const dispatches = await knex("dispatches").select("*").orderBy("dispatch_id");
     res.json(dispatches);
   } catch (err) {
     res.status(500).json({ error: err.message });
