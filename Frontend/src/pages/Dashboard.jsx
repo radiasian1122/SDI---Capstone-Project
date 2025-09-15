@@ -27,7 +27,7 @@ export default function Dashboard() {
     fetch(`${api_url}/dispatches`)
     .then(res => res.json())
     .then(data => {
-      if (user.role === 'APPROVER'){
+      if (user.role === 'DISPATCHER'){
         setDispatches(data)
       }
       else if(user.role === 'DRIVER'){
