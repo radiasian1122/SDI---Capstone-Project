@@ -25,6 +25,8 @@ export default function NewRequest() {
   const [errors, setErrors] = useState({});
   const [selectedVehicleIds, setSelectedVehicleIds] = useState([]);
   const [driverByVehicle, setDriverByVehicle] = useState({}); // { [vehicleId]: userId }
+  //TODO  Post to endpoint "Faults" when availble.
+  // const [fm5988ByVehicle, setFm5988ByVehicle] = useState({});
   const [pickerValue, setPickerValue] = useState("");
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
 
@@ -107,6 +109,8 @@ export default function NewRequest() {
             requestor_id,
             driver_id: driverByVehicle[vid],
             vehicle_id: vid,
+            //TODO Wire in Faults table
+            // fm5988: fm5988ByVehicle[vid] || {},
           })
         )
       );
@@ -114,6 +118,8 @@ export default function NewRequest() {
       // Reset form
       setSelectedVehicleIds([]);
       setDriverByVehicle({});
+      //TODO Wire in Faults table
+      // setFm5988ByVehicle({});
       setForm({ destination: "", purpose: "", start_time: "", end_time: "" });
     } catch (err) {
       console.error(err);
@@ -128,15 +134,27 @@ export default function NewRequest() {
     setPickerValue("");
   };
 
-  const removeVehicle = (id) =>
+  const removeVehicle = (id) => {
     setSelectedVehicleIds((prev) => prev.filter((x) => x !== id));
+    setDriverByVehicle((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+    //TODO Wire in Faults table
+    //   setFm5988ByVehicle((prev) => {
+    //     const next = { ...prev };
+    //     delete next[id];
+    //     return next;
+    //   });
+  };
 
   return (
     <BackgroundMedia posterSrc="/media/pmcs.png">
-      <div className="card slide-in" style={{ maxWidth: 550, width: "100%" }}>
+      <div className="card slide-in max-w-3x1 mx-auto">
         <div className="card-body"></div>
 
-        <div className="cc-page space-y-6">
+        <div className="cc-page space-y-6 p-6" style={{ padding: 24 }}>
           <h1 className="cc-page-title">New Dispatch Request</h1>
 
           <form className="space-y-4 max-w-xl" onSubmit={onSubmit} noValidate>
@@ -149,10 +167,57 @@ export default function NewRequest() {
                 className="input"
                 value={form.destination}
                 onChange={onChange("destination")}
+                style={{ backgroundColor: "#fff", color: "#111827" }}
               />
               {errors.destination && (
                 <p className="error">{errors.destination}</p>
               )}
+            </div>
+            <div>
+              <label className="label" htmlFor="purpose">
+                Purpose
+              </label>
+              <textarea
+                id="purpose"
+                className="input"
+                rows={3}
+                value={form.purpose}
+                onChange={onChange("purpose")}
+                style={{ backgroundColor: "#fff", color: "#111827" }}
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <div>
+                <label className="label required" htmlFor="start">
+                  Start time
+                </label>
+                <input
+                  id="start"
+                  type="datetime-local"
+                  className="input"
+                  value={form.start_time}
+                  onChange={onChange("start_time")}
+                  style={{ backgroundColor: "#fff", color: "#111827" }}
+                />
+                {errors.start_time && (
+                  <p className="error">{errors.start_time}</p>
+                )}
+              </div>
+              <div>
+                <label className="label required" htmlFor="end">
+                  End time
+                </label>
+                <input
+                  id="end"
+                  type="datetime-local"
+                  className="input"
+                  value={form.end_time}
+                  onChange={onChange("end_time")}
+                  style={{ backgroundColor: "#fff", color: "#111827" }}
+                />
+                {errors.end_time && <p className="error">{errors.end_time}</p>}
+              </div>
             </div>
 
             {/* Vehicles picker */}
@@ -184,56 +249,15 @@ export default function NewRequest() {
                     setDriverByVehicle={setDriverByVehicle}
                     onRemoveVehicle={removeVehicle}
                     errors={errors}
+                    //TODO Wire in Faults table
+                    // fm5988ByVehicle={fm5988ByVehicle}
+                    // setFm5988ByVehicle={setFm5988ByVehicle}
                   />
                   {errors.vehicles && (
                     <p className="error mt-2">{errors.vehicles}</p>
                   )}
                 </div>
               )}
-            </div>
-
-            <div>
-              <label className="label" htmlFor="purpose">
-                Purpose
-              </label>
-              <textarea
-                id="purpose"
-                className="input"
-                rows={3}
-                value={form.purpose}
-                onChange={onChange("purpose")}
-              />
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              <div>
-                <label className="label required" htmlFor="start">
-                  Start time
-                </label>
-                <input
-                  id="start"
-                  type="datetime-local"
-                  className="input"
-                  value={form.start_time}
-                  onChange={onChange("start_time")}
-                />
-                {errors.start_time && (
-                  <p className="error">{errors.start_time}</p>
-                )}
-              </div>
-              <div>
-                <label className="label required" htmlFor="end">
-                  End time
-                </label>
-                <input
-                  id="end"
-                  type="datetime-local"
-                  className="input"
-                  value={form.end_time}
-                  onChange={onChange("end_time")}
-                />
-                {errors.end_time && <p className="error">{errors.end_time}</p>}
-              </div>
             </div>
 
             {/* Sticky actions */}
