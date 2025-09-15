@@ -34,14 +34,14 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   // Replace these with your actual approve/deny logic
   async function handlePost(value) {
     var post = {
-      driver_id: row.id,
+      driver_id: row.id.toString(),
       dispatch_id: row.dispatch_id,
       approved: value,
       comments: comment,
     };
     try {
-      const res = await fetch("http://localhost:8080//:dispatch_id", {
-        method: "POST",
+      const res = await fetch("http://localhost:8080/dispatches", {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
@@ -50,6 +50,8 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
 
       if (!res.ok) {
         throw new Error(`HTTP error! Status: ${res.status}`);
+      } else {
+        console.log("request success!");
       }
 
       const data = await res.json(); // Parse JSON response
