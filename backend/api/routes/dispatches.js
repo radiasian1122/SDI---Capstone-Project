@@ -141,6 +141,6 @@ router.get("/uic/:uic", dispatchesCtl.getDispatchesByUic);
  *               items:
  *                $ref: '#/components/updated_dispatch_return'
  */
-router.patch("/:dispatch_id", dispatchesCtl.updateDispatch);
+router.patch("/", dispatchesCtl.updateDispatch);
 
 module.exports = router;
