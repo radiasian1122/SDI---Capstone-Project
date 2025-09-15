@@ -69,13 +69,15 @@ export default function DashboardTile({ dispatch }){
             }
             {viewDetails &&
               <div className="text-muted italic" style={{ fontSize: 13 }}>
-                {/* filter thru and render stuff  */}
+                <div>
+                  
+                </div>
               </div>
             }
             <button
               className="btn btn-secondary"
               onClick={() => setViewDetails(!viewDetails)}
-            >Details</button>
+            >{viewDetails ? 'Hide Details' : 'Show Details'}</button>
           </div>
         </div>
     </div>
