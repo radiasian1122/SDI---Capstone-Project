@@ -34,10 +34,10 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   // Replace these with your actual approve/deny logic
   async function handlePost(value) {
     var post = {
-      driverId: row.id,
-      dispatchId: row.dispatch_id,
-      approval: value,
-      comment: comment,
+      driver_id: row.id,
+      dispatch_id: row.dispatch_id,
+      approved: value,
+      comments: comment,
     };
     try {
       const res = await fetch("http://localhost:8080//:dispatch_id", {
@@ -142,19 +142,19 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
         <div className="mt-2 flex gap-2">
           <button
             onClick={() => {
-              handlePost("approved");
+              handlePost(true);
             }}
             className="btn btn-primary"
-            value="approved"
+            value={true}
           >
             Approve
           </button>
           <button
             onClick={() => {
-              handlePost("denied");
+              handlePost(false);
             }}
             className="btn btn-danger"
-            value="denied"
+            value={false}
           >
             Deny
           </button>
