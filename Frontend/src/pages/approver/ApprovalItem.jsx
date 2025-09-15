@@ -63,7 +63,7 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
     <div key={id} className="card">
       <div className="card-body space-y-4">
         {/* Vehicle strip with status */}
-        <div className="flex flex-wrap items-center justify-end-safe gap-36 text-sm">
+        <div className="flex relative items-center justify-end-safe gap-44 text-sm">
           <div className="flex items-center gap-1">
             <span className="text-text/70">Vehicle:</span>
             <strong>{vehicle?.bumper_no || "—"}</strong>
@@ -84,7 +84,7 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
 
         {/* Driver + Requester section */}
 
-        <div className="flex flex-wrap items-center justify-end-safe gap-26 text-sm">
+        <div className="flex relative items-center justify-end-safe gap-26 text-sm">
           {" "}
           <div>
             <strong>Driver:</strong>{" "}
