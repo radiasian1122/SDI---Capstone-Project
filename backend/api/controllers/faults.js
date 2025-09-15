@@ -40,3 +40,14 @@ exports.createNewFault = (req, res) => {
     })
   }
 }
+
+exports.deleteFault = (req, res) => {
+  try{
+    knex("faults").where({ fault_id: req.params.fault_id }).del()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(400).send(err.message))
+  }
+  catch(err){
+    res.status(500).send(err.message)
+  }
+}
