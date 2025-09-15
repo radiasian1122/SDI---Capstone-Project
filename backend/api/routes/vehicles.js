@@ -81,4 +81,6 @@ router.get('/uic/:uic', vehiclesCtl.getVehiclesByUic)
  */
 router.get('/id/:id', vehiclesCtl.getVehicleById)
 
+router.patch('/id/:id', vehiclesCtl.updateVehicle)
+
 module.exports = router
