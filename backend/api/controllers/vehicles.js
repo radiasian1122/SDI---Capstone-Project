@@ -3,7 +3,7 @@ const knex = require("../db.js");
 // Get all vehicles
 exports.getAllVehicles = async (req, res) => {
   try {
-    const vehicles = await knex("vehicles").select("*");
+    const vehicles = await knex("vehicles").select("*").orderBy("vehicle_id");
     res.json(vehicles);
   } catch (err) {
     res.status(500).json({ error: err.message });

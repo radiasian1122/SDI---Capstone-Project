@@ -99,6 +99,8 @@ router.get('/:vehicle_id', faultsCtl.getFaultsByVehicleId)
  */
 router.post('/', faultsCtl.createNewFault)
 
+router.patch('/:fault_id', faultsCtl.updateFault)
+
 /**
  * @swagger
  * /faults/{fault_id}:
