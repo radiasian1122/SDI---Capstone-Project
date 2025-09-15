@@ -37,60 +37,60 @@ export default function ThemePreview() {
   ];
 
   return (
+    <BackgroundMedia>
+      <div className="cc-page space-y-8">
+        <div className="flex items-center gap-2">
+          <ThemeToggle />{" "}
+        </div>
 
-    <div className="cc-page space-y-8">
-      <div className="flex items-center gap-2">
-        <ThemeToggle />{" "}
-      </div>
-
-      <header>
-        <h1 className="cc-page-title">Convoy Connect — Theme Preview</h1>
-        <p className="text-sm text-text/70">Tokens & components QA</p>
-      </header>
-      <div
-        style={{
-          background: "var(--color-surface-muted)",
-          color: "var(--color-text)",
-          padding: 16,
-          border: "1px solid var(--color-border)",
-          borderRadius: "8px",
-        }}
-      >
-        If you can read this on a light gray panel, tokens are working.
-      </div>
-      {/* Colors */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Colors</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {SWATCHES.map((s) => {
-            const baseStyle = s.isBorder
-              ? {
-                  background: "var(--color-surface)",
-                  border: `2px solid var(${s.varName})`,
-                }
-              : s.isText
+        <header>
+          <h1 className="cc-page-title">Convoy Connect — Theme Preview</h1>
+          <p className="text-sm text-text/70">Tokens & components QA</p>
+        </header>
+        <div
+          style={{
+            background: "var(--color-surface-muted)",
+            color: "var(--color-text)",
+            padding: 16,
+            border: "1px solid var(--color-border)",
+            borderRadius: "8px",
+          }}
+        >
+          If you can read this on a light gray panel, tokens are working.
+        </div>
+        {/* Colors */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Colors</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {SWATCHES.map((s) => {
+              const baseStyle = s.isBorder
                 ? {
                     background: "var(--color-surface)",
-                    color: `var(${s.varName})`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontWeight: 600,
+                    border: `2px solid var(${s.varName})`,
                   }
-                : { background: `var(${s.varName})` };
-            return (
-              <div key={s.name} className="card">
-                <div className="card-body">
-                  <div className="w-full h-12 rounded" style={baseStyle}>
-                    {s.isText ? "Aa" : null}
+                : s.isText
+                  ? {
+                      background: "var(--color-surface)",
+                      color: `var(${s.varName})`,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: 600,
+                    }
+                  : { background: `var(${s.varName})` };
+              return (
+                <div key={s.name} className="card">
+                  <div className="card-body">
+                    <div className="w-full h-12 rounded" style={baseStyle}>
+                      {s.isText ? "Aa" : null}
+                    </div>
+                    <p className="mt-2 text-sm">{s.name}</p>
                   </div>
-                  <p className="mt-2 text-sm">{s.name}</p>
                 </div>
-              </div>
-            );
-          })}
-
-        </div>
+              );
+            })}
+          </div>
+        </section>
         {/* Colors */}
         <section>
           <h2 className="text-xl font-semibold mb-2">Colors</h2>
@@ -106,22 +106,20 @@ export default function ThemePreview() {
           </div>
         </section>
 
-
-      {/* Buttons */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Buttons</h2>
-        <div className="flex flex-wrap gap-3">
-          <button className="btn-primary">Primary</button>
-          <button className="btn-secondary">Secondary</button>
-          <button className="btn-ghost">Ghost</button>
-          <button className="btn-danger">Danger</button>
-          <button className="btn-primary btn-pill">Pill</button>
-          <button className="btn-secondary btn-icon" aria-label="icon">
-            ☆
-          </button>
-        </div>
-      </section>
-
+        {/* Buttons */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Buttons</h2>
+          <div className="flex flex-wrap gap-3">
+            <button className="btn-primary">Primary</button>
+            <button className="btn-secondary">Secondary</button>
+            <button className="btn-ghost">Ghost</button>
+            <button className="btn-danger">Danger</button>
+            <button className="btn-primary btn-pill">Pill</button>
+            <button className="btn-secondary btn-icon" aria-label="icon">
+              ☆
+            </button>
+          </div>
+        </section>
 
         {/* Badges */}
         <section>
