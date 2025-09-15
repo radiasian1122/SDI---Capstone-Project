@@ -10,7 +10,13 @@ export function getBusyDriverIds(dispatches = []) {
 }
 
 // Returns eligible drivers for a vehicle, filtered by qualification, busy set, and form selections
-export function getEligibleDrivers({ vehicle, users, userQuals, busySet, selectedDriverIds }) {
+export function getEligibleDrivers({
+  vehicle,
+  users,
+  userQuals,
+  busySet,
+  selectedDriverIds,
+}) {
   if (!vehicle) return [];
   const required = vehicle.qual_id;
   const selected = new Set((selectedDriverIds || []).map((n) => Number(n)));
@@ -22,10 +28,12 @@ export function getEligibleDrivers({ vehicle, users, userQuals, busySet, selecte
 
 // Returns human-friendly Type strings for a driver's quals using vehicles list + bumper pattern
 export function getDriverQualTypes({ driverId, driverQuals, vehicles }) {
-  const ids = driverId ? (driverQuals[driverId] || []) : [];
+  const ids = driverId ? driverQuals[driverId] || [] : [];
   const types = ids
     .map((qid) => {
-      const v = (vehicles || []).find((vv) => Number(vv.qual_id) === Number(qid));
+      const v = (vehicles || []).find(
+        (vv) => Number(vv.qual_id) === Number(qid)
+      );
       const bumper = v?.bumper_no || "";
       const typeCode = String(bumper).replace(/[^a-zA-Z]/g, "");
       return typeCode || String(qid);
@@ -33,4 +41,3 @@ export function getDriverQualTypes({ driverId, driverQuals, vehicles }) {
     .filter(Boolean);
   return Array.from(new Set(types));
 }
-

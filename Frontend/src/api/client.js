@@ -1,5 +1,5 @@
 import axios from "axios";
-import { mapVehicle, mapUser, mapDispatch } from "./mappers";
+import { mapVehicle, mapFaults, mapUser, mapDispatch } from "./mappers";
 
 const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 const AUTH_MODE = import.meta.env.VITE_AUTH_MODE;
@@ -112,7 +112,7 @@ export async function listVehicles(params) {
   const items = Array.isArray(data) ? data.map(mapVehicle).filter(Boolean) : [];
   return { items };
 }
-
+// GET /faults
 export async function listFaults(params) {
   const { data } = await api.get("/faults", { params });
   const items = Array.isArray(data) ? data.map(mapFaults).filter(Boolean) : [];
