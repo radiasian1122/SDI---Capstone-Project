@@ -44,3 +44,27 @@ exports.getVehiclesByUic = async (req, res) => {
     console.error(err);
   }
 };
+
+exports.updateVehicle = async (req, res) => {
+    if (!req.body) {
+        res.status(400).json({
+            message: "Missing request body"
+        })
+    } else if (
+        !Object.hasOwn(req.body, 'mileage_hours')
+    ) {
+        res.status(400).json({
+            message: "Request body is missing required properties. See /docs endpoint"
+        })
+    }else {
+        await knex('vehicles').where('vehicle_id', req.params.id).update(req.body, ['mileage_hours'])
+            .then(updatedVehicle => {
+                res.status(200).send(updatedVehicle)
+            })
+            .catch( err => {
+                    console.log(err.message)
+                    res.status(500).json(err.message)
+                }
+            )
+    }
+}
