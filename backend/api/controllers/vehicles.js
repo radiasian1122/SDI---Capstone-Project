@@ -57,7 +57,7 @@ exports.updateVehicle = async (req, res) => {
             message: "Request body is missing required properties. See /docs endpoint"
         })
     }else {
-        await knex('vehicles').where('vehicle_id', req.params.id).update(req.body, ['mileage_hours'])
+        await knex('vehicles').where('vehicle_id', req.params.vehicle_id).update(req.body, ['mileage_hours'])
             .then(updatedVehicle => {
                 res.status(200).send(updatedVehicle)
             })
