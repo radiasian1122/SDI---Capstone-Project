@@ -7,20 +7,22 @@ import BackgroundMedia from "../components/BackgroundMedia";
 
 import DevRoleSwitcher from "../components/DevRoleSwitcher";
 
-{
-  import.meta.env.DEV && <DevRoleSwitcher />;
-}
 const SWATCHES = [
-  { name: "brand", className: "bg-brand" },
-  { name: "accent", className: "bg-accent" },
-  { name: "success", className: "bg-success" },
-  { name: "warning", className: "bg-warning" },
-  { name: "danger", className: "bg-danger" },
-  { name: "info", className: "bg-info" },
-  { name: "out", className: "bg-out" },
-  { name: "returned", className: "bg-returned" },
-  { name: "maint", className: "bg-maint" },
-  { name: "closed", className: "bg-closed" },
+  { name: "brand", varName: "--color-brand" },
+  { name: "accent", varName: "--color-accent" },
+  { name: "success", varName: "--color-success" },
+  { name: "warning", varName: "--color-warning" },
+  { name: "danger", varName: "--color-danger" },
+  { name: "info", varName: "--color-info" },
+  { name: "out", varName: "--color-out" },
+  { name: "returned", varName: "--color-returned" },
+  { name: "maint", varName: "--color-maint" },
+  { name: "closed", varName: "--color-closed" },
+  { name: "surface", varName: "--color-surface" },
+  { name: "surface-muted", varName: "--color-surface-muted" },
+  { name: "surface-contrast", varName: "--color-surface-contrast" },
+  { name: "border", varName: "--color-border", isBorder: true },
+  { name: "text", varName: "--color-text", isText: true },
 ];
 export default function ThemePreview() {
   const statuses = [
@@ -35,23 +37,59 @@ export default function ThemePreview() {
   ];
 
   return (
-    <BackgroundMedia posterSrc="/media/pmcs.png">
-      <div className="cc-page space-y-8">
-        <header>
-          <h1 className="cc-page-title">Convoy Connect — Theme Preview</h1>
-          <p className="text-sm text-text/70">Tokens & components QA</p>
-        </header>
 
-        <div
-          style={{
-            background: "var(--color-surface-muted)",
-            color: "var(--color-text)",
-            padding: 16,
-            border: "1px solid var(--color-border)",
-            borderRadius: "8px",
-          }}
-        >
-          If you can read this on a light gray panel, tokens are working.
+    <div className="cc-page space-y-8">
+      <div className="flex items-center gap-2">
+        <ThemeToggle />{" "}
+      </div>
+
+      <header>
+        <h1 className="cc-page-title">Convoy Connect — Theme Preview</h1>
+        <p className="text-sm text-text/70">Tokens & components QA</p>
+      </header>
+      <div
+        style={{
+          background: "var(--color-surface-muted)",
+          color: "var(--color-text)",
+          padding: 16,
+          border: "1px solid var(--color-border)",
+          borderRadius: "8px",
+        }}
+      >
+        If you can read this on a light gray panel, tokens are working.
+      </div>
+      {/* Colors */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">Colors</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {SWATCHES.map((s) => {
+            const baseStyle = s.isBorder
+              ? {
+                  background: "var(--color-surface)",
+                  border: `2px solid var(${s.varName})`,
+                }
+              : s.isText
+                ? {
+                    background: "var(--color-surface)",
+                    color: `var(${s.varName})`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 600,
+                  }
+                : { background: `var(${s.varName})` };
+            return (
+              <div key={s.name} className="card">
+                <div className="card-body">
+                  <div className="w-full h-12 rounded" style={baseStyle}>
+                    {s.isText ? "Aa" : null}
+                  </div>
+                  <p className="mt-2 text-sm">{s.name}</p>
+                </div>
+              </div>
+            );
+          })}
+
         </div>
         {/* Colors */}
         <section>
@@ -68,23 +106,22 @@ export default function ThemePreview() {
           </div>
         </section>
 
-        {/* Buttons */}
-        <section>
-          <h2 className="text-xl font-semibold mb-2">Buttons</h2>
-          <div className="flex flex-wrap gap-3">
-            <button className="btn-primary">Primary</button>
-            <button className="btn-secondary">Secondary</button>
-            <button className="btn-ghost">Ghost</button>
-            <button className="btn-danger">Danger</button>
-            <button className="btn-primary btn-pill">Pill</button>
-            <button className="btn-secondary btn-icon" aria-label="icon">
-              ☆
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />{" "}
-          </div>
-        </section>
+
+      {/* Buttons */}
+      <section>
+        <h2 className="text-xl font-semibold mb-2">Buttons</h2>
+        <div className="flex flex-wrap gap-3">
+          <button className="btn-primary">Primary</button>
+          <button className="btn-secondary">Secondary</button>
+          <button className="btn-ghost">Ghost</button>
+          <button className="btn-danger">Danger</button>
+          <button className="btn-primary btn-pill">Pill</button>
+          <button className="btn-secondary btn-icon" aria-label="icon">
+            ☆
+          </button>
+        </div>
+      </section>
+
 
         {/* Badges */}
         <section>
