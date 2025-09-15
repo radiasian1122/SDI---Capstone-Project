@@ -1,6 +1,7 @@
 import ThemeToggle from "../components/ThemeToggle";
 import React, { useRef, useState } from "react";
 import Popover from "../components/Popover";
+import BackgroundMedia from "../components/BackgroundMedia";
 
 // (dev only)
 
@@ -36,6 +37,7 @@ export default function ThemePreview() {
   ];
 
   return (
+
     <div className="cc-page space-y-8">
       <div className="flex items-center gap-2">
         <ThemeToggle />{" "}
@@ -87,8 +89,23 @@ export default function ThemePreview() {
               </div>
             );
           })}
+
         </div>
-      </section>
+        {/* Colors */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Colors</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {SWATCHES.map((s) => (
+              <div key={s.name} className="card">
+                <div className="card-body">
+                  <div className={`w-full h-12 rounded ${s.className}`} />
+                  <p className="mt-2 text-sm">{s.name}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
 
       {/* Buttons */}
       <section>
@@ -105,114 +122,116 @@ export default function ThemePreview() {
         </div>
       </section>
 
-      {/* Badges */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Badges / Status</h2>
-        <div className="flex flex-wrap gap-2">
-          {statuses.map((s) => (
-            <span key={s} className={`state-${s}`}>
-              {s}
-            </span>
-          ))}
-        </div>
-      </section>
 
-      {/* Cards */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Cards</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="card">
-            <div className="card-body">
-              <h3 className="card-title">Card title</h3>
-              <p className="card-subtitle">Subtitle or helper text</p>
-              <p className="mt-2">Body content inside a card.</p>
+        {/* Badges */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Badges / Status</h2>
+          <div className="flex flex-wrap gap-2">
+            {statuses.map((s) => (
+              <span key={s} className={`state-${s}`}>
+                {s}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        {/* Cards */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Cards</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="card">
+              <div className="card-body">
+                <h3 className="card-title">Card title</h3>
+                <p className="card-subtitle">Subtitle or helper text</p>
+                <p className="mt-2">Body content inside a card.</p>
+              </div>
+            </div>
+            <div className="card" style={{ borderRadius: "var(--radius-2)" }}>
+              <div className="card-body">
+                <h3 className="card-title">Pill Card</h3>
+                <p>Full rounded corners example</p>
+              </div>
             </div>
           </div>
-          <div className="card" style={{ borderRadius: "var(--radius-2)" }}>
-            <div className="card-body">
-              <h3 className="card-title">Pill Card</h3>
-              <p>Full rounded corners example</p>
+        </section>
+
+        {/* Forms */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Forms</h2>
+          <form className="space-y-4 max-w-md">
+            <div>
+              <label htmlFor="dest" className="label required">
+                Destination
+              </label>
+              <input
+                id="dest"
+                className="input"
+                placeholder="e.g., Fort Liberty"
+              />
+              <p className="help">Example helper text</p>
             </div>
-          </div>
-        </div>
-      </section>
+            <div>
+              <label htmlFor="purpose" className="label">
+                Purpose <span className="text-text/70">(Optional)</span>
+              </label>
+              <textarea id="purpose" className="input" rows={3}></textarea>
+              <p className="error">This field is required</p>
+            </div>
+            <div className="cc-actionbar">
+              <button type="button" className="btn-secondary">
+                Cancel
+              </button>
+              <div className="cc-spacer" />
+              <button type="submit" className="btn-primary">
+                Submit
+              </button>
+            </div>
+            <div className="cc-sticky-pad" />
+          </form>
+        </section>
 
-      {/* Forms */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Forms</h2>
-        <form className="space-y-4 max-w-md">
-          <div>
-            <label htmlFor="dest" className="label required">
-              Destination
-            </label>
-            <input
-              id="dest"
-              className="input"
-              placeholder="e.g., Fort Liberty"
-            />
-            <p className="help">Example helper text</p>
-          </div>
-          <div>
-            <label htmlFor="purpose" className="label">
-              Purpose <span className="text-text/70">(Optional)</span>
-            </label>
-            <textarea id="purpose" className="input" rows={3}></textarea>
-            <p className="error">This field is required</p>
-          </div>
-          <div className="cc-actionbar">
-            <button type="button" className="btn-secondary">
-              Cancel
-            </button>
-            <div className="cc-spacer" />
-            <button type="submit" className="btn-primary">
-              Submit
-            </button>
-          </div>
-          <div className="cc-sticky-pad" />
-        </form>
-      </section>
-
-      {/* Tables */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Tables</h2>
-        <div className="overflow-x-auto">
-          <table className="table">
-            <thead className="thead">
-              <tr>
-                <th className="th th-sortable">Vehicle</th>
-                <th className="th th-sortable">Driver</th>
-                <th className="th">Status</th>
-              </tr>
-            </thead>
-            <tbody className="tbody">
-              {[1, 2, 3, 4].map((i) => (
-                <tr key={i} className="tr tr-striped row-hover">
-                  <td className="td px-4 py-2">HMMWV {i}</td>
-                  <td className="td px-4 py-2">Driver {i}</td>
-                  <td className="td px-4 py-2">
-                    <span className="state-PENDING">PENDING</span>
-                  </td>
+        {/* Tables */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Tables</h2>
+          <div className="overflow-x-auto">
+            <table className="table">
+              <thead className="thead">
+                <tr>
+                  <th className="th th-sortable">Vehicle</th>
+                  <th className="th th-sortable">Driver</th>
+                  <th className="th">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody className="tbody">
+                {[1, 2, 3, 4].map((i) => (
+                  <tr key={i} className="tr tr-striped row-hover">
+                    <td className="td px-4 py-2">HMMWV {i}</td>
+                    <td className="td px-4 py-2">Driver {i}</td>
+                    <td className="td px-4 py-2">
+                      <span className="state-PENDING">PENDING</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-      {/* Toast */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Toast (example)</h2>
-        <div className="toast-wrap">
-          <div className="toast">This is a toast notification</div>
-        </div>
-      </section>
+        {/* Toast */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Toast (example)</h2>
+          <div className="toast-wrap">
+            <div className="toast">This is a toast notification</div>
+          </div>
+        </section>
 
-      {/* Popover */}
-      <section>
-        <h2 className="text-xl font-semibold mb-2">Popover</h2>
-        <PopoverDemo />
-      </section>
-    </div>
+        {/* Popover */}
+        <section>
+          <h2 className="text-xl font-semibold mb-2">Popover</h2>
+          <PopoverDemo />
+        </section>
+      </div>
+    </BackgroundMedia>
   );
 }
 

@@ -111,15 +111,17 @@ exports.updateDispatch = (req, res) => {
     })
   }
   else if(
+    !Object.hasOwn(req.body, "dispatch_id") &&
     !Object.hasOwn(req.body, "driver_id") &&
-    !Object.hasOwn(req.body, "approved")
+    !Object.hasOwn(req.body, "approved") &&
+    !Object.hasOwn(req.body, "comments")
   ){
     res.status(400).json({
       message: "Request body is missing required properties. See /docs endpoint."
     })
   }
   else{
-    knex('dispatches').where({ dispatch_id: req.params.dispatch_id }).update(req.body, ['dispatch_id', 'approved', 'driver_id'])
+    knex('dispatches').where({ dispatch_id: req.body.dispatch_id }).update(req.body, ['dispatch_id', 'approved', 'driver_id', 'comments'])
     .then(updatedDispatch => {
       res.status(200).send(updatedDispatch)
     })

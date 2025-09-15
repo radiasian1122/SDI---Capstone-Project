@@ -6,14 +6,17 @@ exports.up = function(knex) {
   return knex.schema.createTable('dispatches', table => {
       table.increments('dispatch_id')
       table.bigint("requestor_id")
-      table.foreign('requestor_id').references('users.dod_id').deferrable('deferred')
+      table.foreign('requestor_id').references('users.dod_id').deferrable('deferred').onDelete('CASCADE')
       table.bigint("driver_id")
-      table.foreign('driver_id').references('users.dod_id').deferrable('deferred')
+      table.foreign('driver_id').references('users.dod_id').deferrable('deferred').onDelete('CASCADE')
       table.integer("vehicle_id")
       table.foreign('vehicle_id').references('vehicles.vehicle_id').deferrable('deferred').onDelete('CASCADE')
       table.boolean('approved').notNullable().defaultTo(false)
       table.datetime('start_time', { useTz: false})
       table.datetime('end_time', { useTz: false})
+      table.string('destination').notNullable()
+      table.string('purpose')
+      table.text('comments')
   })
 };
 

@@ -24,7 +24,7 @@ export default function VehiclePicker({
         <option value="">Select available vehicle…</option>
         {availableVehicles.map((v) => (
           <option key={v.id} value={v.id}>
-            {v.name}
+            {v.company + " co - " + v.bumper_no}
           </option>
         ))}
       </select>

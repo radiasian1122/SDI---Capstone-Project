@@ -29,6 +29,35 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   );
   const qualsBtnRef = useRef(null);
   const [openQuals, setOpenQuals] = useState(false);
+  const [comment, setComment] = useState("");
+
+  // Replace these with your actual approve/deny logic
+  async function handlePost(value) {
+    var post = {
+      driverId: row.id,
+      dispatchId: row.dispatch_id,
+      approval: value,
+      comment: comment,
+    };
+    try {
+      const res = await fetch("http://localhost:8080//:dispatch_id", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json(); // Parse JSON response
+      console.log("Server response:", data);
+    } catch (error) {
+      console.error("Error posting data:", error);
+    }
+  }
 
   return (
     <div key={id} className="card">
@@ -111,8 +140,36 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
             : row.requestor_id || "—"}
         </div>
         <div className="mt-2 flex gap-2">
-          <button className="btn btn-primary">Approve</button>
-          <button className="btn btn-danger">Deny</button>
+          <button
+            onClick={() => {
+              handlePost("approved");
+            }}
+            className="btn btn-primary"
+            value="approved"
+          >
+            Approve
+          </button>
+          <button
+            onClick={() => {
+              handlePost("denied");
+            }}
+            className="btn btn-danger"
+            value="denied"
+          >
+            Deny
+          </button>
+        </div>
+        <div className="comments mt-2">
+          <label htmlFor="comments">Add comments with approve/deny:</label>
+          <input
+            className="border rounded p-4 bg-white shadow mb-4 w-full"
+            type="text"
+            id="comments"
+            name="user_name"
+            placeholder="Enter comments here"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+          />
         </div>
       </div>
     </div>

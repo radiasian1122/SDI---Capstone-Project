@@ -1,6 +1,8 @@
 import React from "react";
 import DriverInfoButton from "./DriverInfoButton";
+
 //TODO Wire in fault endpoint
+
 export default function SelectedVehicleRow({
   vehicle,
   drivers,
@@ -181,6 +183,7 @@ export default function SelectedVehicleRow({
             style={{ backgroundColor: "#fff", color: "#111827" }}
           />
         </div>
+
       </div>
     </div>
   );

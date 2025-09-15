@@ -93,7 +93,8 @@ export function generateVehicles() {
                     uic: uicArray[i],
                     platform_variant: j + 1,
                     bumper_no: `${vehicleTypes[j]}-${k + 1}`,
-                    deadlined: false
+                    deadlined: false,
+                    mileage_hours: faker.number.int({min: 0, max: 1000000})
                 })
             }
         }

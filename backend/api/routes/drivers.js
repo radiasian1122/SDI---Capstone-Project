@@ -61,11 +61,27 @@ const driversCtl = require('../controllers/drivers.js')
  *               items:
  *                 $ref: '#/components/schemas/driver'
  */
-
-
 router.get('/', driversCtl.getAllDrivers)
-router.get('/:id', driversCtl.getDriverById)
-router.get('/qual/:qualId', driversCtl.getDriversByQualId)
 
+/**
+ * @swagger
+ * /drivers/{id}:
+ *   get:
+ *     summary: Get a driver with their qualifications by driver ID
+ *     tags: [Drivers]
+ *     description: Retrieves a driver along with that driver's vehicle platform qualifications, grouped by driver and sorted by last name, first name
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved driver
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/driver'
+ */
+router.get('/:id', driversCtl.getDriverById)
+
+router.get('/qual/:qualId', driversCtl.getDriversByQualId)
 
 module.exports = router;

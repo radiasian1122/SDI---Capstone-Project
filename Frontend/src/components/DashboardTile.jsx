@@ -18,6 +18,8 @@ export default function DashboardTile({ dispatch }){
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
   const [requestor, setRequestor] = useState([])
+  const [faults, setFaults] = useState([])
+  const [viewDetails, setViewDetails] = useState(false)
 
   useEffect(() => {
     fetch(`${api_url}/users/id/${dispatch.requestor_id}`)
@@ -32,8 +34,15 @@ export default function DashboardTile({ dispatch }){
 
     fetch(`${api_url}/vehicles/id/${dispatch.vehicle_id}`)
     .then(res => res.json())
-    .then(data => setVehicle(data))
+    .then(data => {
+      setVehicle(data)
+      fetch(`${api_url}/faults/${data.vehicle_id}`)
+      .then(res => res.json())
+      .then(data => setFaults(data))
+      .catch(err => console.error(err))
+    })
     .catch(err => console.error(err.message))
+
   }, [dispatch.requestor_id, dispatch.driver_id, dispatch.vehicle_id])
 
   return (
@@ -44,6 +53,10 @@ export default function DashboardTile({ dispatch }){
               <span>
                 <strong>Vehicle: </strong>
                 <span>{vehicle.bumper_no}</span>
+              </span>
+              <span>
+                <strong>Requestor: </strong>
+                <span>{requestor.last_name}, {requestor.first_name}</span>
               </span>
               <span>
                 <strong>Driver: </strong>
@@ -62,7 +75,53 @@ export default function DashboardTile({ dispatch }){
                 Pending date
               </div>
             }
-            <div style={{ fontSize: 13 }}>{dispatch.purpose}</div>
+            {viewDetails &&
+              <div className="flex">
+                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
+                  <ul>
+                    <p><strong>Driver Qualifications</strong></p>
+                    {
+                      driver.qualifications.map(qual => {
+                        return <li>{qual}</li>
+                      })
+                    }
+                  </ul>
+                </div>
+                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
+                  <table>
+                    <caption>VEHICLE FAULTS</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Fault Code</th>
+                        <th scope="col">Fault Date</th>
+                        <th scope="col">Fault Description</th>
+                        <th scope="col">Tech Status</th>
+                        <th scope="col">Corrective Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {
+                      faults.map((fault) => {
+                        return (
+                          <tr>
+                            <td>{fault.fault_code}</td>
+                            <td>{fault.fault_date}</td>
+                            <td>{fault.fault_description}</td>
+                            <td>{fault.tech_status}</td>
+                            <td>{fault.corrective_action}</td>
+                          </tr>
+                        )
+                      })
+                    }
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            }
+            <button
+              className="btn btn-secondary"
+              onClick={() => setViewDetails(!viewDetails)}
+            >{viewDetails ? 'Hide Details' : 'Show Details'}</button>
           </div>
         </div>
     </div>
