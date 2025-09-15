@@ -18,6 +18,7 @@ export default function DashboardTile({ dispatch }){
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
   const [requestor, setRequestor] = useState([])
+  const [faults, setFaults] = useState([])
   const [viewDetails, setViewDetails] = useState(false)
 
   useEffect(() => {
@@ -33,8 +34,15 @@ export default function DashboardTile({ dispatch }){
 
     fetch(`${api_url}/vehicles/id/${dispatch.vehicle_id}`)
     .then(res => res.json())
-    .then(data => setVehicle(data))
+    .then(data => {
+      setVehicle(data)
+      fetch(`${api_url}/faults/${data.vehicle_id}`)
+      .then(res => res.json())
+      .then(data => setFaults(data))
+      .catch(err => console.error(err))
+    })
     .catch(err => console.error(err.message))
+
   }, [dispatch.requestor_id, dispatch.driver_id, dispatch.vehicle_id])
 
   return (
@@ -80,12 +88,33 @@ export default function DashboardTile({ dispatch }){
                   </ul>
                 </div>
                 <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
-                  <ul>
-                    <p><strong>5988 Data</strong></p>
+                  <table>
+                    <caption>VEHICLE FAULTS</caption>
+                    <thead>
+                      <tr>
+                        <th scope="col">Fault Code</th>
+                        <th scope="col">Fault Date</th>
+                        <th scope="col">Fault Description</th>
+                        <th scope="col">Tech Status</th>
+                        <th scope="col">Corrective Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
                     {
-
+                      faults.map((fault) => {
+                        return (
+                          <tr>
+                            <td>{fault.fault_code}</td>
+                            <td>{fault.fault_date}</td>
+                            <td>{fault.fault_description}</td>
+                            <td>{fault.tech_status}</td>
+                            <td>{fault.corrective_action}</td>
+                          </tr>
+                        )
+                      })
                     }
-                  </ul>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             }

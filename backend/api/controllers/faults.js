@@ -10,3 +10,14 @@ exports.getAllFaults = async (req, res) => {
         console.error(err);
     }
 }
+
+exports.getFaultsByVehicleId = (req, res) => {
+  try {
+    knex("faults").select("*").where({ vehicle_id: req.params.vehicle_id })
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+  }
+  catch (err){
+    res.status(500).send(err)
+  }
+}
