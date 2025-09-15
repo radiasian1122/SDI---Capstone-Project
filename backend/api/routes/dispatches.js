@@ -58,6 +58,9 @@ const dispatchesCtl = require("../controllers/dispatches.js");
  *      approved:
  *        type: boolean
  *        example: true
+ *      comments:
+ *        type: string
+ *        example: "Your wish has been granted"
  */
 
 ///////// ROUTES DEFINITIONS ////////////
@@ -126,7 +129,7 @@ router.get("/uic/:uic", dispatchesCtl.getDispatchesByUic);
  *  patch:
  *    summary: Update a dispatch
  *    requestBody:
- *      description: Request body must contain property **driver_id** AND/OR **approved**
+ *      description: Request body **must** contain property **dispatch_id**. This will update the corresponding dispatch. Properties **driver_id**, **approved** and **comments** are optional fields for updating the dispatch.
  *      content:
  *        application/json:
  *          schema:
