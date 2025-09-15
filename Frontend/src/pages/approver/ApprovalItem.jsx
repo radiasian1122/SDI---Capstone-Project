@@ -1,9 +1,15 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
 import { getDriverQualTypes } from "../../data/selectors";
 
-export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
+export default function ApprovalItem({
+  row,
+  users,
+  vehicles,
+  driverQuals,
+  dispatch,
+}) {
   const id = row.dispatch_id ?? row.id ?? `${row.driver_id}:${row.vehicle_id}`;
   const driver = useMemo(
     () => users.find((u) => u.dod_id === row.driver_id),
@@ -27,14 +33,32 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
       getDriverQualTypes({ driverId: driver?.dod_id, driverQuals, vehicles }),
     [driver?.dod_id, driverQuals, vehicles]
   );
+
+  const faultsBtnRef = useRef(null);
   const qualsBtnRef = useRef(null);
+  const api_url = import.meta.env.VITE_API_URL || "http://localhost:8080";
+  const [openFaults, setOpenFaults] = useState(false);
   const [openQuals, setOpenQuals] = useState(false);
   const [comment, setComment] = useState("");
+  const [vehicleFaults, setVehicleFaults] = useState([]);
+
+  useEffect(() => {
+    if (openFaults && vehicle) {
+      fetch(`${api_url}/faults/${vehicle.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setVehicleFaults(data);
+        })
+        .catch((err) => console.error(err.message));
+    }
+    if (!openFaults) {
+      setVehicleFaults([]);
+    }
+  }, [openFaults, vehicle, api_url]);
 
   // Replace these with your actual approve/deny logic
   async function handlePost(value) {
-    var post = {
-      driver_id: row.id.toString(),
+    const post = {
       dispatch_id: row.dispatch_id,
       approved: value,
       comments: comment,
@@ -54,7 +78,7 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
         console.log("request success!");
       }
 
-      const data = await res.json(); // Parse JSON response
+      const data = await res.json();
       console.log("Server response:", data);
     } catch (error) {
       console.error("Error posting data:", error);
@@ -97,13 +121,54 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
           <div>
             <strong>UIC:</strong> {driver?.uic || "—"}
           </div>
+          {/* Vehicle Faults tab */}
+          <div className="flex items-center gap-2">
+            <button
+              ref={faultsBtnRef}
+              type="button"
+              className="btn btn-secondary btn-pill"
+              onClick={() => setOpenFaults((v) => !v)}
+              disabled={!vehicle}
+            >
+              Vehicle Faults
+            </button>
+            Vehicle has faults:
+            <span
+              className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
+            >
+              {vehicleFaults.length > 0 ? "Yes" : "No"}
+            </span>
+            <Popover
+              anchorRef={faultsBtnRef}
+              open={openFaults}
+              onClose={() => setOpenFaults(false)}
+            >
+              <div className="popover-body">
+                <div className="font-semibold mb-1">Vehicle Faults:</div>
+                <div className="text-sm">
+                  {vehicleFaults.length ? (
+                    <ul className="list-disc pl-4">
+                      {vehicleFaults.map((fault, idx) => (
+                        <li key={fault.fault_id || idx}>
+                          {fault.description || JSON.stringify(fault)}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <em>None</em>
+                  )}
+                </div>
+              </div>
+            </Popover>
+          </div>
+          {/* Driver quals tab */}
           <div className="flex items-center gap-2">
             <button
               ref={qualsBtnRef}
               type="button"
               className="btn btn-secondary btn-pill"
               onClick={() => setOpenQuals((v) => !v)}
-              disabled={!driver}
+              disabled={!vehicle}
             >
               Driver Qualifications
             </button>
