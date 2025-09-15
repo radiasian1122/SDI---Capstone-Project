@@ -21,3 +21,22 @@ exports.getFaultsByVehicleId = (req, res) => {
     res.status(500).send(err)
   }
 }
+
+exports.createNewFault = (req, res) => {
+  if (!req.body){
+    res.status(400).json({
+      message: "You must supply a body with this request."
+    })
+  }
+  try{
+    knex("faults").insert(req.body, ['fault_id'])
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(500).send(err.message))
+  }
+  catch(err){
+    res.status(500).json({
+      message: "Something went wrong. See /docs endpoint.",
+      error: err.message
+    })
+  }
+}
