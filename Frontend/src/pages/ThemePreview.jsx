@@ -68,7 +68,6 @@ export default function ThemePreview() {
                   border: `2px solid var(${s.varName})`,
                 }
               : s.isText
-
                 ? {
                     background: "var(--color-surface)",
                     border: `2px solid var(${s.varName})`,
@@ -83,20 +82,20 @@ export default function ThemePreview() {
                       fontWeight: 600,
                     }
                   : { background: `var(${s.varName})` };
-              return (
-                <div key={s.name} className="card">
-                  <div className="card-body">
-                    <div className="w-full h-12 rounded" style={baseStyle}>
-                      {s.isText ? "Aa" : null}
-                    </div>
-                    <p className="mt-2 text-sm">{s.name}</p>
+            return (
+              <div key={s.name} className="card">
+                <div className="card-body">
+                  <div className="w-full h-12 rounded" style={baseStyle}>
+                    {s.isText ? "Aa" : null}
                   </div>
+                  <p className="mt-2 text-sm">{s.name}</p>
                 </div>
               </div>
             );
           })}
         </div>
       </section>
+
       {/* Colors
       <section>
         <h2 className="text-xl font-semibold mb-2">Colors</h2>
