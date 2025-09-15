@@ -92,6 +92,8 @@ router.get('/:vehicle_id', faultsCtl.getFaultsByVehicleId)
  */
 router.post('/', faultsCtl.createNewFault)
 
-router.delete('/:fault_id', faultsCtl.deleteFault)
+router.patch('/:fault_id', faultsCtl.updateFault)
+
+// router.delete('/:fault_id', faultsCtl.deleteFault)
 
 module.exports = router
