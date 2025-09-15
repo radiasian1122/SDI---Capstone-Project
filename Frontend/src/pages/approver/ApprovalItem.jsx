@@ -32,16 +32,32 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
   const [comment, setComment] = useState("");
 
   // Replace these with your actual approve/deny logic
-  const handleApprove = () => {
-    // Use comment value here
-    // e.g., send approval with comment
-    console.log("Approved with comment:", comment);
-  };
-  const handleDeny = () => {
-    // Use comment value here
-    // e.g., send denial with comment
-    console.log("Denied with comment:", comment);
-  };
+  async function handlePost(value) {
+    var post = {
+      driverId: row.id,
+      dispatchId: row.dispatch_id,
+      approval: value,
+      comment: comment,
+    };
+    try {
+      const res = await fetch("http://localhost:8080//:dispatch_id", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(post),
+      });
+
+      if (!res.ok) {
+        throw new Error(`HTTP error! Status: ${res.status}`);
+      }
+
+      const data = await res.json(); // Parse JSON response
+      console.log("Server response:", data);
+    } catch (error) {
+      console.error("Error posting data:", error);
+    }
+  }
 
   return (
     <div key={id} className="card">
@@ -124,19 +140,31 @@ export default function ApprovalItem({ row, users, vehicles, driverQuals }) {
             : row.requestor_id || "—"}
         </div>
         <div className="mt-2 flex gap-2">
-          <button className="btn btn-primary" onClick={handleApprove}>
+          <button
+            onClick={() => {
+              handlePost("approved");
+            }}
+            className="btn btn-primary"
+            value="approved"
+          >
             Approve
           </button>
-          <button className="btn btn-danger" onClick={handleDeny}>
+          <button
+            onClick={() => {
+              handlePost("denied");
+            }}
+            className="btn btn-danger"
+            value="denied"
+          >
             Deny
           </button>
         </div>
         <div className="comments mt-2">
-          <label htmlFor="username">Add comments with approve/deny:</label>
+          <label htmlFor="comments">Add comments with approve/deny:</label>
           <input
             className="border rounded p-4 bg-white shadow mb-4 w-full"
             type="text"
-            id="username"
+            id="comments"
             name="user_name"
             placeholder="Enter comments here"
             value={comment}
