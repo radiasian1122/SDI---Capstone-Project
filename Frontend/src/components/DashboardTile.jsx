@@ -68,9 +68,24 @@ export default function DashboardTile({ dispatch }){
               </div>
             }
             {viewDetails &&
-              <div className="text-muted italic" style={{ fontSize: 13 }}>
-                <div>
-                  
+              <div className="flex">
+                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
+                  <ul>
+                    <p><strong>Driver Qualifications</strong></p>
+                    {
+                      driver.qualifications.map(qual => {
+                        return <li>{qual}</li>
+                      })
+                    }
+                  </ul>
+                </div>
+                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
+                  <ul>
+                    <p><strong>5988 Data</strong></p>
+                    {
+
+                    }
+                  </ul>
                 </div>
               </div>
             }
