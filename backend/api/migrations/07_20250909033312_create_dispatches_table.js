@@ -14,6 +14,7 @@ exports.up = function(knex) {
       table.boolean('approved').notNullable().defaultTo(false)
       table.datetime('start_time', { useTz: false})
       table.datetime('end_time', { useTz: false})
+      table.text('comments')
   })
 };
 
