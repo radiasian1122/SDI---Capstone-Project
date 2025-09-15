@@ -75,53 +75,6 @@ export default function DashboardTile({ dispatch }){
                 Pending date
               </div>
             }
-            {viewDetails &&
-              <div className="flex">
-                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
-                  <ul>
-                    <p><strong>Driver Qualifications</strong></p>
-                    {
-                      driver.qualifications.map(qual => {
-                        return <li>{qual}</li>
-                      })
-                    }
-                  </ul>
-                </div>
-                <div className="add-margin text-muted italic" style={{ fontSize: 13 }}>
-                  <table>
-                    <caption>VEHICLE FAULTS</caption>
-                    <thead>
-                      <tr>
-                        <th scope="col">Fault Code</th>
-                        <th scope="col">Fault Date</th>
-                        <th scope="col">Fault Description</th>
-                        <th scope="col">Tech Status</th>
-                        <th scope="col">Corrective Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {
-                      faults.map((fault) => {
-                        return (
-                          <tr>
-                            <td>{fault.fault_code}</td>
-                            <td>{fault.fault_date}</td>
-                            <td>{fault.fault_description}</td>
-                            <td>{fault.tech_status}</td>
-                            <td>{fault.corrective_action}</td>
-                          </tr>
-                        )
-                      })
-                    }
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            }
-            <button
-              className="btn btn-secondary"
-              onClick={() => setViewDetails(!viewDetails)}
-            >{viewDetails ? 'Hide Details' : 'Show Details'}</button>
           </div>
         </div>
     </div>
