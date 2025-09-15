@@ -83,7 +83,7 @@ router.get('/id/:id', vehiclesCtl.getVehicleById)
 
 /**
  * @swagger
- * /vehicles/id/{id}:
+ * /vehicles/id/{vehicle_id}:
  *   patch:
  *     summary: Update a vehicle
  *     tags: [vehicles]
@@ -127,6 +127,6 @@ router.get('/id/:id', vehiclesCtl.getVehicleById)
  *         description: Internal server error
 */
 
-router.patch('/id/:id', vehiclesCtl.updateVehicle)
+router.patch('/id/:vehicle_id', vehiclesCtl.updateVehicle)
 
 module.exports = router
