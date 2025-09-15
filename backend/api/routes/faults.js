@@ -11,12 +11,13 @@ const faultsCtl = require('../controllers/faults.js')
  *       properties:
  *         vehicle_id:
  *           type: integer
- *           example: "3"
+ *           example: 3
  *         fault_code:
  *           type: integer
  *           example: 123
  *         fault_date:
- *           type: date
+ *           type: string
+ *           format: date
  *           example: "2025-01-23"
  *         fault_description:
  *           type: string
@@ -27,6 +28,12 @@ const faultsCtl = require('../controllers/faults.js')
  *         corrective_action:
  *           type: string
  *           example: "Tried adding motor oil, but it didn't work"
+ *     deleted_fault:
+ *       type: object
+ *       properties:
+ *         fault_id:
+ *           type: integer
+ *           example: 1
  */
 
 /**
@@ -94,6 +101,23 @@ router.post('/', faultsCtl.createNewFault)
 
 router.patch('/:fault_id', faultsCtl.updateFault)
 
-// router.delete('/:fault_id', faultsCtl.deleteFault)
+/**
+ * @swagger
+ * /faults/{fault_id}:
+ *   delete:
+ *     summary: Delete the corresponding fault
+ *     tags: [faults]
+ *     description: Delete the corresponding fault
+ *     responses:
+ *       200:
+ *         description: Id of the fault that was deleted
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/deleted_fault'
+ */
+router.delete('/:fault_id', faultsCtl.deleteFault)
 
 module.exports = router

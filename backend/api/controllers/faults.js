@@ -22,6 +22,7 @@ exports.getFaultsByVehicleId = (req, res) => {
 }
 
 exports.createNewFault = (req, res) => {
+
     if (!req.body) {
         res.status(400).json({
             message: "You must supply a body with this request."
@@ -66,4 +67,17 @@ exports.updateFault = (req, res) => {
             message: "Request body is missing required properties. See /docs endpoint"
         })
     }
+}
+
+
+exports.deleteFault = (req, res) => {
+  try{
+    knex("faults").where({ fault_id: req.params.fault_id }).del()
+    .then(data => res.status(200).send(data))
+    .catch(err => res.status(400).send(err.message))
+  }
+  catch(err){
+    res.status(500).send(err.message)
+  }
+
 }
