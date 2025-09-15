@@ -101,7 +101,11 @@ export default function Dashboard() {
 
         <h1 className="cc-page-title">Dashboard</h1>
         {dispatches.length > 0 && dispatches.map((dispatch) => {
-          return <DashboardTile dispatch={dispatch}/>
+          return (
+            <div className="add-margin">
+              <DashboardTile dispatch={dispatch}/>
+            </div>
+        )
         })}
       </div>
     </div>
