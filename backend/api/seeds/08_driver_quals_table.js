@@ -1,5 +1,5 @@
 const {generateDriverQuals} = require('../utils.js')
-const driverIds = [1111111111, 2222222222, 3333333333, 4444444444, 5555555555]
+const driverIds = [1111111111, 2222222222, 3333333333, 4444444444, 5555555555, 7777777777, 8888888888]
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
