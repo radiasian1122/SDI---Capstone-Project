@@ -37,5 +37,24 @@ exports.seed = async function (knex) {
       })
     }
 
+    for (i = 0; i < 3; i++){
+      let startDate = faker.date.soon({ days: 7 })
+      let endDate = faker.date.between({ from: startDate, to: new Date(startDate.getTime() + faker.number.int({ min: 7, max: 14 }) * 24 * 60 * 60 * 1000) })
+
+      let approved = faker.datatype.boolean()
+
+      seedDispatches.push({
+        requestor_id: 1234567890,
+        driver_id: allDrivers[faker.number.int({ min: 0, max: allDrivers.length })].dod_id,
+        vehicle_id: allVehicles[faker.number.int({ min: 0, max: allVehicles.length })].vehicle_id,
+        approved: approved,
+        start_time: startDate,
+        end_time: endDate,
+        destination: faker.location.city(),
+        purpose: faker.lorem.sentence(),
+        comments: approved ? null : faker.lorem.sentence()
+      })
+    }
+
     await knex('dispatches').insert(seedDispatches)
 };
