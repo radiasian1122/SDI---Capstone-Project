@@ -26,7 +26,6 @@ export function getEligibleDrivers({
     .filter((u) => !(busySet || new Set()).has(Number(u.dod_id)));
 }
 
-// Returns human-friendly Type strings for a driver's quals using vehicles list + bumper pattern
 export function getDriverQualTypes({ driverId, driverQuals, vehicles }) {
   const ids = driverId ? driverQuals[driverId] || [] : [];
   const types = ids
@@ -35,6 +34,8 @@ export function getDriverQualTypes({ driverId, driverQuals, vehicles }) {
         (vv) => Number(vv.qual_id) === Number(qid)
       );
       const bumper = v?.bumper_no || "";
+
+      if (String(bumper).startsWith("1.1")) return String(bumper).slice(0, 3);
       const typeCode = String(bumper).replace(/[^a-zA-Z]/g, "");
       return typeCode || String(qid);
     })
