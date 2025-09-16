@@ -3,7 +3,7 @@ import { useAuth } from "../../context/AuthContext";
 import Loading from "../../components/Loading";
 import BackgroundMedia from "../../components/BackgroundMedia";
 import { useFetch } from "../../hooks/useFetch";
-import { createDispatch } from "../../api/client";
+import { createDispatch, createFault } from "../../api/client";
 import {
   useVehicles,
   useUsersWithQuals,
@@ -25,8 +25,7 @@ export default function NewRequest() {
   const [errors, setErrors] = useState({});
   const [selectedVehicleIds, setSelectedVehicleIds] = useState([]);
   const [driverByVehicle, setDriverByVehicle] = useState({}); // { [vehicleId]: userId }
-  //TODO  Post to endpoint "Faults" when availble.
-  // const [fm5988ByVehicle, setFm5988ByVehicle] = useState({});
+  const [fm5988ByVehicle, setFm5988ByVehicle] = useState({});
   const [pickerValue, setPickerValue] = useState("");
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
 
@@ -109,17 +108,55 @@ export default function NewRequest() {
             requestor_id,
             driver_id: driverByVehicle[vid],
             vehicle_id: vid,
-            //TODO Wire in Faults table
-            // fm5988: fm5988ByVehicle[vid] || {},
+            destination: form.destination,
+            purpose: form.purpose,
+            start_time: form.start_time,
+            end_time: form.end_time,
           })
         )
       );
+
+      // Submit fault data separately for vehicles that have fault information
+      const faultPromises = selectedVehicleIds
+        .filter((vid) => {
+          const fm5988Data = fm5988ByVehicle[vid];
+          // Only create fault if we have meaningful fault description
+          const hasDescription = fm5988Data?.deficienciesC?.trim() || fm5988Data?.fault_description?.trim();
+          return fm5988Data && hasDescription;
+        })
+        .map((vid) => {
+          const fm5988Data = fm5988ByVehicle[vid];
+          const faultPayload = {
+            vehicle_id: Number(vid),
+            fault_code: fm5988Data.fault_code && !isNaN(Number(fm5988Data.fault_code)) ? Number(fm5988Data.fault_code) : 999, // Default fault code
+            fault_description: (fm5988Data.deficienciesC || fm5988Data.fault_description || "").trim(),
+          };
+
+          // Add optional fields only if they have values
+          if (fm5988Data.statusB?.trim() || fm5988Data.tech_status?.trim()) {
+            faultPayload.tech_status = (fm5988Data.statusB || fm5988Data.tech_status || "").trim();
+          }
+
+          if (fm5988Data.correctiveActionD?.trim() || fm5988Data.corrective_action?.trim()) {
+            faultPayload.corrective_action = (fm5988Data.correctiveActionD || fm5988Data.corrective_action || "").trim();
+          }
+
+          // Only include fault_date if it's provided
+          if (fm5988Data.fault_date) {
+            faultPayload.fault_date = fm5988Data.fault_date;
+          }
+
+          return createFault(faultPayload);
+        });
+
+      if (faultPromises.length > 0) {
+        await Promise.all(faultPromises);
+      }
       showToast("Request submitted", "success");
       // Reset form
       setSelectedVehicleIds([]);
       setDriverByVehicle({});
-      //TODO Wire in Faults table
-      // setFm5988ByVehicle({});
+      setFm5988ByVehicle({});
       setForm({ destination: "", purpose: "", start_time: "", end_time: "" });
     } catch (err) {
       console.error(err);
@@ -141,12 +178,11 @@ export default function NewRequest() {
       delete next[id];
       return next;
     });
-    //TODO Wire in Faults table
-    //   setFm5988ByVehicle((prev) => {
-    //     const next = { ...prev };
-    //     delete next[id];
-    //     return next;
-    //   });
+    setFm5988ByVehicle((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
   };
 
   return (
@@ -249,9 +285,8 @@ export default function NewRequest() {
                     setDriverByVehicle={setDriverByVehicle}
                     onRemoveVehicle={removeVehicle}
                     errors={errors}
-                    //TODO Wire in Faults table
-                    // fm5988ByVehicle={fm5988ByVehicle}
-                    // setFm5988ByVehicle={setFm5988ByVehicle}
+                    fm5988ByVehicle={fm5988ByVehicle}
+                    setFm5988ByVehicle={setFm5988ByVehicle}
                   />
                   {errors.vehicles && (
                     <p className="error mt-2">{errors.vehicles}</p>
