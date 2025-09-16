@@ -14,9 +14,6 @@ import knex from "./db.js";
 const uicArray = ['NF5HA0', 'NF5HB0', 'NF5HC0']
 
 
-
-
-
 export const masterUsersList = generateUsers();
 
 export function generateUsers() {
@@ -55,6 +52,46 @@ export function generateUsers() {
         }
     }
     return userArray;//User array length is 90
+}
+
+export async function formatUsers(req, res) {
+
+    const users = await knex('roles as R')
+        .innerJoin('users_roles as UR', 'R.role_id', 'UR.role_id')
+        .innerJoin('users as U', 'U.dod_id', 'UR.user_id')
+        .select(
+            'U.dod_id',
+            'U.first_name',
+            'U.last_name'
+        )
+        .select(knex.raw("string_agg(\"R\".\"role_name\", ', ' ORDER BY \"R\".\"role_name\") as roles"))
+        .groupBy('U.dod_id', 'U.first_name', 'U.last_name')
+        .orderBy('U.last_name')
+
+    users.forEach(user => {
+        user.roles = user.roles.split(', ');
+    })
+    res.json(users);
+}
+
+export async function formatUserById(req, res) {
+    const user = await knex('roles as R')
+        .innerJoin('users_roles as UR', 'R.role_id', 'UR.role_id')
+        .innerJoin('users as U', 'U.dod_id', 'UR.user_id')
+        .select(
+            'U.dod_id',
+            'U.first_name',
+            'U.last_name'
+        )
+        .select(knex.raw("string_agg(\"R\".\"role_name\", ', ' ORDER BY \"R\".\"role_name\") as roles"))
+        .groupBy('U.dod_id', 'U.first_name', 'U.last_name')
+        .orderBy('U.last_name')
+        .where('U.dod_id', req.params.id).first()
+
+
+    user.roles = user.roles.split(', ')
+
+    res.json(user);
 }
 
 export function generateUsersRoles() {
@@ -118,7 +155,7 @@ export function generateDriverQuals() {
 }
 
 //Formats the drivers table to be used in the frontend
-export async function formatDrivers(req, res){
+export async function formatDrivers(req, res) {
 
     try {
         const drivers = await knex("qualifications as Q")
@@ -134,19 +171,19 @@ export async function formatDrivers(req, res){
         })
         res.status(200).json(drivers);
 
-    }catch (err) {
-        res.status(500).json({ error: err.message });
+    } catch (err) {
+        res.status(500).json({error: err.message});
         console.error(err);
     }
 }
 
 //Gets a single driver by dod_id and properly formats the data to be used in the frontend
-export async function formatDriverById(req, res){
+export async function formatDriverById(req, res) {
     try {
         const driver = await knex("qualifications as Q")
             .innerJoin("driver_quals as D", "Q.qual_id", "D.qual_id")
             .innerJoin("users as U", "U.dod_id", "D.user_id")
-            .select("U.first_name", "U.last_name", "U.uic","U.dod_id")
+            .select("U.first_name", "U.last_name", "U.uic", "U.dod_id")
             .select(knex.raw("string_agg(\"Q\".\"platform\", ', ' ORDER BY \"Q\".\"platform\") as qualifications"))
             .groupBy("U.first_name", "U.last_name", "U.uic", "U.dod_id")
             .orderBy(["U.last_name", "U.first_name"])
@@ -157,8 +194,8 @@ export async function formatDriverById(req, res){
 
         res.status(200).json(driver);
 
-    }catch (err){
-        res.status(500).json({ error: err.message });
+    } catch (err) {
+        res.status(500).json({error: err.message});
         console.error(err);
     }
 }
@@ -172,11 +209,11 @@ export async function formatDriversByQualId(req, res) {
             .where('D.qual_id', req.params.qualId)
             .orderBy(['U.last_name', 'U.first_name']);
 
-        
+
         res.status(200).json(drivers);
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(500).json({error: err.message});
         console.error(err);
     }
 }
