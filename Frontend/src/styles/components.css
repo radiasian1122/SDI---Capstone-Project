@@ -170,7 +170,7 @@ body {
 
 .btn-primary {
   color: #fff;
-  background: var(--color-accent);
+  background: #295f3d;
 }
 .btn-primary:hover {
   filter: brightness(0.95);

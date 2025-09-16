@@ -27,12 +27,12 @@ export default function AppRouter() {
           }
         />
       )}
-      {import.meta.env.DEV && (
+      {/* {import.meta.env.DEV && (
         <>
           <Route path="/dev/Dashboard" element={<Dashboard />} />
           <Route path="/dev/DispatchForm" element={<DispatchForm />} />
         </>
-      )}
+      )} */}
 
       <Route
         path="/"
@@ -59,7 +59,7 @@ export default function AppRouter() {
       <Route
         path="/approver/approvals"
         element={
-          <ProtectedRoute roles={["APPROVER"]}>
+          <ProtectedRoute roles={["DISPATCHER"]}>
             <NavBar />
             <Approvals />
           </ProtectedRoute>
@@ -67,7 +67,7 @@ export default function AppRouter() {
       />
 
       {/* Dispatcher */}
-      <Route
+      {/* <Route
         path="/dispatcher/dispatches"
         element={
           <ProtectedRoute roles={["DISPATCHER"]}>
@@ -75,7 +75,7 @@ export default function AppRouter() {
             <Dispatches />
           </ProtectedRoute>
         }
-      />
+      /> */}
       <Route
         path="/dispatcher/vehicles"
         element={

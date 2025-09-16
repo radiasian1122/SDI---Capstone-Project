@@ -3,6 +3,7 @@ import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
 import { getDriverQualTypes } from "../../data/selectors";
 import { ToastCtx } from "../../components/ToastProvider";
+import BackgroundSlideshow from "../../components/BackgroundSlideshow";
 
 export default function ApprovalItem({
   row,
@@ -96,215 +97,216 @@ export default function ApprovalItem({
   }
 
   return (
-    <div key={id} className="card">
-      <div className="card-body space-y-4">
-        {/* Vehicle strip with status */}
-        <div className="flex relative items-center justify-end-safe gap-44 text-sm">
-          <div className="flex items-center gap-1">
-            <span className="text-text/70">Vehicle:</span>
-            <strong>{vehicle?.bumper_no || "—"}</strong>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-text/70">Company:</span>
-            <strong>
-              {vehicle?.company || vehicle?.uic?.slice(4, 5) || "—"}
-            </strong>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="text-text/70">Status:</div>
-            <StatusBadge status={vehicle?.status || "PENDING"} />
-          </div>
-
-          <StatusBadge status={row.approved ? "APPROVED" : "PENDING"} />
+    <div className="card bg-base-100 shadow-xl">
+      {/* Vehicle strip with status */}
+      <div className="flex relative items-center justify-end-safe gap-44 text-sm">
+        <div className="flex items-center gap-1">
+          <span className="text-text/70">Vehicle:</span>
+          <strong>{vehicle?.bumper_no || "—"}</strong>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-text/70">Company:</span>
+          <strong>
+            {vehicle?.company || vehicle?.uic?.slice(4, 5) || "—"}
+          </strong>
+        </div>
+        <div className="flex items-center gap-1">
+          <div className="text-text/70">Status:</div>
+          <StatusBadge status={vehicle?.status || "PENDING"} />
         </div>
 
-        {/* Driver + Requester section */}
-
-        <div className="flex relative items-center justify-end-safe gap-26 text-sm">
-          {" "}
-          <div>
-            <strong>Driver:</strong>{" "}
-            {driver
-              ? `${driver.first_name} ${driver.last_name}`
-              : row.driver_id || "—"}
-          </div>
-          <div>
-            <strong>UIC:</strong> {driver?.uic || "—"}
-          </div>
-          {/* Vehicle Faults tab */}
-          <div className="flex items-center gap-2">
-            <button
-              ref={faultsBtnRef}
-              type="button"
-              className="btn btn-secondary btn-pill"
-              onClick={() => setOpenFaults((v) => !v)}
-              disabled={!vehicle}
-            >
-              Vehicle Faults
-            </button>
-            Vehicle has faults:
-            <span
-              className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
-            >
-              {vehicleFaults.length > 0 ? "Yes" : "No"}
-            </span>
-            <Popover
-              anchorRef={faultsBtnRef}
-              open={openFaults}
-              onClose={() => setOpenFaults(false)}
-            >
-              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
-                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
-                  <span role="img" aria-label="warning">
-                    🚧
-                  </span>{" "}
-                  Vehicle Faults
-                </div>
-                <div className="text-sm text-gray-700">
-                  {vehicleFaults.length ? (
-                    <ul className="space-y-3">
-                      {vehicleFaults.map((fault, idx) => (
-                        <li
-                          key={fault.fault_id || idx}
-                          className="bg-red-50 border border-red-200 rounded p-2"
-                        >
-                          <div className="font-semibold text-red-800 mb-1">
-                            Fault #{fault.fault_id}
-                          </div>
-                          <div className="text-xs space-y-1 text-gray-700">
-                            {fault.fault_date && (
-                              <div>
-                                <span className="font-medium">Date:</span>{" "}
-                                {new Date(
-                                  fault.fault_date
-                                ).toLocaleDateString()}
-                              </div>
-                            )}
-                            {fault.fault_code && (
-                              <div>
-                                <span className="font-medium">Code:</span>{" "}
-                                {fault.fault_code}
-                              </div>
-                            )}
-                            {fault.fault_description && (
-                              <div>
-                                <span className="font-medium">
-                                  Description:
-                                </span>{" "}
-                                {fault.fault_description}
-                              </div>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-green-700 font-semibold flex items-center gap-1">
-                      <span role="img" aria-label="check">
-                        ✅
-                      </span>{" "}
-                      No faults reported
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Popover>
-          </div>
-          {/* Driver quals tab */}
-          <div className="flex items-center gap-2">
-            <button
-              ref={qualsBtnRef}
-              type="button"
-              className="btn btn-secondary btn-pill"
-              onClick={() => setOpenQuals((v) => !v)}
-              disabled={!vehicle}
-            >
-              Driver Qualifications
-            </button>
-            Driver Qualified on requested Vehicle:
-            <span
-              className={`badge ${qualified ? "state-FMC" : "state-DEADLINED"}`}
-            >
-              {qualified ? "Yes" : "No"}
-            </span>
-            <Popover
-              anchorRef={qualsBtnRef}
-              open={openQuals}
-              onClose={() => setOpenQuals(false)}
-            >
-              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
-                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
-                  <span role="img" aria-label="medal">
-                    🎖️
-                  </span>{" "}
-                  Driver Qualifications
-                </div>
-                <div className="text-sm text-gray-700">
-                  {driverQualTypes.length ? (
-                    <ul className="space-y-2">
-                      {driverQualTypes.map((t, idx) => (
-                        <li
-                          key={idx}
-                          className="bg-gray-50 border border-gray-100 rounded p-2"
-                        >
-                          <div className="font-medium">{t}</div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-green-700 font-semibold flex items-center gap-1">
-                      <span role="img" aria-label="check">
-                        ✅
-                      </span>{" "}
-                      None
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Popover>
-          </div>
-        </div>
+        <StatusBadge status={row.approved ? "APPROVED" : "PENDING"} />
       </div>
 
-      {/* Actions */}
-      <div className="pt-2 border-t">
-        <div className="mb-2">
-          <strong>Requester:</strong>{" "}
-          {requestor
-            ? `${requestor.first_name} ${requestor.last_name}`
-            : row.requestor_id || "—"}
+      <div className="flex gap-4">
+        <div className="pt-2 border-t w-1/3">
+          <div className="mb-2">
+            <strong>Requester:</strong>{" "}
+            {requestor
+              ? `${requestor.first_name} ${requestor.last_name}`
+              : row.requestor_id || "—"}
+          </div>
+          <div className="mt-2 flex gap-2">
+            <button
+              onClick={() => {
+                handlePost(true);
+              }}
+              className="btn btn-primary"
+              value={true}
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => {
+                handlePost(false);
+              }}
+              className="btn btn-danger"
+              value={false}
+            >
+              Deny
+            </button>
+          </div>
+          <div className="comments mt-2">
+            <label htmlFor="comments">Add comments with approve/deny:</label>
+            <input
+              className="border rounded p-4 bg-white shadow mb-4 w-full"
+              type="text"
+              id="comments"
+              name="user_name"
+              placeholder="Enter comments here"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </div>
         </div>
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={() => {
-              handlePost(true);
-            }}
-            className="btn btn-primary"
-            value={true}
-          >
-            Approve
-          </button>
-          <button
-            onClick={() => {
-              handlePost(false);
-            }}
-            className="btn btn-danger"
-            value={false}
-          >
-            Deny
-          </button>
-        </div>
-        <div className="comments mt-2">
-          <label htmlFor="comments">Add comments with approve/deny:</label>
-          <input
-            className="border rounded p-4 bg-white shadow mb-4 w-full"
-            type="text"
-            id="comments"
-            name="user_name"
-            placeholder="Enter comments here"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
+
+        <div className="card-body space-y-4 w-2/3">
+          {/* Driver + Requester section */}
+
+          <div className="flex relative items-center justify-end-safe gap-26 text-sm">
+            {" "}
+            <div>
+              <strong>Driver:</strong>{" "}
+              {driver
+                ? `${driver.first_name} ${driver.last_name}`
+                : row.driver_id || "—"}
+            </div>
+            <div>
+              <strong>UIC:</strong> {driver?.uic || "—"}
+            </div>
+            {/* Vehicle Faults tab */}
+            <div className="flex items-center gap-2">
+              <button
+                ref={faultsBtnRef}
+                type="button"
+                className="btn btn-secondary btn-pill"
+                onClick={() => setOpenFaults((v) => !v)}
+                disabled={!vehicle}
+              >
+                Vehicle Faults
+              </button>
+              Vehicle has faults:
+              <span
+                className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
+              >
+                {vehicleFaults.length > 0 ? "Yes" : "No"}
+              </span>
+              <Popover
+                anchorRef={faultsBtnRef}
+                open={openFaults}
+                onClose={() => setOpenFaults(false)}
+              >
+                <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
+                  <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
+                    <span role="img" aria-label="warning">
+                      🚧
+                    </span>{" "}
+                    Vehicle Faults
+                  </div>
+                  <div className="text-sm text-gray-700">
+                    {vehicleFaults.length ? (
+                      <ul className="space-y-3">
+                        {vehicleFaults.map((fault, idx) => (
+                          <li
+                            key={fault.fault_id || idx}
+                            className="bg-red-50 border border-red-200 rounded p-2"
+                          >
+                            <div className="font-semibold text-red-800 mb-1">
+                              Fault #{fault.fault_id}
+                            </div>
+                            <div className="text-xs space-y-1 text-gray-700">
+                              {fault.fault_date && (
+                                <div>
+                                  <span className="font-medium">Date:</span>{" "}
+                                  {new Date(
+                                    fault.fault_date
+                                  ).toLocaleDateString()}
+                                </div>
+                              )}
+                              {fault.fault_code && (
+                                <div>
+                                  <span className="font-medium">Code:</span>{" "}
+                                  {fault.fault_code}
+                                </div>
+                              )}
+                              {fault.fault_description && (
+                                <div>
+                                  <span className="font-medium">
+                                    Description:
+                                  </span>{" "}
+                                  {fault.fault_description}
+                                </div>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="text-green-700 font-semibold flex items-center gap-1">
+                        <span role="img" aria-label="check">
+                          ✅
+                        </span>{" "}
+                        No faults reported
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Popover>
+            </div>
+            {/* Driver quals tab */}
+            <div className="flex items-center gap-2">
+              <button
+                ref={qualsBtnRef}
+                type="button"
+                className="btn btn-secondary btn-pill"
+                onClick={() => setOpenQuals((v) => !v)}
+                disabled={!vehicle}
+              >
+                Driver Qualifications
+              </button>
+              Driver Qualified on requested Vehicle:
+              <span
+                className={`badge ${qualified ? "state-FMC" : "state-DEADLINED"}`}
+              >
+                {qualified ? "Yes" : "No"}
+              </span>
+              <Popover
+                anchorRef={qualsBtnRef}
+                open={openQuals}
+                onClose={() => setOpenQuals(false)}
+              >
+                <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
+                  <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
+                    <span role="img" aria-label="medal">
+                      🎖️
+                    </span>{" "}
+                    Driver Qualifications
+                  </div>
+                  <div className="text-sm text-gray-700">
+                    {driverQualTypes.length ? (
+                      <ul className="space-y-2">
+                        {driverQualTypes.map((t, idx) => (
+                          <li
+                            key={idx}
+                            className="bg-gray-50 border border-gray-100 rounded p-2"
+                          >
+                            <div className="font-medium">{t}</div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="text-green-700 font-semibold flex items-center gap-1">
+                        <span role="img" aria-label="check">
+                          ✅
+                        </span>{" "}
+                        None
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </Popover>
+            </div>
+          </div>
         </div>
       </div>
     </div>
