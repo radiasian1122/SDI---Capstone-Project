@@ -25,9 +25,9 @@ exports.seed = async function (knex) {
       let approved = faker.datatype.boolean()
 
       seedDispatches.push({
-        requestor_id: allRequestors[faker.number.int({ min: 0, max: allRequestors.length })].dod_id,
-        driver_id: allDrivers[faker.number.int({ min: 0, max: allDrivers.length })].dod_id,
-        vehicle_id: allVehicles[faker.number.int({ min: 0, max: allVehicles.length })].vehicle_id,
+        requestor_id: allRequestors[faker.number.int({ min: 0, max: allRequestors.length - 1 })].dod_id,
+        driver_id: allDrivers[faker.number.int({ min: 0, max: allDrivers.length - 1 })].dod_id,
+        vehicle_id: allVehicles[faker.number.int({ min: 0, max: allVehicles.length - 1 })].vehicle_id,
         approved: approved,
         start_time: startDate,
         end_time: endDate,
@@ -45,8 +45,8 @@ exports.seed = async function (knex) {
 
       seedDispatches.push({
         requestor_id: 1234567890,
-        driver_id: allDrivers[faker.number.int({ min: 0, max: allDrivers.length })].dod_id,
-        vehicle_id: allVehicles[faker.number.int({ min: 0, max: allVehicles.length })].vehicle_id,
+        driver_id: allDrivers[faker.number.int({ min: 0, max: allDrivers.length - 1 })].dod_id,
+        vehicle_id: allVehicles[faker.number.int({ min: 0, max: allVehicles.length - 1 })].vehicle_id,
         approved: approved,
         start_time: startDate,
         end_time: endDate,

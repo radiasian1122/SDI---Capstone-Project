@@ -209,7 +209,6 @@ export async function formatDriversByQualId(req, res) {
             .where('D.qual_id', req.params.qualId)
             .orderBy(['U.last_name', 'U.first_name']);
 
-
         res.status(200).json(drivers);
 
     } catch (err) {
