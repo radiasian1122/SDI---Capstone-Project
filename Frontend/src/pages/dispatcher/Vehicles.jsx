@@ -96,7 +96,7 @@ export default function Vehicles() {
                 <td className="td px-4 py-2">{vehicle.bumper_no}</td>
                 <td className="td px-4 py-2">{vehicle.uic.slice(4, 5)}</td>
                 <td className="td px-4 py-2">
-                  {vehicle.deadlined ? "Deadlined" : "FMC"}
+                    {vehicle.deadlined ? <p className="text-red-800">Deadlined</p>: "FMC"}
                 </td>
                 <td className="td px-4 py-2">
                   <ul>
