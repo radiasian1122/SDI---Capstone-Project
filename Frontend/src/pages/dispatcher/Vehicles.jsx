@@ -9,6 +9,39 @@ import { useEffect, useState, useContext } from "react";
 import { VehiclesContext } from "../../context/VehiclesContext";
 
 export default function Vehicles() {
+
+  const api_url = 'http://localhost:8080'
+
+  const [vehicles, setVehicles] = useState([])
+  const [vehicleFaults, setVehicleFaults] = useState([])
+
+  useEffect(() => {
+    fetch(`${api_url}/vehicles`)
+      .then((data) => data.json())
+      .then((json) => {
+        setVehicles(json);
+      });
+  }, []);
+
+  useEffect(() => {
+    vehicles.forEach((vehicle) => {
+      fetch(`${api_url}/faults/${vehicle.vehicle_id}`)
+      .then(res => res.json())
+      .then(faults => {
+        let vehicleFaultsObj = {
+          vehicle_id: vehicle.vehicle_id,
+          faults: []
+        }
+        if(faults.length > 0){
+          faults.forEach((fault) => {
+            vehicleFaultsObj.faults.push(fault)
+          })
+        }
+        setVehicleFaults((prev) => [...prev, vehicleFaultsObj])
+      })
+    })
+  }, [vehicles])
+
   const { user, loading: authLoading } = useAuth();
   const { dispatchId, setDispatchId } = useContext(VehiclesContext);
   if (authLoading) return <Loading label="Loading account…" />;
@@ -24,18 +57,6 @@ export default function Vehicles() {
       </div>
     );
   }
-
-  // const { loading } = useFetch(() => listVehicles(), []);
-
-  const [vehicles, setVehicles] = useState([]);
-
-  useEffect(() => {
-    fetch("http://localhost:8080/vehicles")
-      .then((data) => data.json())
-      .then((json) => {
-        setVehicles(json);
-      });
-  }, []);
 
   function handleBumperNumbers(id) {
     if (dispatchId.includes(id)) {
@@ -63,7 +84,7 @@ export default function Vehicles() {
                 Company
               </th>
               <th scope="col">Status</th>
-              <th scope="col">Check Box to Add</th>
+              <th scope="col">Faults</th>
             </tr>
           </thead>
           <tbody className="tbody">
@@ -78,10 +99,21 @@ export default function Vehicles() {
                   {vehicle.deadlined ? "Deadlined" : "FMC"}
                 </td>
                 <td className="td px-4 py-2">
-                  <input
-                    type="checkbox"
-                    onChange={() => handleBumperNumbers(vehicle.vehicle_id)}
-                  />
+                  <ul>
+                    {vehicleFaults.map((faultsObj) => {
+                      if (faultsObj.vehicle_id == vehicle.vehicle_id){
+                        if (faultsObj.faults.length > 0){
+                          return faultsObj.faults.map(fault => {
+                            console.log(fault.fault_description)
+                            return <li>{fault.fault_description}</li>
+                          })
+                        }
+                        else{
+                          return <li className="italic">NO FAULTS</li>
+                        }
+                      }
+                    })}
+                  </ul>
                 </td>
               </tr>
             ))}
