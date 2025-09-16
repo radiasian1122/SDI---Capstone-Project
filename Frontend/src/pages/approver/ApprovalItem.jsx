@@ -43,18 +43,17 @@ export default function ApprovalItem({
   const [vehicleFaults, setVehicleFaults] = useState([]);
 
   useEffect(() => {
-    if (openFaults && vehicle) {
+    if (vehicle) {
       fetch(`${api_url}/faults/${vehicle.id}`)
         .then((res) => res.json())
         .then((data) => {
           setVehicleFaults(data);
         })
         .catch((err) => console.error(err.message));
-    }
-    if (!openFaults) {
+    } else {
       setVehicleFaults([]);
     }
-  }, [openFaults, vehicle, api_url]);
+  }, [vehicle, api_url]);
 
   // Replace these with your actual approve/deny logic
   async function handlePost(value) {
@@ -143,19 +142,45 @@ export default function ApprovalItem({
               open={openFaults}
               onClose={() => setOpenFaults(false)}
             >
-              <div className="popover-body">
-                <div className="font-semibold mb-1">Vehicle Faults:</div>
-                <div className="text-sm">
+              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
+                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
+                  <span role="img" aria-label="warning">
+                    🚧
+                  </span>{" "}
+                  Vehicle Faults
+                </div>
+                <div className="text-sm text-gray-700">
                   {vehicleFaults.length ? (
-                    <ul className="list-disc pl-4">
+                    <ul className="list-disc pl-5 space-y-2">
                       {vehicleFaults.map((fault, idx) => (
-                        <li key={fault.fault_id || idx}>
-                          {fault.description || JSON.stringify(fault)}
+                        <li
+                          key={fault.fault_id || idx}
+                          className="bg-red-50 border border-red-200 rounded px-2 py-1"
+                        >
+                          <div className="font-semibold text-red-700">
+                            {fault.code ? `#${fault.code}` : `Fault ${idx + 1}`}
+                          </div>
+                          <div>
+                            {fault.description || JSON.stringify(fault)}
+                          </div>
+                          {fault.date_reported && (
+                            <div className="text-xs text-gray-500 mt-1">
+                              Reported:{" "}
+                              {new Date(
+                                fault.date_reported
+                              ).toLocaleDateString()}
+                            </div>
+                          )}
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <em>None</em>
+                    <div className="text-green-700 font-semibold flex items-center gap-1">
+                      <span role="img" aria-label="check">
+                        ✅
+                      </span>{" "}
+                      No faults reported
+                    </div>
                   )}
                 </div>
               </div>
