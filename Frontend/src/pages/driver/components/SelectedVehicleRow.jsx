@@ -183,7 +183,6 @@ export default function SelectedVehicleRow({
             style={{ backgroundColor: "#fff", color: "#111827" }}
           />
         </div>
-
       </div>
     </div>
   );

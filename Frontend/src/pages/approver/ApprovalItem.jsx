@@ -1,7 +1,8 @@
-import React, { useMemo, useRef, useState, useEffect } from "react";
+import React, { useMemo, useRef, useState, useEffect, useContext } from "react";
 import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
 import { getDriverQualTypes } from "../../data/selectors";
+import { ToastCtx } from "../../components/ToastProvider";
 
 export default function ApprovalItem({
   row,
@@ -9,6 +10,8 @@ export default function ApprovalItem({
   vehicles,
   driverQuals,
   dispatch,
+  dispatches,
+  setDispatches,
 }) {
   const id = row.dispatch_id ?? row.id ?? `${row.driver_id}:${row.vehicle_id}`;
   const driver = useMemo(
@@ -34,6 +37,8 @@ export default function ApprovalItem({
     [driver?.dod_id, driverQuals, vehicles]
   );
 
+  const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
+
   const faultsBtnRef = useRef(null);
   const qualsBtnRef = useRef(null);
   const api_url = import.meta.env.VITE_API_URL || "http://localhost:8080";
@@ -55,8 +60,14 @@ export default function ApprovalItem({
     }
   }, [vehicle, api_url]);
 
-  // Replace these with your actual approve/deny logic
   async function handlePost(value) {
+    showToast(`Request ${value ? "approved" : "denied"}`);
+    const newDispatches = dispatches.filter(
+      (data) => data.dispatch_id !== row.dispatch_id
+    );
+    setTimeout(() => {
+      setDispatches(newDispatches);
+    }, 2000);
     const post = {
       dispatch_id: row.dispatch_id,
       approved: value,
@@ -221,13 +232,32 @@ export default function ApprovalItem({
               open={openQuals}
               onClose={() => setOpenQuals(false)}
             >
-              <div className="popover-body">
-                <div className="font-semibold mb-1">Driver Qualifications:</div>
-                <div className="text-sm">
+              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
+                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
+                  <span role="img" aria-label="medal">
+                    🎖️
+                  </span>{" "}
+                  Driver Qualifications
+                </div>
+                <div className="text-sm text-gray-700">
                   {driverQualTypes.length ? (
-                    <code>[{driverQualTypes.join(", ")}]</code>
+                    <ul className="space-y-2">
+                      {driverQualTypes.map((t, idx) => (
+                        <li
+                          key={idx}
+                          className="bg-gray-50 border border-gray-100 rounded p-2"
+                        >
+                          <div className="font-medium">{t}</div>
+                        </li>
+                      ))}
+                    </ul>
                   ) : (
-                    <em>None</em>
+                    <div className="text-green-700 font-semibold flex items-center gap-1">
+                      <span role="img" aria-label="check">
+                        ✅
+                      </span>{" "}
+                      None
+                    </div>
                   )}
                 </div>
               </div>
