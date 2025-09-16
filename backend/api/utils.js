@@ -61,6 +61,7 @@ export async function formatUsers(req, res) {
         .innerJoin('users as U', 'U.dod_id', 'UR.user_id')
         .select(
             'U.dod_id',
+            'U.uic',
             'U.first_name',
             'U.last_name'
         )
