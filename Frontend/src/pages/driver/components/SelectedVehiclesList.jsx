@@ -28,7 +28,7 @@ export default function SelectedVehiclesList({
             onRemove={() => onRemoveVehicle(id)}
             error={errors?.[`driver_${id}`]}
             fm5988={fm5988}
-            onChangeFm5988={(next) => setFm5988ByVehicle((prev) => ({ ...prev, [id]: next }))}
+            onChangeFm5988={(next) => setFm5988ByVehicle?.((prev) => ({ ...prev, [id]: next }))}
           />
         );
       })}

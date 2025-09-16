@@ -64,19 +64,20 @@ export async function listDispatches(params) {
 
 // POST /dispatches (create)
 export async function createDispatch(payload) {
-  // Try nested path first, then fall back. This tolerates either
-  // router style: app.use('/dispatches', router.post('/', ...))
-  // or: app.use('/dispatches', router.post('/dispatches', ...))
-  try {
-    const { data } = await api.post("/dispatches/dispatches", payload);
-    return data;
-  } catch (e) {
-    if (e?.response?.status === 404) {
-      const { data } = await api.post("/dispatches", payload);
-      return data;
-    }
-    throw e;
-  }
+  const { data } = await api.post("/dispatches", payload);
+  return data;
+}
+
+//POST /faults (create)
+export async function createFault(payload) {
+  const { data } = await api.post("/faults", payload);
+  return data;
+}
+
+//PATCH /faults/{fault_id} (update)
+export async function updateFault(faultId, payload) {
+  const { data } = await api.patch(`/faults/${faultId}`, payload);
+  return data;
 }
 
 // GET /dispatches/uic/{uic}
@@ -182,6 +183,8 @@ const client = {
   // vehicles
   listVehicles,
   listFaults,
+  createFault,
+  updateFault,
   // shims
   createRequest,
   listRequests,
