@@ -16,6 +16,11 @@ exports.seed = async function (knex) {
     let seedFaults = [];
     for (i = 0; i < allVehicles.length; i++){
       let numberOfFaults = faker.number.int({ min: 0, max: 5 })
+
+      if (numberOfFaults > 0){
+        await knex('vehicles').where({ vehicle_id: allVehicles[i].vehicle_id }).update('deadlined', faker.datatype.boolean(0.2))
+      }
+
       for (j = 0; j < numberOfFaults; j++){
         seedFaults.push({
           vehicle_id: allVehicles[i].vehicle_id,
