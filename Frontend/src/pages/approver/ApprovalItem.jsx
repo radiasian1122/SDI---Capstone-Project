@@ -63,7 +63,7 @@ export default function ApprovalItem({
       comments: comment,
     };
     try {
-      const res = await fetch("http://localhost:8080/dispatches", {
+      const res = await fetch(`${api_url}/dispatches`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -151,26 +151,39 @@ export default function ApprovalItem({
                 </div>
                 <div className="text-sm text-gray-700">
                   {vehicleFaults.length ? (
-                    <ul className="list-disc pl-5 space-y-2">
+                    <ul className="space-y-3">
                       {vehicleFaults.map((fault, idx) => (
                         <li
                           key={fault.fault_id || idx}
-                          className="bg-red-50 border border-red-200 rounded px-2 py-1"
+                          className="bg-red-50 border border-red-200 rounded p-2"
                         >
-                          <div className="font-semibold text-red-700">
-                            {fault.code ? `#${fault.code}` : `Fault ${idx + 1}`}
+                          <div className="font-semibold text-red-800 mb-1">
+                            Fault #{fault.fault_id}
                           </div>
-                          <div>
-                            {fault.description || JSON.stringify(fault)}
+                          <div className="text-xs space-y-1 text-gray-700">
+                            {fault.fault_date && (
+                              <div>
+                                <span className="font-medium">Date:</span>{" "}
+                                {new Date(
+                                  fault.fault_date
+                                ).toLocaleDateString()}
+                              </div>
+                            )}
+                            {fault.fault_code && (
+                              <div>
+                                <span className="font-medium">Code:</span>{" "}
+                                {fault.fault_code}
+                              </div>
+                            )}
+                            {fault.fault_description && (
+                              <div>
+                                <span className="font-medium">
+                                  Description:
+                                </span>{" "}
+                                {fault.fault_description}
+                              </div>
+                            )}
                           </div>
-                          {fault.date_reported && (
-                            <div className="text-xs text-gray-500 mt-1">
-                              Reported:{" "}
-                              {new Date(
-                                fault.date_reported
-                              ).toLocaleDateString()}
-                            </div>
-                          )}
                         </li>
                       ))}
                     </ul>
