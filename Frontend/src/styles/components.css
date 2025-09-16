@@ -182,11 +182,11 @@ body {
 
 .btn-secondary {
   color: var(--color-text);
-  background: var(--color-surface);
+  background: var(--color-surface-muted);
   border: 1px solid var(--color-border);
 }
 .btn-secondary:hover {
-  background: var(--color-surface-muted);
+  background: color-mix(in oklab, var(--color-surface-muted) 80%, var(--color-border));
 }
 
 .btn-ghost {
@@ -388,7 +388,7 @@ body {
   top: 75px;
   z-index: 3;
   box-shadow: var(--shadow-md);
-  background: var(--color-surface);
+  background: var(--color-surface-muted);
   color: var(--color-text);
   border: 1px solid var(--color-border);
 }
@@ -434,6 +434,100 @@ select::picker {
     scroll-behavior: auto !important;
   }
 }
+/* ---------- DARK MODE OVERRIDES ---------- */
+/* Comments box should be white for readability */
+:root.dark .bg-gray-50 {
+  background-color: #ffffff !important;
+}
+:root.dark .border-gray-200 {
+  border-color: var(--color-border) !important;
+}
+:root.dark .text-gray-700 {
+  color: #000000 !important;
+}
+:root.dark .text-gray-800 {
+  color: #000000 !important;
+}
+/* Text inputs should be white for easy reading */
+:root.dark .bg-white {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+:root.dark .bg-gray-100 {
+  background-color: var(--color-border) !important;
+}
+:root.dark .border-gray-100 {
+  border-color: var(--color-border) !important;
+}
+
+/* ---------- APPROVAL ITEMS PAGE SPECIFIC STYLING ---------- */
+/* Compact card body padding - only for approval items */
+.approval-items-page .card .card-body {
+  padding: 1.25rem !important;
+}
+
+/* Update to 4 column layout with even responsive spacing - only for approval items */
+.approval-items-page .grid.grid-cols-3 {
+  grid-template-columns: 1fr 1fr 1fr 1fr !important;
+  gap: 2rem !important;
+  width: 100% !important;
+}
+
+/* Compact vertical spacing within columns - only for approval items */
+.approval-items-page .space-y-6 > * + * {
+  margin-top: 0.75rem !important;
+}
+
+.approval-items-page .space-y-8 > * + * {
+  margin-top: 0.75rem !important;
+}
+
+/* Reduce card body spacing - only for approval items */
+.approval-items-page .card-body.space-y-4 > * + * {
+  margin-top: 0.5rem !important;
+}
+
+/* Compact comments box padding - only for approval items */
+.approval-items-page .bg-gray-50.p-4 {
+  padding: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+/* Compact form element spacing - only for approval items */
+.approval-items-page .space-y-3 > * + * {
+  margin-top: 0.5rem !important;
+}
+
+/* Add space between comments section and buttons - only for approval items */
+.approval-items-page .space-y-3.max-w-xs.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Compact input padding - only for approval items */
+.approval-items-page input.border.rounded {
+  padding: 0.5rem 0.75rem !important;
+}
+
+/* Compact button spacing - only for approval items */
+.approval-items-page .flex.gap-3 {
+  gap: 0.75rem !important;
+}
+
+/* Ensure uniform card heights - only for approval items */
+.approval-items-page .card {
+  min-height: 320px !important;
+}
+
+/* Reduce empty spacing divs - only for approval items */
+.approval-items-page .h-6 {
+  height: 1rem !important;
+}
+
+.approval-items-page .h-20 {
+  height: 2rem !important;
+}
+
+
 @media print {
   body {
     background: white !important;

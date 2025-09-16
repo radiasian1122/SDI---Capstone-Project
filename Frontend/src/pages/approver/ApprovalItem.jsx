@@ -46,7 +46,12 @@ export default function ApprovalItem({
   const [openQuals, setOpenQuals] = useState(false);
   const [comment, setComment] = useState("");
   const [vehicleFaults, setVehicleFaults] = useState([]);
-  const [approvalStatus, setApprovalStatus] = useState("PENDING");
+  const [approvalStatus, setApprovalStatus] = useState(() => {
+    if (row.approved === true) return "APPROVED";
+    // Only treat as DENIED if explicitly denied with comments (not a new dispatch)
+    if (row.approved === false && row.comments) return "DENIED";
+    return "PENDING";
+  });
 
   useEffect(() => {
     if (vehicle) {
@@ -62,18 +67,44 @@ export default function ApprovalItem({
   }, [vehicle, api_url]);
 
   async function handlePost(value) {
+    // Require comments when denying, optional when approving
+    if (!value && !comment.trim()) {
+      showToast("Comments are required when denying a request", "error");
+      return;
+    }
+
     setApprovalStatus(value ? "APPROVED" : "DENIED");
     showToast(`Request ${value ? "approved" : "denied"}`);
-    const newDispatches = dispatches.filter(
-      (data) => data.dispatch_id !== row.dispatch_id
-    );
-    setTimeout(() => {
-      setDispatches(newDispatches);
-    }, 2000);
+
+    // Update the dispatch data immediately to show new comment
+    const updatedDispatches = dispatches.map(dispatch => {
+      if (dispatch.dispatch_id === row.dispatch_id) {
+        return {
+          ...dispatch,
+          approved: value,
+          comments: comment || null
+        };
+      }
+      return dispatch;
+    });
+
+    // Only remove from list if approved, keep denied requests visible with updated data
+    if (value) {
+      const newDispatches = updatedDispatches.filter(
+        (data) => data.dispatch_id !== row.dispatch_id
+      );
+      setTimeout(() => {
+        setDispatches(newDispatches);
+      }, 2000);
+    } else {
+      // For denied requests, update the data immediately
+      setDispatches(updatedDispatches);
+    }
+
     const post = {
       dispatch_id: row.dispatch_id,
       approved: value,
-      comments: comment,
+      comments: comment || null,
     };
     try {
       const res = await fetch(`${api_url}/dispatches`, {
@@ -92,6 +123,9 @@ export default function ApprovalItem({
 
       const data = await res.json();
       console.log("Server response:", data);
+
+      // Clear the comment input after successful submission
+      setComment("");
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -100,7 +134,7 @@ export default function ApprovalItem({
   return (
     <div key={id} className="card">
       <div className="card-body space-y-4">
-        {/* Three Column Layout with Horizontal Alignment */}
+        {/* Four Column Layout with Horizontal Alignment */}
         <div className="grid grid-cols-3 gap-8">
           {/* Column 1 - Approvers Section */}
           <div className="flex flex-col justify-between h-full">
@@ -120,25 +154,11 @@ export default function ApprovalItem({
                   : row.requestor_id || "—"}
               </div>
 
-              {/* Empty div for UIC/Company level - Level 2 */}
-              <div className="h-6"></div>
+              {/* Comments Input Header - aligned with Previous Comments */}
+              <div className="text-base font-bold">Add comments with approve/deny:</div>
 
-              {/* Previous comments - Level 3 */}
-              {row.comments && (
-                <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg max-w-xs">
-                  <div className="font-bold text-base text-gray-700 mb-2">Previous Comments:</div>
-                  <div className="text-base text-gray-800">{row.comments}</div>
-                </div>
-              )}
-
-              {/* Vehicle Faults level placeholder - Level 4 */}
-              <div className="h-6"></div>
-
-              {/* Comments Input */}
+              {/* Comments Input Field */}
               <div className="space-y-3 max-w-xs mb-4">
-                <label htmlFor="comments" className="block text-base font-bold">
-                  Add comments with approve/deny:
-                </label>
                 <input
                   className="border rounded p-3 bg-white w-full shadow-sm"
                   type="text"
@@ -174,7 +194,30 @@ export default function ApprovalItem({
             </div>
           </div>
 
-          {/* Column 2 - Driver Section */}
+          {/* Column 2 - Previous Comments Section */}
+          <div className="flex flex-col h-full">
+            <div className="space-y-6">
+              {/* Empty div for Status level alignment */}
+              <div className="h-6"></div>
+
+              {/* Empty div for Requester level alignment */}
+              <div className="text-base">&nbsp;</div>
+
+              {/* Previous Comments Header - aligned with Add Comments */}
+              <div className="text-base font-bold">Previous Comments:</div>
+
+              {/* Previous comments content or placeholder */}
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg min-h-[4rem]">
+                {row.comments ? (
+                  <div className="text-base text-gray-800">{row.comments}</div>
+                ) : (
+                  <div className="text-base text-gray-500 italic">No previous comments</div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3 - Driver Section */}
           <div className="flex flex-col justify-between h-full">
             {/* Top Section */}
             <div className="space-y-8">
@@ -204,11 +247,8 @@ export default function ApprovalItem({
                 </span>
               </div>
 
-              {/* Empty div for Vehicle Faults level - Level 4 */}
+              {/* Empty div for spacing */}
               <div className="h-6"></div>
-
-              {/* Empty div for Comments Input level */}
-              <div className="h-20"></div>
             </div>
 
             {/* Bottom Section - Button Level */}
@@ -258,7 +298,7 @@ export default function ApprovalItem({
             </Popover>
           </div>
 
-          {/* Column 3 - Vehicle Section */}
+          {/* Column 4 - Vehicle Section */}
           <div className="flex flex-col justify-between h-full">
             {/* Top Section */}
             <div className="space-y-8">
