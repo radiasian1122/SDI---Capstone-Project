@@ -7,6 +7,8 @@ export default function NavBar() {
   const { user, loading, logout } = useAuth();
   const navigate = useNavigate();
 
+  console.log(user)
+
   const linkBase = "px-2 py-1 rounded transition-colors";
   const linkActive = "font-semibold";
   const linkHoverStyle = { background: "var(--color-surface-muted)" };
@@ -50,34 +52,43 @@ export default function NavBar() {
           >
             Dashboard
           </NavLink>
-          <NavLink
-            to="/driver/new-request"
-            className={({ isActive }) =>
-              `${linkBase} ${isActive ? linkActive : ""}`
-            }
-            style={linkHoverStyle}
-          >
-            New Request
-          </NavLink>
-          <NavLink
-            to="/approver/approvals"
-            className={({ isActive }) =>
-              `${linkBase} ${isActive ? linkActive : ""}`
-            }
-            style={linkHoverStyle}
-          >
-            Dispatches
-          </NavLink>
+          
+          {user.role === 'DRIVER' &&
+            <NavLink
+              to="/driver/new-request"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : ""}`
+              }
+              style={linkHoverStyle}
+            >
+              New Request
+            </NavLink>
+          }
 
-          <NavLink
-            to="/dispatcher/vehicles"
-            className={({ isActive }) =>
-              `${linkBase} ${isActive ? linkActive : ""}`
-            }
-            style={linkHoverStyle}
-          >
-            Vehicles
-          </NavLink>
+          { user.role === 'DISPATCHER' &&
+            <NavLink
+              to="/approver/approvals"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : ""}`
+              }
+              style={linkHoverStyle}
+            >
+              Pending Requests
+            </NavLink>
+          }
+
+
+          { user.role === 'DISPATCHER' &&
+            <NavLink
+              to="/dispatcher/vehicles"
+              className={({ isActive }) =>
+                `${linkBase} ${isActive ? linkActive : ""}`
+              }
+              style={linkHoverStyle}
+            >
+              Vehicles
+            </NavLink>
+          }
         </div>
 
         <div className="cc-spacer" />

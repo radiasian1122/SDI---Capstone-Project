@@ -53,8 +53,6 @@ export default function Dashboard() {
   // 1) Wait for auth to resolve (both dev & prod)
   if (authLoading) return <Loading label="Loading account…" />;
 
-  console.log(`USER: ${user.first_name}`);
-
   // 3) If no role in prod, show friendly message
   if (!user.role) {
     return (
