@@ -25,6 +25,13 @@ export default function Approvals() {
       </div>
     );
   }
+  const [dispatches, setDispatches] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/dispatches")
+      .then((res) => res.json())
+      .then((data) => setDispatches(data));
+  }, []);
 
   const params = useMemo(() => ({ status: "PENDING" }), []);
   const { data, loading } = useFetch(() => listRequests(params), []);
@@ -39,15 +46,17 @@ export default function Approvals() {
 
       {loading || usersLoading || vehiclesLoading ? (
         <SkeletonList rows={4} />
-      ) : data?.items?.length ? (
+      ) : dispatches.length > 0 ? (
         <div className="grid gap-3">
-          {data.items.map((r) => (
+          {dispatches.map((r) => (
             <ApprovalItem
               key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
               row={r}
               users={users}
               vehicles={vehicles}
               driverQuals={driverQuals}
+              dispatches={dispatches}
+              setDispatches={setDispatches}
             />
           ))}
         </div>
