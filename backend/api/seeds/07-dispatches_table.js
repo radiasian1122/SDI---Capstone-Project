@@ -44,5 +44,27 @@ exports.seed = async function (knex) {
             destination: "TA-10",
             purpose: "Land Navigation Training",
             comments: "This is a test comment to help show what it will look like when it's added to the frontend"
+        },
+        {
+            requestor_id: 6666666666,
+            driver_id: 6666666666,
+            vehicle_id: 33,
+            approved: false,
+            destination: "TA-10",
+        },
+        {
+            requestor_id: 6666666666,
+            driver_id: 7777777777,
+            vehicle_id: 31,
+            approved: false,
+            destination: "TA-10",
+            purpose: "Land Navigation Training",
+        },
+        {
+            requestor_id: 6666666666,
+            driver_id: 8888888888,
+            vehicle_id: 37,
+            approved: false,
+            destination: "NTC"
         }]);
 };
