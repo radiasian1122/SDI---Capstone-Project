@@ -7,21 +7,24 @@ export default function DevRoleSwitcher() {
   const current = user?.role || "DISPATCHER";
 
   return (
-    <div className="cc-actionbar">
-      <span className="badge">DEVELOPER TOOL: SELECT YOUR USER ROLE</span>
-      <select
-        className="input"
-        value={current}
-        onChange={(e) => setDevRole?.(e.target.value)}
-        popover="auto"
-        anchor-name="role-select"
-      >
-        {["DRIVER", "DISPATCHER"].map((r) => (
-          <option key={r} value={r}>
-            {r}
-          </option>
-        ))}
-      </select>
-    </div>
+    <>
+      <h1 className="italic"> Role Switcher - For Demonstration Purposes Only</h1>
+      <div className="cc-actionbar">
+        <span className="badge">DEVELOPER TOOL: SELECT YOUR USER ROLE</span>
+        <select
+          className="input"
+          value={current}
+          onChange={(e) => setDevRole?.(e.target.value)}
+          popover="auto"
+          anchor-name="role-select"
+        >
+          {["DRIVER", "DISPATCHER"].map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
+        </select>
+      </div>
+    </>
   );
 }

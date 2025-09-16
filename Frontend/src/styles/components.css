@@ -47,6 +47,7 @@ body {
 
 /* Top Nav (top bar only) */
 .cc-nav {
+  border-radius: 8px;
   border-bottom: 1px solid var(--color-border);
   background: color-mix(in oklab, var(--color-surface) 90%, transparent);
   -webkit-backdrop-filter: blur(8px);
@@ -76,6 +77,7 @@ body {
 
 /* Sticky page action bar */
 .cc-actionbar {
+  border-radius: 8px;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -87,7 +89,6 @@ body {
   align-items: center;
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
-  background: color-mix(in oklab, var(--color-surface) 85%, transparent);
 }
 .cc-sticky-pad {
   height: 48px;
