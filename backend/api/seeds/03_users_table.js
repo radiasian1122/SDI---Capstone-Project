@@ -55,6 +55,18 @@ exports.seed = async function(knex) {
             uic: 'NF5HC0',
             first_name: 'Frank',
             last_name: 'Castle'
-        }])
+        },
+        {
+            dod_id: 7777777777,
+            uic: 'NF5HC0',
+            first_name: 'George',
+            last_name: 'Driver'
+        },
+    {
+            dod_id: 8888888888,
+            uic: 'NF5HC0',
+            first_name: 'Henry',
+            last_name: 'Driver'
+    }])
   await knex('users').insert(masterUsersList);
 };

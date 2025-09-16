@@ -33,7 +33,7 @@ exports.seed = async function (knex) {
             role_id: 1
         }])
 
-    //Default Driver
+    //Default Drivers
     await knex('users_roles').insert([{
         user_id: 1111111111,
         role_id: 4
@@ -51,6 +51,14 @@ exports.seed = async function (knex) {
         },
         {
             user_id: 5555555555,
+            role_id: 4
+        },
+        {
+            user_id: 7777777777,
+            role_id: 4
+        },
+        {
+            user_id: 8888888888,
             role_id: 4
         }])
     await knex('users_roles').insert(generateUsersRoles());

@@ -1,9 +1,9 @@
 const knex = require("../db.js");
+const {formatUsers, formatUserById} = require('../utils.js')
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await knex("users").select("*").orderBy("last_name");
-    res.json(users);
+    await formatUsers(req, res);
   } catch (err) {
     res.status(500).json({ error: err.message });
     console.error(err);
@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 
 exports.getUserById = async (req, res) => {
   try {
-    const user = await knex("users").where("dod_id", req.params.id).first();
+    const user = await formatUserById(req, res);
     if (user) {
       res.json(user);
     } else {
