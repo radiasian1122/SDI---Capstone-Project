@@ -22,12 +22,11 @@ export default function NavBar() {
           style={{ cursor: "pointer", padding: "6px  0px" }}
           onClick={() => navigate("/")}
         >
-          Convoy
         </div>
         <img
           alt="Logo"
-          className="w-16 h-16"
-          src="/public/media/logo-NoBackground.png"
+          className="w-30 h-30"
+          src="/public/media/CConnectTrans.png"
         />
         <div
           className="cc-brand"
@@ -35,7 +34,6 @@ export default function NavBar() {
           onClick={() => navigate("/")}
         >
           {" "}
-          Connect
         </div>
 
         {/* Main nav links */}
