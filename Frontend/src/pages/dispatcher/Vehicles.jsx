@@ -4,8 +4,17 @@ import Loading from "../../components/Loading";
 import StatusBadge from "../../components/StatusBadge";
 import { useEffect, useState, useContext } from "react";
 import { VehiclesContext } from "../../context/VehiclesContext";
+import BackgroundSlideshow from "../../components/BackgroundSlideshow";
 
 export default function Vehicles() {
+  const IMAGES = [
+    "/media/1.png",
+    "/media/2.png",
+    "/media/3.png",
+    "/media/4.png",
+    "/media/5.png",
+  ];
+  
   const api_url = "http://localhost:8080";
 
   const [vehicles, setVehicles] = useState([]);
@@ -111,6 +120,12 @@ export default function Vehicles() {
 
   return (
     <div className="cc-page space-y-6">
+      <BackgroundSlideshow
+        images={IMAGES}
+        intervalMs={6000}
+        fadeMs={800}
+        dim={0.25}
+      />
       <h1 className="cc-page-title">Vehicles</h1>
       <div className="vehicles-container">
         <table className="table">
