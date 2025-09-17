@@ -30,7 +30,7 @@ export default function BackgroundSlideshow({
       style={{
         position: "fixed",
         inset: 0,
-        zIndex: 0,
+        zIndex: -3,
         overflow: "hidden",
         pointerEvents: "none",
       }}

@@ -45,23 +45,42 @@ function DashboardTile({ dispatch }){
               </span>
               <span>
                 <strong>Requestor: </strong>
-                <span>{requestor.last_name}, {requestor.first_name}</span>
+                <span>{requestor?.last_name}, {requestor?.first_name}</span>
               </span>
               <span>
                 <strong>Driver: </strong>
-                <span>{driver.last_name}, {driver.first_name}</span>
+                <span>{driver?.last_name}, {driver?.first_name}</span>
               </span>
               <StatusBadge status={getDispatchStatus(dispatch)} />
+
             </div>
+
             {dispatch.start_time !== null && dispatch.end_time !== null &&
               <div className="text-muted" style={{ fontSize: 13 }}>
-                  {new Date(dispatch.start_time).toLocaleString()} → {new Date(dispatch.end_time).toLocaleString()}
+                {new Date(dispatch.start_time).toLocaleString()} → {new Date(dispatch.end_time).toLocaleString()}
               </div>
             }
+
             {(dispatch.start_time === null || dispatch.end_time === null) &&
               <div className="text-muted italic" style={{ fontSize: 13 }}>
                 Pending date
               </div>
+            }
+
+            {dispatch.comments &&
+              <button
+                className="btn btn-secondary"
+                onClick={() => setShowComments(!showComments)}
+              >
+              {showComments ? "Hide Comments" : "Show Comments"}
+              </button>
+            }
+
+            {showComments &&
+            <div className="text-muted add-margin" style={{ fontSize: 13 }}>
+                <span className="italic"><strong>Comments:</strong> </span> <span>{dispatch.comments}</span>
+            </div>
+
             }
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useContext } from "react";
+import React, { useMemo, useState, useContext, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import Loading from "../../components/Loading";
 import BackgroundMedia from "../../components/BackgroundMedia";
@@ -28,13 +28,24 @@ export default function NewRequest() {
   const [fm5988ByVehicle, setFm5988ByVehicle] = useState({});
   const [pickerValue, setPickerValue] = useState("");
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
+  const [dispatches, setDispatches] = useState([]);
 
   // Load vehicles inventory
+    useEffect(() => {
+        fetch('http://localhost:8080/dispatches')
+            .then(res => res.json())
+            .then(dispatches => {
+                setDispatches(dispatches.map(dispatch => dispatch.vehicle_id))
+                console.log(dispatches)
+            })
+    }, [])
+
+
   const { items: allVehicles, loading: vehiclesLoading } = useVehicles();
   const availableVehicles = useMemo(
     () =>
       allVehicles.filter(
-        (v) => v.status === "FMC" && !selectedVehicleIds.includes(v.id)
+        (v) => v.status === "FMC" && !selectedVehicleIds.includes(v.id) && !dispatches.includes(v.id)
       ),
     [allVehicles, selectedVehicleIds]
   );
