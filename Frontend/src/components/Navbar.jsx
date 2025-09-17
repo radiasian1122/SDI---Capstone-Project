@@ -19,23 +19,17 @@ export default function NavBar() {
       >
         <div
           className="cc-brand"
-          style={{ cursor: "pointer", padding: "6px  0px" }}
+          style={{
+            cursor: "pointer",
+            padding: "6px 0px",
+          }}
           onClick={() => navigate("/")}
         >
-          Convoy
-        </div>
-        <img
-          alt="Logo"
-          className="w-16 h-16"
-          src="/public/media/logo-NoBackground.png"
-        />
-        <div
-          className="cc-brand"
-          style={{ cursor: "pointer", padding: "6px 0px" }}
-          onClick={() => navigate("/")}
-        >
-          {" "}
-          Connect
+          <img
+            alt="Logo"
+            className="w-30 h-30"
+            src="/public/media/CConnectTrans.png"
+          />
         </div>
 
         {/* Main nav links */}
@@ -51,7 +45,7 @@ export default function NavBar() {
             Dashboard
           </NavLink>
 
-          {user.role === 'DRIVER' &&
+          {user.role === "DRIVER" && (
             <NavLink
               to="/driver/new-request"
               className={({ isActive }) =>
@@ -61,9 +55,9 @@ export default function NavBar() {
             >
               New Request
             </NavLink>
-          }
+          )}
 
-          { user.role === 'DISPATCHER' &&
+          {user.role === "DISPATCHER" && (
             <NavLink
               to="/approver/approvals"
               className={({ isActive }) =>
@@ -73,10 +67,9 @@ export default function NavBar() {
             >
               Pending Requests
             </NavLink>
-          }
+          )}
 
-
-          { user.role === 'DISPATCHER' &&
+          {user.role === "DISPATCHER" && (
             <NavLink
               to="/dispatcher/vehicles"
               className={({ isActive }) =>
@@ -86,7 +79,7 @@ export default function NavBar() {
             >
               Vehicles
             </NavLink>
-          }
+          )}
         </div>
 
         <div className="cc-spacer" />
