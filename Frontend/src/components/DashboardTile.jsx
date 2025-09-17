@@ -1,10 +1,12 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useContext } from "react";
 import StatusBadge from '../components/StatusBadge';
 import { getDispatchStatus } from '../utils/dispatchStatus';
+import { ToastCtx } from "./ToastProvider";
 
 const api_url = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 function DashboardTile({ dispatch }){
+  const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
 
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
@@ -24,13 +26,7 @@ function DashboardTile({ dispatch }){
 
     fetch(`${api_url}/vehicles/id/${dispatch.vehicle_id}`)
     .then(res => res.json())
-    .then(data => {
-      setVehicle(data)
-      fetch(`${api_url}/faults/${data.vehicle_id}`)
-      .then(res => res.json())
-      .then(data => setFaults(data))
-      .catch(err => console.error(err))
-    })
+    .then(data => setVehicle(data))
     .catch(err => console.error(err.message))
 
   }, [dispatch.requestor_id, dispatch.driver_id, dispatch.vehicle_id])
@@ -85,6 +81,35 @@ function DashboardTile({ dispatch }){
             }
           </div>
         </div>
+        { getDispatchStatus(dispatch) === 'DENIED' &&
+          <button
+            className="btn btn-primary w-[500px] justify-self-center"
+            onClick={() => {
+              fetch(`${api_url}/dispatches/${dispatch.dispatch_id}`, {
+                method: 'DELETE'
+              })
+              .then(res => {
+                if (res.ok){
+                  showToast("Denied dispatch was acknowledged. Please re-submit.", "error");
+                  return;
+                }
+                else{
+                  showToast("Something went wrong. Please try again.", "error");
+                  return res.json();
+                }
+              })
+              .then(data => {
+                if(data){
+                  console.log(data)
+                }
+              })
+              .catch(err => {
+                console.error(err.message)
+                showToast("Something went wrong. Please try again.", "error");
+              })
+            }}
+          >ACKNOWLEDGE DENIED REQUEST</button>
+        }
     </div>
   );
 }
