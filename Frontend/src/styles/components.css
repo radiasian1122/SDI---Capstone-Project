@@ -12,6 +12,14 @@ body {
 }
 
 /* ---------- LAYOUT ---------- */
+.rounded {
+  border-radius: 0.5rem;
+}
+
+.bottom-margin{
+  margin-bottom: 1.5rem;
+}
+
 .add-margin {
   margin: 1.5rem;
 }
@@ -186,7 +194,11 @@ body {
   border: 1px solid var(--color-border);
 }
 .btn-secondary:hover {
-  background: color-mix(in oklab, var(--color-surface-muted) 80%, var(--color-border));
+  background: color-mix(
+    in oklab,
+    var(--color-surface-muted) 80%,
+    var(--color-border)
+  );
 }
 
 .btn-ghost {
@@ -526,7 +538,6 @@ select::picker {
 .approval-items-page .h-20 {
   height: 2rem !important;
 }
-
 
 @media print {
   body {
