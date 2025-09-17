@@ -62,8 +62,9 @@ export default function DashboardTile({ dispatch }){
                 <strong>Driver: </strong>
                 <span>{driver.last_name}, {driver.first_name}</span>
               </span>
-              {dispatch.approved && <StatusBadge status={'APPROVED'} />}
-              {!dispatch.approved && <StatusBadge status={'PENDING'} />}
+              {dispatch.approved === true && <StatusBadge status={'APPROVED'} />}
+              {dispatch.approved === false && dispatch.comments && <StatusBadge status={'DENIED'} />}
+              {((dispatch.approved === false && !dispatch.comments) || dispatch.approved === null || dispatch.approved === undefined) && <StatusBadge status={'PENDING'} />}
             </div>
             {dispatch.start_time !== null && dispatch.end_time !== null &&
               <div className="text-muted" style={{ fontSize: 13 }}>
