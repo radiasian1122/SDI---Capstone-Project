@@ -14,7 +14,7 @@ export default function Vehicles() {
     "/media/4.png",
     "/media/5.png",
   ];
-  
+
   const api_url = "http://localhost:8080";
 
   const [vehicles, setVehicles] = useState([]);
@@ -156,6 +156,7 @@ export default function Vehicles() {
                 Company
               </th>
               <th
+                className="th th-sortable"
                 scope="col"
                 onClick={() => handleOrder("status")}
                 style={{ cursor: "pointer" }}
