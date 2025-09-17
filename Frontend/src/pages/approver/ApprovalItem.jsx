@@ -76,12 +76,12 @@ function ApprovalItem({
     showToast(`Request ${value ? "approved" : "denied"}`);
 
     // Update the dispatch data immediately to show new comment
-    const updatedDispatches = dispatches.map(dispatch => {
+    const updatedDispatches = dispatches.map((dispatch) => {
       if (dispatch.dispatch_id === row.dispatch_id) {
         return {
           ...dispatch,
           approved: value,
-          comments: comment || null
+          comments: comment || null,
         };
       }
       return dispatch;
@@ -152,68 +152,9 @@ function ApprovalItem({
                   ? `${requestor.first_name} ${requestor.last_name}`
                   : row.requestor_id || "—"}
               </div>
-
-              {/* Comments Input Header - aligned with Previous Comments */}
-              <div className="text-base font-bold">Add comments with approve/deny:</div>
-
-              {/* Comments Input Field */}
-              <div className="space-y-3 max-w-xs mb-4">
-                <input
-                  className="border rounded p-3 bg-white w-full shadow-sm"
-                  type="text"
-                  id="comments"
-                  name="user_name"
-                  placeholder="Enter comments here"
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-              </div>
             </div>
 
             {/* Bottom Section - Button Level */}
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  handlePost(true);
-                }}
-                className="btn btn-primary"
-                value={true}
-              >
-                Approve
-              </button>
-              <button
-                onClick={() => {
-                  handlePost(false);
-                }}
-                className="btn btn-danger"
-                value={false}
-              >
-                Deny
-              </button>
-            </div>
-          </div>
-
-          {/* Column 2 - Previous Comments Section */}
-          <div className="flex flex-col h-full">
-            <div className="space-y-6">
-              {/* Empty div for Status level alignment */}
-              <div className="h-6"></div>
-
-              {/* Empty div for Requester level alignment */}
-              <div className="text-base">&nbsp;</div>
-
-              {/* Previous Comments Header - aligned with Add Comments */}
-              <div className="text-base font-bold">Previous Comments:</div>
-
-              {/* Previous comments content or placeholder */}
-              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg min-h-[4rem]">
-                {row.comments ? (
-                  <div className="text-base text-gray-800">{row.comments}</div>
-                ) : (
-                  <div className="text-base text-gray-500 italic">No previous comments</div>
-                )}
-              </div>
-            </div>
           </div>
 
           {/* Column 3 - Driver Section */}
@@ -306,7 +247,8 @@ function ApprovalItem({
 
               {/* Vehicle - Level 1 */}
               <div className="text-base py-2">
-                <span className="font-bold">Vehicle:</span> {vehicle?.bumper_no || "—"}
+                <span className="font-bold">Vehicle:</span>{" "}
+                {vehicle?.bumper_no || "—"}
               </div>
 
               {/* Company - Level 2 */}
@@ -406,6 +348,40 @@ function ApprovalItem({
                 </div>
               </div>
             </Popover>
+          </div>
+          {/* Comments Input Header - aligned with Previous Comments */}
+          <div className="text-base font-bold">
+            Add comments with approve/deny:
+            {/* Comments Input Field */}
+            <input
+              className="border rounded p-3 bg-white w-full shadow-sm"
+              type="text"
+              id="comments"
+              name="user_name"
+              placeholder="Enter comments here"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <div className="bottom flex justify-end gap-4 mt-2 margin-top-auto">
+              <button
+                onClick={() => {
+                  handlePost(true);
+                }}
+                className="btn btn-primary"
+                value={true}
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => {
+                  handlePost(false);
+                }}
+                className="btn btn-danger"
+                value={false}
+              >
+                Deny
+              </button>
+            </div>
           </div>
         </div>
       </div>
