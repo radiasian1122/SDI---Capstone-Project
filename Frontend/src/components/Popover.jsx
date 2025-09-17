@@ -1,6 +1,12 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 
-export default function Popover({ anchorRef, open, onClose, children, placement = "bottom" }) {
+export default function Popover({
+  anchorRef,
+  open,
+  onClose,
+  children,
+  placement = "bottom",
+}) {
   const popRef = useRef(null);
   const [style, setStyle] = useState({ visibility: "hidden" });
 
@@ -11,14 +17,21 @@ export default function Popover({ anchorRef, open, onClose, children, placement 
     const a = anchor.getBoundingClientRect();
     const p = pop.getBoundingClientRect();
     const margin = 8;
-    let top = placement === "top" ? a.top - p.height - margin : a.bottom + margin;
-    let left = Math.min(Math.max(a.left, margin), window.innerWidth - p.width - margin);
+    let top =
+      placement === "top" ? a.top - p.height - margin : a.bottom + margin;
+    let left = Math.min(
+      Math.max(a.left, margin),
+      window.innerWidth - p.width - margin
+    );
     // Flip if overflow bottom
     if (placement === "bottom" && top + p.height > window.innerHeight) {
       top = a.top - p.height - margin;
     }
     // Ensure on-screen vertically
-    top = Math.max(margin, Math.min(top, window.innerHeight - p.height - margin));
+    top = Math.max(
+      margin,
+      Math.min(top, window.innerHeight - p.height - margin)
+    );
     setStyle({ top: `${top}px`, left: `${left}px`, visibility: "visible" });
   };
 
@@ -37,11 +50,17 @@ export default function Popover({ anchorRef, open, onClose, children, placement 
     const onResize = () => computePosition();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onResize, { passive: true });
-    document.addEventListener("scroll", onScroll, { passive: true, capture: true });
+    document.addEventListener("scroll", onScroll, {
+      passive: true,
+      capture: true,
+    });
     return () => {
       window.removeEventListener("scroll", onScroll, { passive: true });
       window.removeEventListener("resize", onResize, { passive: true });
-      document.removeEventListener("scroll", onScroll, { passive: true, capture: true });
+      document.removeEventListener("scroll", onScroll, {
+        passive: true,
+        capture: true,
+      });
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
@@ -75,7 +94,11 @@ export default function Popover({ anchorRef, open, onClose, children, placement 
 
   if (!open) return null;
   return (
-    <div ref={popRef} className="popover" style={{ position: "fixed", zIndex: 1000, ...style }}>
+    <div
+      ref={popRef}
+      className="popover"
+      style={{ position: "fixed", zIndex: 1000, ...style }}
+    >
       {children}
     </div>
   );
