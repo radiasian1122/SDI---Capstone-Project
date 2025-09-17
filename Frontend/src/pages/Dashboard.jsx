@@ -50,7 +50,7 @@ export default function Dashboard() {
       }
     })
     .catch(err => console.log(err.message))
-  }, [user.dod_id, user.role, dispatches])
+  }, [user.dod_id, user.role])
 
   ////// TODO - refactor when auth is implemented //////
 
