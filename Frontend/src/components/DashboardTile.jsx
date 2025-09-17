@@ -1,25 +1,14 @@
-import { useMemo, useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { listRequests } from "../api/client";
-import { useFetch } from "../hooks/useFetch";
-import Loading from "../components/Loading";
-import SkeletonList from "../components/SkeletonList";
-import EmptyState from "../components/EmptyState";
-import DevRoleSwitcher from "../components/DevRoleSwitcher";
-import BackgroundSlideshow from "../components/BackgroundSlideshow";
-import { VehiclesContext } from "../context/VehiclesContext";
-import { useContext } from "react";
-import StatusBadge from '../components/StatusBadge'
+import { useEffect, useState, memo } from "react";
+import StatusBadge from '../components/StatusBadge';
+import { getDispatchStatus } from '../utils/dispatchStatus';
 
 const api_url = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
-export default function DashboardTile({ dispatch }){
+function DashboardTile({ dispatch }){
 
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
   const [requestor, setRequestor] = useState([])
-  const [faults, setFaults] = useState([])
-  const [showComments, setShowComments] = useState(false)
 
   useEffect(() => {
     fetch(`${api_url}/users/id/${dispatch.requestor_id}`)
@@ -62,9 +51,7 @@ export default function DashboardTile({ dispatch }){
                 <strong>Driver: </strong>
                 <span>{driver?.last_name}, {driver?.first_name}</span>
               </span>
-              {dispatch.approved === true && <StatusBadge status={'APPROVED'} />}
-              {dispatch.approved === false && dispatch.comments && <StatusBadge status={'DENIED'} />}
-              {((dispatch.approved === false && !dispatch.comments) || dispatch.approved === null || dispatch.approved === undefined) && <StatusBadge status={'PENDING'} />}
+              <StatusBadge status={getDispatchStatus(dispatch)} />
 
             </div>
 
@@ -100,3 +87,5 @@ export default function DashboardTile({ dispatch }){
     </div>
   );
 }
+
+export default memo(DashboardTile);
