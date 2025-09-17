@@ -61,6 +61,7 @@ export async function formatUsers(req, res) {
         .innerJoin('users as U', 'U.dod_id', 'UR.user_id')
         .select(
             'U.dod_id',
+            'U.uic',
             'U.first_name',
             'U.last_name'
         )
@@ -208,7 +209,6 @@ export async function formatDriversByQualId(req, res) {
             .select('U.first_name', 'U.last_name', 'U.uic', 'U.dod_id')
             .where('D.qual_id', req.params.qualId)
             .orderBy(['U.last_name', 'U.first_name']);
-
 
         res.status(200).json(drivers);
 
