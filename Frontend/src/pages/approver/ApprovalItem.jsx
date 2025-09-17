@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState, useEffect, useContext, memo } from "react";
+import { useMemo, useRef, useState, useContext, memo } from "react";
 import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
+import VehicleFaultsButton from "../../components/VehicleFaultsButton";
 import { getDriverQualTypes } from "../../data/selectors";
 import { ToastCtx } from "../../components/ToastProvider";
 
@@ -38,32 +39,16 @@ function ApprovalItem({
 
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
 
-  const faultsBtnRef = useRef(null);
   const qualsBtnRef = useRef(null);
   const api_url = import.meta.env.VITE_API_URL || "http://localhost:8080";
-  const [openFaults, setOpenFaults] = useState(false);
   const [openQuals, setOpenQuals] = useState(false);
   const [comment, setComment] = useState("");
-  const [vehicleFaults, setVehicleFaults] = useState([]);
   const [approvalStatus, setApprovalStatus] = useState(() => {
     if (row.approved === true) return "APPROVED";
     // Only treat as DENIED if explicitly denied with comments (not a new dispatch)
     if (row.approved === false && row.comments) return "DENIED";
     return "PENDING";
   });
-
-  useEffect(() => {
-    if (vehicle) {
-      fetch(`${api_url}/faults/${vehicle.id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setVehicleFaults(data);
-        })
-        .catch((err) => console.error(err.message));
-    } else {
-      setVehicleFaults([]);
-    }
-  }, [vehicle, api_url]);
 
   async function handlePost(value) {
     // Require comments when denying, optional when approving
@@ -325,9 +310,9 @@ function ApprovalItem({
               <div className="flex items-center gap-3 py-2">
                 <span className="text-base font-bold">Vehicle Faults:</span>
                 <span
-                  className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
+                  className={`badge state-FMC`}
                 >
-                  {vehicleFaults.length > 0 ? "Has Faults" : "No Faults"}
+                  See Details
                 </span>
               </div>
 
@@ -336,76 +321,10 @@ function ApprovalItem({
             </div>
 
             {/* Bottom Section - Button Level */}
-            <button
-              ref={faultsBtnRef}
-              type="button"
-              className="btn btn-secondary btn-pill w-1/2"
-              onClick={() => setOpenFaults((v) => !v)}
-              disabled={!vehicle}
-            >
-              View Vehicle Faults
-            </button>
-            <Popover
-              anchorRef={faultsBtnRef}
-              open={openFaults}
-              onClose={() => setOpenFaults(false)}
-            >
-              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
-                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
-                  <span role="img" aria-label="warning">
-                    🚧
-                  </span>{" "}
-                  Vehicle Faults
-                </div>
-                <div className="text-sm text-gray-700">
-                  {vehicleFaults.length ? (
-                    <ul className="space-y-3">
-                      {vehicleFaults.map((fault, idx) => (
-                        <li
-                          key={fault.fault_id || idx}
-                          className="bg-red-50 border border-red-200 rounded p-2"
-                        >
-                          <div className="font-semibold text-red-800 mb-1">
-                            Fault #{fault.fault_id}
-                          </div>
-                          <div className="text-xs space-y-1 text-gray-700">
-                            {fault.fault_date && (
-                              <div>
-                                <span className="font-medium">Date:</span>{" "}
-                                {new Date(
-                                  fault.fault_date
-                                ).toLocaleDateString()}
-                              </div>
-                            )}
-                            {fault.fault_code && (
-                              <div>
-                                <span className="font-medium">Code:</span>{" "}
-                                {fault.fault_code}
-                              </div>
-                            )}
-                            {fault.fault_description && (
-                              <div>
-                                <span className="font-medium">
-                                  Description:
-                                </span>{" "}
-                                {fault.fault_description}
-                              </div>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-green-700 font-semibold flex items-center gap-1">
-                      <span role="img" aria-label="check">
-                        ✅
-                      </span>{" "}
-                      No faults reported
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Popover>
+            <VehicleFaultsButton
+              vehicle={vehicle}
+              buttonClassName="btn btn-secondary btn-pill w-1/2"
+            />
           </div>
         </div>
       </div>
