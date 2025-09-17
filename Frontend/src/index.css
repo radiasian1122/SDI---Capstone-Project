@@ -100,3 +100,8 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 } */
+
+.vehicle-maintenance-status {
+    background-color: white;
+    color: black;
+}
