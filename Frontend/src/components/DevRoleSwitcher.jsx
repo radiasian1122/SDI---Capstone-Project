@@ -8,7 +8,7 @@ export default function DevRoleSwitcher() {
 
   return (
     <>
-      <h1 className="italic"> Role Switcher - For Demonstration Purposes Only</h1>
+      <h1 className="italic text-white"> Role Switcher - For Demonstration Purposes Only</h1>
       <div className="cc-actionbar">
         <span className="badge">DEVELOPER TOOL: SELECT YOUR USER ROLE</span>
         <select
