@@ -12,6 +12,14 @@ body {
 }
 
 /* ---------- LAYOUT ---------- */
+.rounded {
+  border-radius: 0.5rem;
+}
+
+.bottom-margin{
+  margin-bottom: 1.5rem;
+}
+
 .add-margin {
   margin: 1.5rem;
 }
