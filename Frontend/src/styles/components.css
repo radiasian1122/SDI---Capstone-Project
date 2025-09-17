@@ -44,6 +44,7 @@ body {
   padding-block: 1.5rem;
 }
 .cc-page-title {
+  color: #fff;
   font-size: 1.5rem; /* text-2xl */
   font-weight: 600;
   letter-spacing: -0.01em;
