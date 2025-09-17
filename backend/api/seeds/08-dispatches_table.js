@@ -12,7 +12,7 @@ exports.seed = async function (knex) {
     const allRequestors = await knex.select('*').from('users')
     const allDrivers = await knex.select('*').from('users').join('driver_quals', 'driver_quals.user_id', 'users.dod_id' )
     const allVehicles = await knex.select('*').from('vehicles')
-    const numberOfDispatches = faker.numberw.int({ min: 10, max: allVehicles.length })
+    const numberOfDispatches = faker.number.int({ min: 10, max: allVehicles.length })
     const seedDispatches = [];
 
     // Generate dispatches
