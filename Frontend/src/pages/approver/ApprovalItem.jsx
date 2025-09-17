@@ -94,11 +94,11 @@ function ApprovalItem({
       );
       setTimeout(() => {
         setDispatches(newDispatches);
-      }, 2000);
+      }, 300);
     } else {
       setTimeout(() => {
         setDispatches(updatedDispatches);
-      }, 2000);
+      }, 300);
     }
 
     const post = {

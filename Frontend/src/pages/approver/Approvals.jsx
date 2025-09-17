@@ -60,7 +60,7 @@ export default function Approvals() {
         dim={0.25}
       />
       <div className="cc-page space-y-6 approval-items-page">
-        <h1 className="cc-page-title">Dispatches</h1>
+        <h1 className="cc-page-title">Pending Dispatches <span>{`(${dispatches.filter(d => (d.approved !== true) && (d.comments === null)).length})`}</span></h1>
 
         {loading || usersLoading || vehiclesLoading ? (
           <SkeletonList rows={4} />
