@@ -94,10 +94,11 @@ function ApprovalItem({
       );
       setTimeout(() => {
         setDispatches(newDispatches);
-      }, 2000);
+      }, 300);
     } else {
-      // For denied requests, update the data immediately
-      setDispatches(updatedDispatches);
+      setTimeout(() => {
+        setDispatches(updatedDispatches);
+      }, 300);
     }
 
     const post = {

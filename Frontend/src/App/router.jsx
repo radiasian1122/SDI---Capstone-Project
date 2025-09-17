@@ -66,7 +66,7 @@ export default function AppRouter() {
         }
       />
 
-      {/* Dispatcher */}
+      Dispatcher
       <Route
         path="/dispatcher/dispatches"
         element={
