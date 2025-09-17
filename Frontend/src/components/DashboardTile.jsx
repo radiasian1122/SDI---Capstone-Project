@@ -85,14 +85,15 @@ function DashboardTile({ dispatch }){
         </div>
         { getDispatchStatus(dispatch) === 'DENIED' && user.role === 'DRIVER' &&
           <button
-            className="btn btn-primary w-[500px] justify-self-center"
+            className="btn btn-danger w-[250px] justify-self-start"
             onClick={() => {
               fetch(`${api_url}/dispatches/${dispatch.dispatch_id}`, {
                 method: 'DELETE'
               })
               .then(res => {
                 if (res.ok){
-                  showToast("Denied dispatch was acknowledged. Please re-submit.", "error");
+                  showToast("Acknowledgement received. Please re-submit your dispatch.", "error");
+                  window.location.reload();
                   return;
                 }
                 else{
@@ -110,7 +111,7 @@ function DashboardTile({ dispatch }){
                 showToast("Something went wrong. Please try again.", "error");
               })
             }}
-          >ACKNOWLEDGE DENIED REQUEST</button>
+          >ACKNOWLEDGE</button>
         }
     </div>
   );
