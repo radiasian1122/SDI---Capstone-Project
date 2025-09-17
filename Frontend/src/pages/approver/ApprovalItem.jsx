@@ -46,6 +46,12 @@ export default function ApprovalItem({
   const [openQuals, setOpenQuals] = useState(false);
   const [comment, setComment] = useState("");
   const [vehicleFaults, setVehicleFaults] = useState([]);
+  const [approvalStatus, setApprovalStatus] = useState(() => {
+    if (row.approved === true) return "APPROVED";
+    // Only treat as DENIED if explicitly denied with comments (not a new dispatch)
+    if (row.approved === false && row.comments) return "DENIED";
+    return "PENDING";
+  });
 
   useEffect(() => {
     if (vehicle) {
@@ -61,17 +67,44 @@ export default function ApprovalItem({
   }, [vehicle, api_url]);
 
   async function handlePost(value) {
+    // Require comments when denying, optional when approving
+    if (!value && !comment.trim()) {
+      showToast("Comments are required when denying a request", "error");
+      return;
+    }
+
+    setApprovalStatus(value ? "APPROVED" : "DENIED");
     showToast(`Request ${value ? "approved" : "denied"}`);
-    const newDispatches = dispatches.filter(
-      (data) => data.dispatch_id !== row.dispatch_id
-    );
-    setTimeout(() => {
-      setDispatches(newDispatches);
-    }, 2000);
+
+    // Update the dispatch data immediately to show new comment
+    const updatedDispatches = dispatches.map(dispatch => {
+      if (dispatch.dispatch_id === row.dispatch_id) {
+        return {
+          ...dispatch,
+          approved: value,
+          comments: comment || null
+        };
+      }
+      return dispatch;
+    });
+
+    // Only remove from list if approved, keep denied requests visible with updated data
+    if (value) {
+      const newDispatches = updatedDispatches.filter(
+        (data) => data.dispatch_id !== row.dispatch_id
+      );
+      setTimeout(() => {
+        setDispatches(newDispatches);
+      }, 2000);
+    } else {
+      // For denied requests, update the data immediately
+      setDispatches(updatedDispatches);
+    }
+
     const post = {
       dispatch_id: row.dispatch_id,
       approved: value,
-      comments: comment,
+      comments: comment || null,
     };
     try {
       const res = await fetch(`${api_url}/dispatches`, {
@@ -90,6 +123,9 @@ export default function ApprovalItem({
 
       const data = await res.json();
       console.log("Server response:", data);
+
+      // Clear the comment input after successful submission
+      setComment("");
     } catch (error) {
       console.error("Error posting data:", error);
     }
@@ -98,56 +134,218 @@ export default function ApprovalItem({
   return (
     <div key={id} className="card">
       <div className="card-body space-y-4">
-        {/* Vehicle strip with status */}
-        <div className="flex relative items-center justify-end-safe gap-44 text-sm">
-          <div className="flex items-center gap-1">
-            <span className="text-text/70">Vehicle:</span>
-            <strong>{vehicle?.bumper_no || "—"}</strong>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="text-text/70">Company:</span>
-            <strong>
-              {vehicle?.company || vehicle?.uic?.slice(4, 5) || "—"}
-            </strong>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="text-text/70">Status:</div>
-            <StatusBadge status={vehicle?.status || "PENDING"} />
+        {/* Four Column Layout with Horizontal Alignment */}
+        <div className="grid grid-cols-3 gap-8">
+          {/* Column 1 - Approvers Section */}
+          <div className="flex flex-col justify-between h-full">
+            {/* Top Section */}
+            <div className="space-y-6">
+              {/* Status Badge */}
+              <div className="flex items-center gap-3">
+                <span className="text-base font-bold">Status:</span>
+                <StatusBadge status={approvalStatus} />
+              </div>
+
+              {/* Requester - Level 1 */}
+              <div className="text-base">
+                <span className="font-bold">Requester:</span>{" "}
+                {requestor
+                  ? `${requestor.first_name} ${requestor.last_name}`
+                  : row.requestor_id || "—"}
+              </div>
+
+              {/* Comments Input Header - aligned with Previous Comments */}
+              <div className="text-base font-bold">Add comments with approve/deny:</div>
+
+              {/* Comments Input Field */}
+              <div className="space-y-3 max-w-xs mb-4">
+                <input
+                  className="border rounded p-3 bg-white w-full shadow-sm"
+                  type="text"
+                  id="comments"
+                  name="user_name"
+                  placeholder="Enter comments here"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+              </div>
+            </div>
+
+            {/* Bottom Section - Button Level */}
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  handlePost(true);
+                }}
+                className="btn btn-primary"
+                value={true}
+              >
+                Approve
+              </button>
+              <button
+                onClick={() => {
+                  handlePost(false);
+                }}
+                className="btn btn-danger"
+                value={false}
+              >
+                Deny
+              </button>
+            </div>
           </div>
 
-          <StatusBadge status={row.approved ? "APPROVED" : "PENDING"} />
-        </div>
+          {/* Column 2 - Previous Comments Section */}
+          <div className="flex flex-col h-full">
+            <div className="space-y-6">
+              {/* Empty div for Status level alignment */}
+              <div className="h-6"></div>
 
-        {/* Driver + Requester section */}
+              {/* Empty div for Requester level alignment */}
+              <div className="text-base">&nbsp;</div>
 
-        <div className="flex relative items-center justify-end-safe gap-26 text-sm">
-          {" "}
-          <div>
-            <strong>Driver:</strong>{" "}
-            {driver
-              ? `${driver.first_name} ${driver.last_name}`
-              : row.driver_id || "—"}
+              {/* Previous Comments Header - aligned with Add Comments */}
+              <div className="text-base font-bold">Previous Comments:</div>
+
+              {/* Previous comments content or placeholder */}
+              <div className="p-4 bg-gray-50 border border-gray-200 rounded-lg min-h-[4rem]">
+                {row.comments ? (
+                  <div className="text-base text-gray-800">{row.comments}</div>
+                ) : (
+                  <div className="text-base text-gray-500 italic">No previous comments</div>
+                )}
+              </div>
+            </div>
           </div>
-          <div>
-            <strong>UIC:</strong> {driver?.uic || "—"}
+
+          {/* Column 3 - Driver Section */}
+          <div className="flex flex-col justify-between h-full">
+            {/* Top Section */}
+            <div className="space-y-8">
+              {/* Empty div for Status level */}
+              <div className="h-6"></div>
+
+              {/* Driver - Level 1 */}
+              <div className="text-base py-2">
+                <span className="font-bold">Driver:</span>{" "}
+                {driver
+                  ? `${driver.first_name} ${driver.last_name}`
+                  : row.driver_id || "—"}
+              </div>
+
+              {/* UIC - Level 2 */}
+              <div className="text-base py-2">
+                <span className="font-bold">UIC:</span> {driver?.uic || "—"}
+              </div>
+
+              {/* Driver Qualified - Level 3 */}
+              <div className="flex items-center gap-3 py-2">
+                <span className="text-base font-bold">Driver Qualified:</span>
+                <span
+                  className={`badge ${qualified ? "state-FMC" : "state-DEADLINED"}`}
+                >
+                  {qualified ? "Qualified" : "Not Qualified"}
+                </span>
+              </div>
+
+              {/* Empty div for spacing */}
+              <div className="h-6"></div>
+            </div>
+
+            {/* Bottom Section - Button Level */}
+            <button
+              ref={qualsBtnRef}
+              type="button"
+              className="btn btn-secondary btn-pill w-1/2"
+              onClick={() => setOpenQuals((v) => !v)}
+              disabled={!vehicle}
+            >
+              View Driver Quals
+            </button>
+            <Popover
+              anchorRef={qualsBtnRef}
+              open={openQuals}
+              onClose={() => setOpenQuals(false)}
+            >
+              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
+                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
+                  <span role="img" aria-label="medal">
+                    🎖️
+                  </span>{" "}
+                  Driver Qualifications
+                </div>
+                <div className="text-sm text-gray-700">
+                  {driverQualTypes.length ? (
+                    <ul className="space-y-2">
+                      {driverQualTypes.map((t, idx) => (
+                        <li
+                          key={idx}
+                          className="bg-gray-50 border border-gray-100 rounded p-2"
+                        >
+                          <div className="font-medium">{t}</div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <div className="text-green-700 font-semibold flex items-center gap-1">
+                      <span role="img" aria-label="check">
+                        ✅
+                      </span>{" "}
+                      None
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Popover>
           </div>
-          {/* Vehicle Faults tab */}
-          <div className="flex items-center gap-2">
+
+          {/* Column 4 - Vehicle Section */}
+          <div className="flex flex-col justify-between h-full">
+            {/* Top Section */}
+            <div className="space-y-8">
+              {/* Empty div for Status level */}
+              <div className="h-6"></div>
+
+              {/* Vehicle - Level 1 */}
+              <div className="text-base py-2">
+                <span className="font-bold">Vehicle:</span> {vehicle?.bumper_no || "—"}
+              </div>
+
+              {/* Company - Level 2 */}
+              <div className="text-base py-2">
+                <span className="font-bold">Company:</span>{" "}
+                {vehicle?.company || vehicle?.uic?.slice(4, 5) || "—"}
+              </div>
+
+              {/* Vehicle Status - Level 3 */}
+              <div className="flex items-center gap-3 py-2">
+                <span className="text-base font-bold">Vehicle Status:</span>
+                <StatusBadge status={vehicle?.status || "PENDING"} />
+              </div>
+
+              {/* Vehicle Faults - Level 4 */}
+              <div className="flex items-center gap-3 py-2">
+                <span className="text-base font-bold">Vehicle Faults:</span>
+                <span
+                  className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
+                >
+                  {vehicleFaults.length > 0 ? "Has Faults" : "No Faults"}
+                </span>
+              </div>
+
+              {/* Empty div for Comments Input level */}
+              <div className="h-20"></div>
+            </div>
+
+            {/* Bottom Section - Button Level */}
             <button
               ref={faultsBtnRef}
               type="button"
-              className="btn btn-secondary btn-pill"
+              className="btn btn-secondary btn-pill w-1/2"
               onClick={() => setOpenFaults((v) => !v)}
               disabled={!vehicle}
             >
-              Vehicle Faults
+              View Vehicle Faults
             </button>
-            Vehicle has faults:
-            <span
-              className={`badge ${vehicleFaults.length > 0 ? "state-DEADLINED" : "state-FMC"}`}
-            >
-              {vehicleFaults.length > 0 ? "Yes" : "No"}
-            </span>
             <Popover
               anchorRef={faultsBtnRef}
               open={openFaults}
@@ -210,101 +408,6 @@ export default function ApprovalItem({
               </div>
             </Popover>
           </div>
-          {/* Driver quals tab */}
-          <div className="flex items-center gap-2">
-            <button
-              ref={qualsBtnRef}
-              type="button"
-              className="btn btn-secondary btn-pill"
-              onClick={() => setOpenQuals((v) => !v)}
-              disabled={!vehicle}
-            >
-              Driver Qualifications
-            </button>
-            Driver Qualified on requested Vehicle:
-            <span
-              className={`badge ${qualified ? "state-FMC" : "state-DEADLINED"}`}
-            >
-              {qualified ? "Yes" : "No"}
-            </span>
-            <Popover
-              anchorRef={qualsBtnRef}
-              open={openQuals}
-              onClose={() => setOpenQuals(false)}
-            >
-              <div className="popover-body bg-white rounded-lg shadow-lg p-4 min-w-[260px] max-w-[350px] border border-gray-200">
-                <div className="font-bold text-lg mb-2 text-gray-800 flex items-center gap-2">
-                  <span role="img" aria-label="medal">
-                    🎖️
-                  </span>{" "}
-                  Driver Qualifications
-                </div>
-                <div className="text-sm text-gray-700">
-                  {driverQualTypes.length ? (
-                    <ul className="space-y-2">
-                      {driverQualTypes.map((t, idx) => (
-                        <li
-                          key={idx}
-                          className="bg-gray-50 border border-gray-100 rounded p-2"
-                        >
-                          <div className="font-medium">{t}</div>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <div className="text-green-700 font-semibold flex items-center gap-1">
-                      <span role="img" aria-label="check">
-                        ✅
-                      </span>{" "}
-                      None
-                    </div>
-                  )}
-                </div>
-              </div>
-            </Popover>
-          </div>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="pt-2 border-t">
-        <div className="mb-2">
-          <strong>Requester:</strong>{" "}
-          {requestor
-            ? `${requestor.first_name} ${requestor.last_name}`
-            : row.requestor_id || "—"}
-        </div>
-        <div className="mt-2 flex gap-2">
-          <button
-            onClick={() => {
-              handlePost(true);
-            }}
-            className="btn btn-primary"
-            value={true}
-          >
-            Approve
-          </button>
-          <button
-            onClick={() => {
-              handlePost(false);
-            }}
-            className="btn btn-danger"
-            value={false}
-          >
-            Deny
-          </button>
-        </div>
-        <div className="comments mt-2">
-          <label htmlFor="comments">Add comments with approve/deny:</label>
-          <input
-            className="border rounded p-4 bg-white shadow mb-4 w-full"
-            type="text"
-            id="comments"
-            name="user_name"
-            placeholder="Enter comments here"
-            value={comment}
-            onChange={(e) => setComment(e.target.value)}
-          />
         </div>
       </div>
     </div>
