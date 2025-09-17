@@ -2,11 +2,13 @@ import { useEffect, useState, memo, useContext } from "react";
 import StatusBadge from '../components/StatusBadge';
 import { getDispatchStatus } from '../utils/dispatchStatus';
 import { ToastCtx } from "./ToastProvider";
+import { useAuth } from "../context/AuthContext";
 
 const api_url = import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 function DashboardTile({ dispatch }){
   const { showToast } = useContext(ToastCtx) || { showToast: () => {} };
+  const { user, loading: authLoading } = useAuth();
 
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
@@ -81,7 +83,7 @@ function DashboardTile({ dispatch }){
             }
           </div>
         </div>
-        { getDispatchStatus(dispatch) === 'DENIED' &&
+        { getDispatchStatus(dispatch) === 'DENIED' && user.role === 'DRIVER' &&
           <button
             className="btn btn-primary w-[500px] justify-self-center"
             onClick={() => {
