@@ -67,7 +67,7 @@ export default function Approvals() {
         ) : dispatches.filter(d => d.approved !== true).length > 0 ? (
           <div className="grid gap-3">
             {dispatches
-              .filter(d => d.approved !== true)
+              .filter(d => (d.approved !== true) && (d.comments === null))
               .sort((a, b) => {
                 // Pending requests first (no comments or approved is null/undefined)
                 const aPending = !a.comments || a.approved === null || a.approved === undefined;
