@@ -64,7 +64,7 @@ export default function Approvals() {
 
         {loading || usersLoading || vehiclesLoading ? (
           <SkeletonList rows={4} />
-        ) : dispatches.filter(d => d.approved !== true).length > 0 ? (
+        ) : dispatches.filter(d => (d.approved !== true) && (d.comments === null)).length > 0 ? (
           <div className="grid gap-3">
             {dispatches
               .filter(d => (d.approved !== true) && (d.comments === null))
