@@ -22,7 +22,9 @@ exports.seed = async function (knex) {
       let startDate = faker.date.soon({ days: 7 })
       let endDate = faker.date.between({ from: startDate, to: new Date(startDate.getTime() + faker.number.int({ min: 7, max: 14 }) * 24 * 60 * 60 * 1000) })
 
-      let approved = faker.datatype.boolean()
+      let approved = faker.datatype.boolean(0.1) // 10% weight for approval
+
+      let comments = faker.datatype.boolean() ? null : faker.lorem.sentence()
 
       seedDispatches.push({
         requestor_id: allRequestors[faker.number.int({ min: 0, max: allRequestors.length - 1 })].dod_id,
@@ -33,7 +35,7 @@ exports.seed = async function (knex) {
         end_time: endDate,
         destination: faker.location.city(),
         purpose: faker.lorem.sentence(),
-        comments: approved ? null : faker.lorem.sentence()
+        comments: !approved ? comments : null
       })
     }
 
