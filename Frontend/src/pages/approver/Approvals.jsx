@@ -52,9 +52,6 @@ export default function Approvals() {
   const driverQuals = userQuals;
 
   return (
-
-    <div className="cc-page space-y-6 approval-items-page">
-    <>
     <div>
       <BackgroundSlideshow
         images={IMAGES}
@@ -62,42 +59,40 @@ export default function Approvals() {
         fadeMs={800}
         dim={0.25}
       />
-      <div className="cc-page space-y-6">
+      <div className="cc-page space-y-6 approval-items-page">
+        <h1 className="cc-page-title">Dispatches</h1>
 
-      <h1 className="cc-page-title">Dispatches</h1>
+        {loading || usersLoading || vehiclesLoading ? (
+          <SkeletonList rows={4} />
+        ) : dispatches.filter(d => d.approved !== true).length > 0 ? (
+          <div className="grid gap-3">
+            {dispatches
+              .filter(d => d.approved !== true)
+              .sort((a, b) => {
+                // Pending requests first (no comments or approved is null/undefined)
+                const aPending = !a.comments || a.approved === null || a.approved === undefined;
+                const bPending = !b.comments || b.approved === null || b.approved === undefined;
 
-      {loading || usersLoading || vehiclesLoading ? (
-        <SkeletonList rows={4} />
-      ) : dispatches.filter(d => d.approved !== true).length > 0 ? (
-        <div className="grid gap-3">
-          {dispatches
-            .filter(d => d.approved !== true)
-            .sort((a, b) => {
-              // Pending requests first (no comments or approved is null/undefined)
-              const aPending = !a.comments || a.approved === null || a.approved === undefined;
-              const bPending = !b.comments || b.approved === null || b.approved === undefined;
-
-              if (aPending && !bPending) return -1; // a goes first
-              if (!aPending && bPending) return 1;  // b goes first
-              return 0; // keep original order for same type
-            })
-            .map((r) => (
-            <ApprovalItem
-            key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
-            row={r}
-            users={users}
-            vehicles={vehicles}
-            driverQuals={driverQuals}
-            dispatches={dispatches}
-            setDispatches={setDispatches}
-            />
-          ))}
-        </div>
-      ) : (
-        <EmptyState title="No pending requests." />
-      )}
+                if (aPending && !bPending) return -1; // a goes first
+                if (!aPending && bPending) return 1;  // b goes first
+                return 0; // keep original order for same type
+              })
+              .map((r) => (
+                <ApprovalItem
+                  key={r.dispatch_id ?? r.id ?? `${r.driver_id}:${r.vehicle_id}`}
+                  row={r}
+                  users={users}
+                  vehicles={vehicles}
+                  driverQuals={driverQuals}
+                  dispatches={dispatches}
+                  setDispatches={setDispatches}
+                />
+              ))}
+          </div>
+        ) : (
+          <EmptyState title="No pending requests." />
+        )}
+      </div>
     </div>
-    </div>
-    </>
   );
 }

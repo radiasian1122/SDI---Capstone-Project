@@ -9,6 +9,7 @@ function DashboardTile({ dispatch }){
   const [vehicle, setVehicle] = useState([])
   const [driver, setDriver] = useState([])
   const [requestor, setRequestor] = useState([])
+  const [showComments, setShowComments] = useState(false)
 
   useEffect(() => {
     fetch(`${api_url}/users/id/${dispatch.requestor_id}`)
