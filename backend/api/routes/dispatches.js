@@ -146,4 +146,35 @@ router.get("/uic/:uic", dispatchesCtl.getDispatchesByUic);
  */
 router.patch("/", dispatchesCtl.updateDispatch);
 
+
+/**
+ * @swagger
+ * /dispatches/{dispatch_id}:
+ *   delete:
+ *     summary: Delete a dispatch
+ *     parameters:
+ *       - in: path
+ *         name: dispatch_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID of the dispatch to delete
+ *     responses:
+ *       200:
+ *         description: Dispatch successfully deleted
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Dispatch deleted
+ *       404:
+ *         description: Dispatch not found
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: Dispatch not found
+ */
+router.delete("/:dispatch_id", dispatchesCtl.deleteDispatch)
+
 module.exports = router;

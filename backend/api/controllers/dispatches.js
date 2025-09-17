@@ -131,3 +131,19 @@ exports.updateDispatch = (req, res) => {
     })
   }
 }
+
+exports.deleteDispatch = (req, res) => {
+    try{
+        knex('dispatches').where('dispatch_id', req.params.dispatch_id).del()
+            .then((data) => {
+                if (data === 0) {
+                    res.status(404).send('Dispatch not found')
+                }else {
+                    res.status(200).send('Dispatch deleted')
+                }
+            })
+    } catch (err) {
+        res.status(404).send('Dispatch not found')
+        console.error(err)
+    }
+}
