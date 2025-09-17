@@ -1,5 +1,5 @@
 // src/pages/Dashboard.jsx
-import { useMemo, useEffect, useState } from "react";
+import { useMemo, useEffect, useState, useContext } from "react";
 import { useAuth } from "../context/AuthContext";
 import Loading from "../components/Loading";
 import DevRoleSwitcher from "../components/DevRoleSwitcher";
@@ -50,7 +50,7 @@ export default function Dashboard() {
       }
     })
     .catch(err => console.log(err.message))
-  }, [user.dod_id, user.role])
+  }, [user.dod_id, user.role, dispatches])
 
   ////// TODO - refactor when auth is implemented //////
 
