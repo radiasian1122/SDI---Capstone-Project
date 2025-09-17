@@ -1,15 +1,14 @@
-import React, { useMemo, useRef, useState, useEffect, useContext } from "react";
+import { useMemo, useRef, useState, useEffect, useContext, memo } from "react";
 import StatusBadge from "../../components/StatusBadge";
 import Popover from "../../components/Popover";
 import { getDriverQualTypes } from "../../data/selectors";
 import { ToastCtx } from "../../components/ToastProvider";
 
-export default function ApprovalItem({
+function ApprovalItem({
   row,
   users,
   vehicles,
   driverQuals,
-  dispatch,
   dispatches,
   setDispatches,
 }) {
@@ -413,3 +412,5 @@ export default function ApprovalItem({
     </div>
   );
 }
+
+export default memo(ApprovalItem);
