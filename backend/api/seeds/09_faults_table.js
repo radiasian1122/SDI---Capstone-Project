@@ -15,32 +15,41 @@ exports.seed = async function (knex) {
       "Failed transmission",
       "Left turn signal inop",
       "Windshield wipers inop",
-      "Class 1 oil leak",
       "Class 2 oil leak",
-      "Class 3 oil leak",
       "Class 1 transmission fluid leak",
-      "Class 2 transmission fluid leak",
-      "Class 3 transmission fluid leak",
-      "Class 1 coolant leak",
-      "Class 2 coolant leak",
       "Class 3 coolant leak",
       "Power steering inop",
       "Failing piston head",
-      "Overdue for services"
+      "Overdue for services",
+      "Brake lights not working",
+      "Flat tire",
+      "Battery voltage low",
+      "Engine overheating",
+      "ABS warning light on",
+      "Fuel gauge malfunction",
+      "Air conditioning not cooling",
+      "Door lock failure",
+      "Headlights flickering",
+      "Exhaust system leak",
+      "Steering wheel vibration"
     ]
 
     const allCorrectiveAction = [
-      "Added 1QT oil",
-      "Added 2QT oil",
       "Added 3QT oil",
-      "Added 1QT transmission fluid",
       "Added 2QT transmission fluid",
-      "Added 3QT transmission fluid",
       "Added 1QT coolant",
-      "Added 2QT coolant",
-      "Added 3QT coolant",
       "Added 1QT power steering fluid",
-      "Rotated tires"
+      "Rotated tires",
+      "Replaced transmission",
+      "Replaced turn signal bulb",
+      "Replaced windshield wiper blades",
+      "Repaired oil leak",
+      "Repaired transmission fluid leak",
+      "Repaired coolant leak",
+      "Repaired power steering system",
+      "Replaced piston head",
+      "Performed scheduled maintenance",
+      "Replaced brake light bulbs"
     ]
 
     const allTechStatus = [

@@ -50,7 +50,7 @@ export default function Dashboard() {
       }
     })
     .catch(err => console.log(err.message))
-  }, [user.dod_id, user.role, dispatches])
+  }, [user.dod_id, user.role])
 
   ////// TODO - refactor when auth is implemented //////
 
@@ -101,15 +101,34 @@ export default function Dashboard() {
         {/* Tab Navigation */}
         <div className="cc-actionbar">
           <div className="flex gap-2">
-            {tabs.map((tab) => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`btn ${activeTab === tab ? 'btn-primary' : 'btn-secondary'}`}
-              >
-                {tab} ({getTabCount(tab)})
-              </button>
-            ))}
+            {tabs.map((tab) => {
+
+              let tabStyle;
+              switch (tab){
+                case 'ALL':
+                  tabStyle = 'btn-primary'
+                  break;
+                case 'PENDING':
+                  tabStyle = 'state-PENDING'
+                  break;
+                case 'DENIED':
+                  tabStyle = 'state-DENIED'
+                  break;
+                case 'APPROVED':
+                  tabStyle = 'state-APPROVED'
+                  break;
+              }
+
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`btn ${activeTab === tab ? tabStyle : 'btn-secondary'}`}
+                >
+                  {tab} ({getTabCount(tab)})
+                </button>
+              )
+            })}
           </div>
         </div>
 

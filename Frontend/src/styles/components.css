@@ -12,6 +12,14 @@ body {
 }
 
 /* ---------- LAYOUT ---------- */
+.rounded {
+  border-radius: 0.5rem;
+}
+
+.bottom-margin{
+  margin-bottom: 1.5rem;
+}
+
 .add-margin {
   margin: 1.5rem;
 }
@@ -36,6 +44,7 @@ body {
   padding-block: 1.5rem;
 }
 .cc-page-title {
+  color: #fff;
   font-size: 1.5rem; /* text-2xl */
   font-weight: 600;
   letter-spacing: -0.01em;
