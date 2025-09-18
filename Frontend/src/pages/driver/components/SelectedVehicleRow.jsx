@@ -1,5 +1,6 @@
 import React from "react";
 import DriverInfoButton from "./DriverInfoButton";
+import VehicleFaultsButton from "../../../components/VehicleFaultsButton";
 
 //TODO Wire in fault endpoint
 
@@ -119,13 +120,18 @@ export default function SelectedVehicleRow({
             <label className="label" htmlFor={`status-${vehicle?.id}`}>
               STATUS b.
             </label>
-            <select id={`status-${vehicle?.id}`} name="status-menu" className="vehicle-maintenance-status" onChange={(e) =>
+            <select
+              id={`status-${vehicle?.id}`}
+              name="status-menu"
+              className="vehicle-maintenance-status"
+              onChange={(e) =>
                 onChangeFm5988?.({ ...fm5988, statusB: e.target.value })
-            }>
-                <option value="nff">NFF</option>
-                <option value="faults-found">FAULTS FOUND</option>
-                <option value="deadlined">DEADLINED</option>
-                <option value="safety-deadlined">SAFETY DEADLINED</option>
+              }
+            >
+              <option value="nff">NFF</option>
+              <option value="faults-found">FAULTS FOUND</option>
+              <option value="deadlined">DEADLINED</option>
+              <option value="safety-deadlined">SAFETY DEADLINED</option>
             </select>
           </div>
         </div>
