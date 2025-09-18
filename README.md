@@ -4,12 +4,12 @@
 
 <table>
   <tr>
-    <td><img src="docs/screenshots/cc-screenshot4.png" alt="Screenshot 1" width="500"/></td>
-    <td><img src="docs/screenshots/cc-screenshot2.png" alt="Screenshot 2" width="500"/></td>
+    <td><img src="docs/screenshots/cc-screenshot4.png" alt="Screenshot 1" height="500"/></td>
+    <td><img src="docs/screenshots/cc-screenshot2.png" alt="Screenshot 2" height="500"/></td>
   </tr>
   <tr>
-    <td><img src="docs/screenshots/cc-screenshot1.png" alt="Screenshot 3" width="750"/></td>
-    <td><img src="docs/screenshots/cc-screenshot3.png" alt="Screenshot 4" width="750"/></td>
+    <td><img src="docs/screenshots/cc-screenshot1.png" alt="Screenshot 3" /></td>
+    <td><img src="docs/screenshots/cc-screenshot3.png" alt="Screenshot 4" /></td>
   </tr>
 </table>
 
