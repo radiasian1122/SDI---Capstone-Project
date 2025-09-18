@@ -5,6 +5,7 @@ import StatusBadge from "../../components/StatusBadge";
 import { useEffect, useState, useContext } from "react";
 import { VehiclesContext } from "../../context/VehiclesContext";
 import BackgroundSlideshow from "../../components/BackgroundSlideshow";
+import ReadinessDashboard from "../../components/ReadinessDashboard";
 
 export default function Vehicles() {
   const IMAGES = [
@@ -127,83 +128,94 @@ export default function Vehicles() {
         dim={0.25}
       />
       <h1 className="cc-page-title">Vehicles</h1>
-      <div className="vehicles-container">
-        <table className="table">
-          <thead className="thead">
-            <tr>
-              <th
-                className="th th-sortable"
-                scope="col"
-                onClick={() => handleOrder("type")}
-                style={{ cursor: "pointer" }}
-              >
-                Type
-              </th>
-              <th
-                className="th th-sortable"
-                scope="col"
-                onClick={() => handleOrder("callsign")}
-                style={{ cursor: "pointer" }}
-              >
-                Callsign
-              </th>
-              <th
-                className="th th-sortable"
-                scope="col"
-                onClick={() => handleOrder("company")}
-                style={{ cursor: "pointer" }}
-              >
-                Company
-              </th>
-              <th
-                className="th th-sortable"
-                scope="col"
-                onClick={() => handleOrder("status")}
-                style={{ cursor: "pointer" }}
-              >
-                Status
-              </th>
-              <th scope="col">Faults</th>
-            </tr>
-          </thead>
-          <tbody className="tbody">
-            {sortedVehicles.map((vehicle) => (
-              <tr
-                key={vehicle.vehicle_id ?? vehicle.bumper_no}
-                className="tr tr-striped row-hover"
-              >
-                <td className="td px-4 py-2">
-                  {vehicle.bumper_no?.startsWith("1.1")
-                    ? vehicle.bumper_no.slice(0, 3)
-                    : (vehicle.bumper_no || "").replace(/[^a-zA-Z]/g, "")}
-                </td>
-                <td className="td px-4 py-2">{vehicle.bumper_no}</td>
-                <td className="td px-4 py-2">{vehicle.uic?.slice(4, 5)}</td>
-                <td className="td px-4 py-2">
-                    {vehicle.deadlined ? <p className="text-red-800">Deadlined</p>: "FMC"}
-                </td>
-                <td className="td px-4 py-2">
-                  <ul>
-                    {vehicleFaults.map((faultsObj) => {
-                      if (faultsObj.vehicle_id == vehicle.vehicle_id) {
-                        if (faultsObj.faults.length > 0) {
-                          return faultsObj.faults.map((fault, idx) => (
-                            <li key={fault.fault_id ?? idx}>
-                              {fault.fault_description}
-                            </li>
-                          ));
-                        } else {
-                          return <li className="italic">NO FAULTS</li>;
-                        }
-                      }
-                      return null;
-                    })}
-                  </ul>
-                </td>
+      <div className="motorpoolReadiness-container space-y-12 mb-20">
+        <ReadinessDashboard vehicles={vehicles} vehicleFaults={vehicleFaults} />
+      </div>
+
+      <div className="border-t border-gray-200 pt-6">
+        <h2 className="text-xl font-semibold mb-4">All Assigned Vehicles</h2>
+        <div className="vehicles-container">
+          <table className="table">
+            <thead className="thead">
+              <tr>
+                <th
+                  className="th th-sortable"
+                  scope="col"
+                  onClick={() => handleOrder("type")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Company
+                </th>
+                <th
+                  className="th th-sortable"
+                  scope="col"
+                  onClick={() => handleOrder("callsign")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Callsign
+                </th>
+                <th
+                  className="th th-sortable"
+                  scope="col"
+                  onClick={() => handleOrder("company")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Type
+                </th>
+                <th
+                  className="th th-sortable"
+                  scope="col"
+                  onClick={() => handleOrder("status")}
+                  style={{ cursor: "pointer" }}
+                >
+                  Status
+                </th>
+                <th scope="col">Faults</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="tbody">
+              {sortedVehicles.map((vehicle) => (
+                <tr
+                  key={vehicle.vehicle_id ?? vehicle.bumper_no}
+                  className="tr tr-striped row-hover"
+                >
+                  <td className="td px-4 py-2">{vehicle.uic?.slice(4, 5)}</td>
+                  <td className="td px-4 py-2">
+                    {vehicle.bumper_no?.startsWith("1.1")
+                      ? vehicle.bumper_no.slice(0, 3)
+                      : (vehicle.bumper_no || "").replace(/[^a-zA-Z]/g, "")}
+                  </td>
+                  <td className="td px-4 py-2">{vehicle.bumper_no}</td>
+                  <td className="td px-4 py-2">
+                    {vehicle.deadlined ? (
+                      <p className="text-red-800">Deadlined</p>
+                    ) : (
+                      "FMC"
+                    )}
+                  </td>
+                  <td className="td px-4 py-2">
+                    <ul>
+                      {vehicleFaults.map((faultsObj) => {
+                        if (faultsObj.vehicle_id == vehicle.vehicle_id) {
+                          if (faultsObj.faults.length > 0) {
+                            return faultsObj.faults.map((fault, idx) => (
+                              <li key={fault.fault_id ?? idx}>
+                                {fault.fault_description}
+                              </li>
+                            ));
+                          } else {
+                            return <li className="italic">NO FAULTS</li>;
+                          }
+                        }
+                        return null;
+                      })}
+                    </ul>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
