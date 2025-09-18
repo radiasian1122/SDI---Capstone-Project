@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
-export default function Popover({ anchorRef, open, onClose, children, placement = "bottom" }) {
+export default function Popover({ anchorRef, open, onClose, children, placement = "bottom", usePortal = false }) {
   const popRef = useRef(null);
   const [style, setStyle] = useState({ visibility: "hidden" });
 
@@ -74,9 +75,17 @@ export default function Popover({ anchorRef, open, onClose, children, placement 
   }, [open, onClose, anchorRef]);
 
   if (!open) return null;
-  return (
+
+  const popoverElement = (
     <div ref={popRef} className="popover" style={{ position: "fixed", zIndex: 1000, ...style }}>
       {children}
     </div>
   );
+
+  // Use portal to render outside any overflow containers
+  if (usePortal) {
+    return createPortal(popoverElement, document.body);
+  }
+
+  return popoverElement;
 }
