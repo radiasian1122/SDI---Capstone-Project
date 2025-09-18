@@ -11,7 +11,7 @@ const api_url = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 export default function Dashboard() {
   const [dispatches, setDispatches] = useState([]);
-  const [activeTab, setActiveTab] = useState('ALL');
+  const [activeTab, setActiveTab] = useState("ALL");
   const { user, loading: authLoading } = useAuth();
 
   // Filter and sort dispatches - moved before early returns to fix hooks rule
@@ -20,37 +20,38 @@ export default function Dashboard() {
   }, [dispatches]);
 
   const filteredDispatches = useMemo(() => {
-    if (activeTab === 'ALL') return sortedDispatches;
-    return sortedDispatches.filter(dispatch => getDispatchStatus(dispatch) === activeTab);
+    if (activeTab === "ALL") return sortedDispatches;
+    return sortedDispatches.filter(
+      (dispatch) => getDispatchStatus(dispatch) === activeTab
+    );
   }, [sortedDispatches, activeTab]);
 
-  const tabs = ['ALL', 'DENIED', 'PENDING', 'APPROVED'];
+  const tabs = ["ALL", "DENIED", "PENDING", "APPROVED"];
 
   const getTabCount = (status) => {
-    if (status === 'ALL') return dispatches.length;
-    return dispatches.filter(dispatch => getDispatchStatus(dispatch) === status).length;
+    if (status === "ALL") return dispatches.length;
+    return dispatches.filter(
+      (dispatch) => getDispatchStatus(dispatch) === status
+    ).length;
   };
 
   // TODO - Filter by role once auth is implemented
   useEffect(() => {
     fetch(`${api_url}/dispatches`)
-
-    .then(res => res.json())
-    .then(data => {
-      if (user.role === 'DISPATCHER'){
-        setDispatches(data)
-      }
-      else if(user.role === 'DRIVER'){
-        setDispatches(
-          data.filter(dispatch => dispatch.requestor_id == user.dod_id)
-        )
-      }
-      else{
-        setDispatches([])
-      }
-    })
-    .catch(err => console.log(err.message))
-  }, [user.dod_id, user.role])
+      .then((res) => res.json())
+      .then((data) => {
+        if (user.role === "DISPATCHER") {
+          setDispatches(data);
+        } else if (user.role === "DRIVER") {
+          setDispatches(
+            data.filter((dispatch) => dispatch.requestor_id == user.dod_id)
+          );
+        } else {
+          setDispatches([]);
+        }
+      })
+      .catch((err) => console.log(err.message));
+  }, [user.dod_id, user.role]);
 
   ////// TODO - refactor when auth is implemented //////
 
@@ -102,20 +103,19 @@ export default function Dashboard() {
         <div className="cc-actionbar">
           <div className="flex gap-2">
             {tabs.map((tab) => {
-
               let tabStyle;
-              switch (tab){
-                case 'ALL':
-                  tabStyle = 'btn-primary'
+              switch (tab) {
+                case "ALL":
+                  tabStyle = "btn-primary";
                   break;
-                case 'PENDING':
-                  tabStyle = 'state-PENDING'
+                case "PENDING":
+                  tabStyle = "state-PENDING";
                   break;
-                case 'DENIED':
-                  tabStyle = 'state-DENIED'
+                case "DENIED":
+                  tabStyle = "state-DENIED";
                   break;
-                case 'APPROVED':
-                  tabStyle = 'state-APPROVED'
+                case "APPROVED":
+                  tabStyle = "state-APPROVED";
                   break;
               }
 
@@ -123,11 +123,11 @@ export default function Dashboard() {
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`btn ${activeTab === tab ? tabStyle : 'btn-secondary'}`}
+                  className={`btn ${activeTab === tab ? tabStyle : "btn-secondary"}`}
                 >
                   {tab} ({getTabCount(tab)})
                 </button>
-              )
+              );
             })}
           </div>
         </div>
@@ -142,12 +142,13 @@ export default function Dashboard() {
         ) : (
           <div className="card">
             <div className="card-body">
-              <h3 className="card-title">No {activeTab.toLowerCase()} dispatches</h3>
+              <h3 className="card-title">
+                No {activeTab.toLowerCase()} dispatches
+              </h3>
               <p className="card-subtitle">
-                {activeTab === 'ALL'
-                  ? 'No dispatches found for your role.'
-                  : `No ${activeTab.toLowerCase()} dispatches at this time.`
-                }
+                {activeTab === "ALL"
+                  ? "No dispatches found for your role."
+                  : `No ${activeTab.toLowerCase()} dispatches at this time.`}
               </p>
             </div>
           </div>
